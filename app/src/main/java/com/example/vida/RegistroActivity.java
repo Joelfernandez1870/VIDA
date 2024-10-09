@@ -11,7 +11,7 @@ public class RegistroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Cargar el layout del registro
-        setContentView(R.layout.activity_registro); // Asegúrate de que el nombre coincida con el archivo XML
+        setContentView(R.layout.activity_registro);
 
         // Captura el botón de Usuario Particular
         Button btnUsuarioParticular = findViewById(R.id.btnUsuarioParticular);
