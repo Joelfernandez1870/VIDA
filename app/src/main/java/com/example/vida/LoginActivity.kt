@@ -1,32 +1,25 @@
-package com.example.vida;
+package com.example.vida
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
+class LoginActivity : AppCompatActivity() {
+    private var registerLink: TextView? = null
 
-public class LoginActivity extends AppCompatActivity {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
 
-    private TextView registerLink;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        registerLink = findViewById(R.id.register_link);
+        registerLink = findViewById(R.id.register_link)
 
         // Acción para redirigir al presionar el enlace de "Registrarse"
-        registerLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Redirigir a la nueva actividad de registro
-                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
-                startActivity(intent);
-            }
-        });
+        registerLink?.setOnClickListener(View.OnClickListener { // Redirigir a la nueva actividad de registro
+            val intent = Intent(this@LoginActivity, RegistroActivity::class.java)
+            startActivity(intent)
+        })
     }
 }
