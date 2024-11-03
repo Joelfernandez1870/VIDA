@@ -1,4 +1,4 @@
-package com.example.vida
+package com.example.vida.view
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.vida.R
 import java.util.Calendar
 
 class RegistrarUsuarioActivity : AppCompatActivity() {
@@ -33,7 +34,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         inputNombre = findViewById(R.id.inputNombre)
         inputApellido = findViewById(R.id.inputApellido)
         inputEmail = findViewById(R.id.inputEmail)
-        inputContrasena = findViewById(R.id.inputContrasena)
+        inputContrasena = findViewById(R.id.et_longitud)
         inputGrupoSanguineo = findViewById(R.id.inputGrupoSanguineo)
         inputFechaNacimiento = findViewById(R.id.inputFechaNacimiento)
         inputCiudad = findViewById(R.id.inputCiudad)
