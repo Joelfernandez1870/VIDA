@@ -14,6 +14,7 @@ import com.example.vida.data.database.MySqlConexion
 import com.example.vida.models.HospitalCentro
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.log
 
 class RegistrarHospitalActivity : AppCompatActivity() {
@@ -56,15 +57,24 @@ class RegistrarHospitalActivity : AppCompatActivity() {
 
         var hospitalCentro = HospitalCentro(tipoLugar, nombreLugar, ciudad, pais, longitud, latitud)
 
-        val exito = HospitalCentroDao.insert(hospitalCentro)
+        lifecycleScope.launch(Dispatchers.IO) {// Corrutina (coroutines, hilo secundario) para realizar la inserción en la base de datos
+            try {
+                var exito = HospitalCentroDao.insert(hospitalCentro)
+                withContext(Dispatchers.Main) {
+                    // Display the result in a Toast on the main thread
+                    if (exito) {
+                        Toast.makeText( applicationContext, "Usiario agregado exitosamente", Toast.LENGTH_SHORT).show()
+                        //limpiarFormulario()
+                    } else {
+                        Toast.makeText(applicationContext, "Error al agregar el Usuario", Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-        if (exito) {
-            Toast.makeText(this, "Usiario agregado exitosamente", Toast.LENGTH_SHORT).show()
-            //limpiarFormulario()
-        } else {
-            Toast.makeText(this, "Error al agregar el Usuario", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e("Error", e.message.toString())
+            }
         }
 
-
     }
+
 }

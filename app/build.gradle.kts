@@ -37,8 +37,9 @@ android {
 
 dependencies {
     //implementation("tech.turso.libsql:libsql:0.1.0")
+//    implementation("mysql:mysql-connector-java:5.1.49")
 
-    implementation("mysql:mysql-connector-java:5.1.49")
+    implementation(libs.mysql.connector.java)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

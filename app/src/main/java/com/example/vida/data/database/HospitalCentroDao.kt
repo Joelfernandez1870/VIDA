@@ -16,7 +16,7 @@ object HospitalCentroDao {
         try {
             val ps = connection?.prepareStatement(sql)
 
-            Log.d("HospitalCentro", hospitalCentro.toString())
+            //Log.d("HospitalCentro", hospitalCentro.toString())
 
             ps?.setString(1, hospitalCentro.tipoLugar)
             ps?.setString(2, hospitalCentro.nombreLugar)
