@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                     // Credenciales válidas
                     runOnUiThread {
                         loading.visibility = View.GONE
-                        val intent = Intent(this@LoginActivity, InicioUsuario::class.java) // Cambiado a InicioUsuario
+                        val intent = Intent(this@LoginActivity, InicioUsuario::class.java)
                         startActivity(intent)
                         finish() // Finaliza la actividad de login
                     }

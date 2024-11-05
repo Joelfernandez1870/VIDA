@@ -12,6 +12,9 @@ coreKtx = "1.15.0"
 mysqlConnectorJava = "5.1.49"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
+annotation = "1.8.2"
+lifecycleLivedataKtx = "2.8.6"
+lifecycleViewmodelKtx = "2.8.6"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,6 +28,9 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx"
 mysql-connector-java = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJava" }
 room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

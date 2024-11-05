@@ -16,6 +16,24 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".view.ListaPedidosUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".view.Beneficios"
+            android:exported="false" />
+        <activity
+            android:name=".view.Chats"
+            android:exported="false" />
+        <activity
+            android:name=".view.RegistrarDonacion"
+            android:exported="false" />
+        <activity
+            android:name=".view.Donaciones"
+            android:exported="false" />
+        <activity
+            android:name=".view.CentroDonaciones"
+            android:exported="false" />
+        <activity
             android:name=".view.InicioUsuario"
             android:exported="false" />
         <activity
@@ -23,7 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".view.RegistrarUsuarioActivity"
-            android:exported="false" /> <!-- LoginActivity será la pantalla inicial -->
+            android:exported="false" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">

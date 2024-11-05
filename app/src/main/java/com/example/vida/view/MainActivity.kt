@@ -9,6 +9,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.vida.R
 
 class MainActivity : AppCompatActivity() {
+
+    // Esta clase esta sin usar, creo que abria que sacarla !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.enableEdgeToEdge()
