@@ -10,5 +10,6 @@ data class Usuario(
     val fechaNacimiento: String, // Cambiado a String
     val ciudad: String,
     val pais: String,
-    val puntos: Int? = null
+    val puntos: Int? = null,
+    val es_admin: Boolean
 )

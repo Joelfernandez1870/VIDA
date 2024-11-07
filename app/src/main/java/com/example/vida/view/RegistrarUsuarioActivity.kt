@@ -129,7 +129,8 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
             grupoSanguineo = grupoSanguineo,
             fechaNacimiento = fechaNacimiento,
             ciudad = ciudad,
-            pais = pais
+            pais = pais,
+            es_admin = false
         )
 
         // Ejecutar la inserción en una coroutine

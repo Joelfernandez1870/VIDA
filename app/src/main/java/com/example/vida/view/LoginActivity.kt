@@ -61,17 +61,23 @@ class LoginActivity : AppCompatActivity() {
 
             try {
                 connection = MySqlConexion.getConexion()
-                val query = "SELECT * FROM USUARIO WHERE EMAIL = ? AND CONTRASEÑA = ?"
+                val query = "SELECT ES_ADMIN FROM USUARIO WHERE EMAIL = ? AND CONTRASEÑA = ?"
                 preparedStatement = connection?.prepareStatement(query)
                 preparedStatement?.setString(1, email)
                 preparedStatement?.setString(2, password)
+
                 resultSet = preparedStatement?.executeQuery()
 
                 if (resultSet?.next() == true) {
+
+                    val esAdmin = resultSet.getBoolean("ES_ADMIN")
                     // Credenciales válidas
                     runOnUiThread {
                         loading.visibility = View.GONE
-                        val intent = Intent(this@LoginActivity, InicioUsuario::class.java)
+                        val intent = if (esAdmin) {Intent(this@LoginActivity, RegistrarHospitalActivity::class.java)
+                        } else {
+                            Intent(this@LoginActivity, InicioUsuario::class.java)
+                        }
                         startActivity(intent)
                         finish() // Finaliza la actividad de login
                     }
