@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Acción para redirigir al presionar el enlace de "Registrarse"
         registerLink.setOnClickListener {
-            val intent = Intent(this@LoginActivity, RegistroActivity::class.java)
+            val intent = Intent(this@LoginActivity, RegistrarUsuarioActivity::class.java)
             startActivity(intent)
         }
 

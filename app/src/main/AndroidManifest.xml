@@ -51,12 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Otras actividades -->
-        <activity
-            android:name=".view.RegistroActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>
