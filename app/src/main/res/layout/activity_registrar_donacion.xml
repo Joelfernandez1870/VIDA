@@ -1,0 +1,114 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Encabezado -->
+    <TextView
+        android:id="@+id/titleRegistrarDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorPrimary"
+        android:text="Registrar Donación"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Campo para el nombre -->
+    <EditText
+        android:id="@+id/inputNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/titleRegistrarDonacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Campo para el apellido -->
+    <EditText
+        android:id="@+id/inputApellido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Apellido"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/inputNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Campo para el DNI -->
+    <EditText
+        android:id="@+id/inputDNI"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="DNI"
+        android:inputType="number"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/inputApellido"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Campo para la fecha de la donación -->
+    <EditText
+        android:id="@+id/inputFechaDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Fecha de Donación"
+        android:inputType="date"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/inputDNI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Campo para el tipo de sangre -->
+    <EditText
+        android:id="@+id/inputTipoSangre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Tipo de Sangre"
+        android:inputType="text"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/inputFechaDonacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Campo para el hospital o centro de donación -->
+    <EditText
+        android:id="@+id/inputCentroDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Centro de Donación"
+        android:inputType="text"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/inputTipoSangre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Botón Guardar Donación -->
+    <Button
+        android:id="@+id/btnGuardarDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Guardar Donación"
+        app:layout_constraintTop_toBottomOf="@id/inputCentroDonacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:padding="16dp"
+        android:background="?android:attr/colorPrimary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
