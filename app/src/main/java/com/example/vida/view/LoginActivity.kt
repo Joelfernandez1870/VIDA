@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                     // Credenciales válidas
                     runOnUiThread {
                         loading.visibility = View.GONE
-                        val intent = if (esAdmin) {Intent(this@LoginActivity, RegistrarHospitalActivity::class.java)
+                        val intent = if (esAdmin) {Intent(this@LoginActivity, InicioHospitalesYCentros::class.java)
                         } else {
                             Intent(this@LoginActivity, InicioUsuario::class.java)
                         }

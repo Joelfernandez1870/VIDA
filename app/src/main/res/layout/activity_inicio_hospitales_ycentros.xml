@@ -1,0 +1,59 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Encabezado -->
+    <TextView
+        android:id="@+id/titleMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorPrimary"
+        android:text="Hospitales"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón Carga Donaciones -->
+    <Button
+        android:id="@+id/btnCargaDonaciones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Carga Donaciones"
+        app:layout_constraintTop_toBottomOf="@id/titleMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+
+    <!-- Botón Notificación Urgente -->
+    <Button
+        android:id="@+id/btnNotificacionUrgente"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Notificación Urgente"
+        app:layout_constraintTop_toBottomOf="@id/btnCargaDonaciones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+
+    <!-- Botón Lista de Pedidos de Donación -->
+    <Button
+        android:id="@+id/btnListaPedidosDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Lista de Pedidos de Donación"
+        app:layout_constraintTop_toBottomOf="@id/btnNotificacionUrgente"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

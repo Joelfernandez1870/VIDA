@@ -16,6 +16,21 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".view.Mensajes"
+            android:exported="false" />
+        <activity
+            android:name=".view.RegistrarPedidoHospital"
+            android:exported="false" />
+        <activity
+            android:name=".view.ListaPedidosHospitales"
+            android:exported="false" />
+        <activity
+            android:name=".view.NotificacionesUrgentes"
+            android:exported="false" />
+        <activity
+            android:name=".view.InicioHospitalesYCentros"
+            android:exported="false" />
+        <activity
             android:name=".view.ListaPedidosUsuario"
             android:exported="false" />
         <activity
@@ -50,7 +65,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Otras actividades -->
+        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.example.vida.view;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -56,5 +58,8 @@ public class InicioUsuario extends AppCompatActivity {
             Intent intent = new Intent(InicioUsuario.this,ListaPedidosUsuario.class);
             startActivity(intent);
         });
+
+     // FALTA CONFIGURAR EL BOTON CERRAR SESION AQUI !!!!!
+
     }
 }

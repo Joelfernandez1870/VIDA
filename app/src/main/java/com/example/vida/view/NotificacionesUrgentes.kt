@@ -1,17 +1,15 @@
 package com.example.vida.view
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.example.vida.R
 
-class Donaciones : AppCompatActivity() {
+class NotificacionesUrgentes : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_donaciones)
-
-
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_notificaciones_urgentes)
 
     }
 }
