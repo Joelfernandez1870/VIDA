@@ -47,5 +47,19 @@ class InicioHospitalesYCentros : AppCompatActivity() {
                 Intent(this, ListaPedidosHospitales::class.java)
             startActivity(intent)
         }
+
+
+        // Obtener referencia al botón "Cerrar Sesión"
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesionHospital)
+
+
+        // Configurar el OnClickListener para iniciar la actividad de login
+        btnCerrarSesion.setOnClickListener { v: View? ->
+            val intent = Intent(
+                this@InicioHospitalesYCentros,LoginActivity::class.java
+            )
+            startActivity(intent)
+            finish() // Finaliza la actividad actual para que no esté en la pila
+        }
     }
 }

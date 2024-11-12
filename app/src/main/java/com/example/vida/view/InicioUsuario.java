@@ -59,7 +59,15 @@ public class InicioUsuario extends AppCompatActivity {
             startActivity(intent);
         });
 
-     // FALTA CONFIGURAR EL BOTON CERRAR SESION AQUI !!!!!
+// Obtener referencia al botón "Cerrar Sesión"
+       Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
+// Configurar el OnClickListener para iniciar la actividad de login
+                btnCerrarSesion.setOnClickListener(v -> {
+                    Intent intent = new Intent(InicioUsuario.this,LoginActivity.class);
+
+            startActivity(intent);
+            finish(); // Finaliza la actividad actual para que no esté en la pila
+                });
     }
 }
