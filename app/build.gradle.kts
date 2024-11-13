@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.map.secret)
 }
 
 android {
@@ -46,6 +47,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
+    implementation(libs.google.maps)
     implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
     implementation(libs.annotation)

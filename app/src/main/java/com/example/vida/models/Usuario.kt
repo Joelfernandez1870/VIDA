@@ -11,5 +11,5 @@ data class Usuario(
     val ciudad: String,
     val pais: String,
     val puntos: Int? = null,
-    val es_admin: Boolean
+//    val es_admin: Boolean
 )
