@@ -22,115 +22,181 @@
 
     <EditText
         android:id="@+id/et_nombreLugar"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="6dp"
         android:hint="Nombre del Lugar"
         android:inputType="textPersonName"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="69dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_direccion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_direccion"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="7dp"
         android:hint="Direccion"
         android:inputType="text"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="125dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_ciudad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_nombreLugar" />
 
     <EditText
         android:id="@+id/et_ciudad"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="8dp"
         android:hint="Ciudad"
         android:inputType="text"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="180dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_pais"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_direccion" />
 
     <EditText
         android:id="@+id/et_codigo"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="1dp"
         android:hint="Codigo habilitacion"
         android:inputType="textEmailAddress"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="292dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_longitud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_pais" />
 
     <EditText
         android:id="@+id/et_pais"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:hint="Pais"
         android:inputType="textEmailAddress"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="-1dp"
-        tools:layout_editor_absoluteY="236dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_codigo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_ciudad" />
 
     <EditText
         android:id="@+id/et_longitud"
-        android:layout_width="379dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:hint="Longitud"
         android:inputType="number"
         android:padding="12dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="341dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_latitud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_codigo" />
 
     <Button
         android:id="@+id/btnGuardarHospital"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="224dp"
+        android:layout_marginBottom="27dp"
         android:background="?android:attr/colorPrimary"
         android:padding="16dp"
         android:text="Guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_longitud" />
+        app:layout_constraintTop_toBottomOf="@+id/et_claverepetida" />
 
     <EditText
         android:id="@+id/et_latitud"
-        android:layout_width="377dp"
-        android:layout_height="43dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="9dp"
         android:ems="10"
         android:hint="  Latitud"
         android:inputType="number"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="405dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_correo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_longitud" />
 
     <EditText
         android:id="@+id/et_correo"
-        android:layout_width="377dp"
-        android:layout_height="43dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
         android:hint="Correo"
         android:inputType="number"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="457dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_clave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_latitud" />
 
     <EditText
         android:id="@+id/et_clave"
-        android:layout_width="377dp"
-        android:layout_height="43dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="9dp"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="number"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="507dp" />
+        app:layout_constraintBottom_toTopOf="@+id/et_claverepetida"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_correo" />
 
     <EditText
         android:id="@+id/et_claverepetida"
-        android:layout_width="377dp"
-        android:layout_height="43dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="27dp"
         android:ems="10"
         android:hint="Repita la contraseña"
         android:inputType="number"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="559dp" />
+        app:layout_constraintBottom_toTopOf="@+id/btnGuardarHospital"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_clave" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="et_clave,et_nombreLugar,et_claverepetida,et_direccion,et_ciudad,et_longitud,et_pais,et_latitud,et_correo,et_codigo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
