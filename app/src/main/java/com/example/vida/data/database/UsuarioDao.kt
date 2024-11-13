@@ -96,7 +96,7 @@ object UsuarioDao {
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     puntos = resultSet.getInt("PUNTOS").takeIf { !resultSet.wasNull() },
-                    es_admin = resultSet.getBoolean("ES_ADMIN")
+//                    es_admin = resultSet.getBoolean("ES_ADMIN")
                 )
             } else null
         } catch (e: SQLException) {
@@ -126,7 +126,7 @@ object UsuarioDao {
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     puntos = resultSet.getInt("PUNTOS").takeIf { !resultSet.wasNull() },
-                    es_admin = resultSet.getBoolean("ES_ADMIN")
+//                    es_admin = resultSet.getBoolean("ES_ADMIN")
                 )
                 usuarios.add(usuario)
             }

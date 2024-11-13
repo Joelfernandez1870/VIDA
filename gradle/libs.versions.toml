@@ -6,15 +6,16 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
+googleMaps = "17.0.0"
 constraintlayout = "2.1.4"
 kotlin = "2.0.21"
+mapSecret = "2.0.1"
 coreKtx = "1.15.0"
 mysqlConnectorJava = "5.1.49"
-roomCommon = "2.6.1"
-roomKtx = "2.6.1"
 annotation = "1.8.2"
 lifecycleLivedataKtx = "2.8.6"
 lifecycleViewmodelKtx = "2.8.6"
+playServicesMaps = "19.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,14 +26,15 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+google-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googleMaps" }
+
 mysql-connector-java = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJava" }
-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.23" }
-
+map-secret = { id="com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref ="mapSecret"   }

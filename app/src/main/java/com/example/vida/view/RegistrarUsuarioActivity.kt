@@ -136,7 +136,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
             fechaNacimiento = fechaNacimiento,
             ciudad = ciudad,
             pais = pais,
-            es_admin = false
+//            es_admin = false
         )
 
         // Ejecutar la inserción en una coroutine
