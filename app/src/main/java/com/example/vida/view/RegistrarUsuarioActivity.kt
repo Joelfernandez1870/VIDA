@@ -82,6 +82,12 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         val pais = inputPais.text.toString()
 
         // Validación de los campos
+        val usuarioExistente = UsuarioDao.getUsuarioByDni(dni)
+        if (usuarioExistente != null) {
+            Toast.makeText(this, "El DNI ya está registrado", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (!dni.matches("\\d{7,8}".toRegex())) {
             inputDNI.error = "DNI debe tener 7 u 8 dígitos"
             return

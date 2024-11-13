@@ -16,6 +16,9 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".Probando"
+            android:exported="false" />
+        <activity
             android:name=".view.Mensajes"
             android:exported="false" />
         <activity
