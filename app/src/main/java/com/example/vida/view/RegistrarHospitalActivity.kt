@@ -33,18 +33,16 @@ class RegistrarHospitalActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_hospital)
 
-        et_nombreLugar = findViewById<EditText>(R.id.et_nombreLugar)
-        et_ciudad = findViewById<EditText>(R.id.et_ciudad)
-        et_pais = findViewById<EditText>(R.id.et_codigo)
-        et_longitud = findViewById<EditText>(R.id.et_longitud)
-        et_latitud = findViewById<EditText>(R.id.et_clave)
-        et_correo = findViewById<EditText>(R.id.et_correo)
-        et_direccion = findViewById<EditText>(R.id.et_direccion)
-        et_codigo = findViewById<EditText>(R.id.et_codigo)
-        et_clave = findViewById<EditText>(R.id.et_clave)
-        et_claverepetida = findViewById<EditText>(R.id.et_claverepetida)
-
-
+        et_nombreLugar = findViewById(R.id.et_nombreLugar)
+        et_ciudad = findViewById(R.id.et_ciudad)
+        et_pais = findViewById(R.id.et_pais)
+        et_longitud = findViewById(R.id.et_longitud)
+        et_latitud = findViewById(R.id.et_latitud)
+        et_codigo = findViewById(R.id.et_codigo)
+        et_clave = findViewById(R.id.et_clave)
+        et_claverepetida = findViewById(R.id.et_claverepetida)
+        et_correo = findViewById(R.id.et_correo)
+        et_direccion = findViewById(R.id.et_direccion)
 
         btnGuardarHospital = findViewById(R.id.btnGuardarHospital)
 
@@ -53,38 +51,39 @@ class RegistrarHospitalActivity : AppCompatActivity() {
         }
     }
 
-    fun insertHospitalCentro() {
+    private fun insertHospitalCentro() {
         // Obtener los valores de los campos de entrada
+        val tipoLugar = "Hospital"  // Valor predeterminado para tipoLugar
         val nombreLugar = et_nombreLugar.text.toString()
         val ciudad = et_ciudad.text.toString()
         val pais = et_pais.text.toString()
-        val longitud = et_longitud.text.toString().toDouble()
-        val latitud = et_latitud.text.toString().toDouble()
-        val codigo = et_codigo.text.toString()
-        val clave = et_clave.text.toString()
-        val claverepetida = et_claverepetida.text.toString()
-        val correo = et_correo.text.toString()
+        val longitud = et_longitud.text.toString().toDoubleOrNull() ?: 0.0
+        val latitud = et_latitud.text.toString().toDoubleOrNull() ?: 0.0
 
-        var hospitalCentro = HospitalCentro (/*COMPLETAR CON ESTRUCTURA DE BASE DATOS*/)
+        // Crear el objeto HospitalCentro con los parámetros correctos
+        val hospitalCentro = HospitalCentro(
+            tipoLugar = tipoLugar,
+            nombreLugar = nombreLugar,
+            ciudad = ciudad,
+            pais = pais,
+            longitud = longitud,
+            latitud = latitud
+        )
 
-        lifecycleScope.launch(Dispatchers.IO) {// Corrutina (coroutines, hilo secundario) para realizar la inserción en la base de datos
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
-                var exito = HospitalCentroDao.insert(hospitalCentro)
+                val exito = HospitalCentroDao.insert(hospitalCentro)
                 withContext(Dispatchers.Main) {
-                    // Display the result in a Toast on the main thread
                     if (exito) {
-                        Toast.makeText( applicationContext, "Usiario agregado exitosamente", Toast.LENGTH_SHORT).show()
-                        //limpiarFormulario()
+                        Toast.makeText(applicationContext, "Hospital/Centro agregado exitosamente", Toast.LENGTH_SHORT).show()
+                        // limpiarFormulario() // Descomentar si se implementa la función para limpiar el formulario
                     } else {
-                        Toast.makeText(applicationContext, "Error al agregar el Usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Error al agregar el Hospital/Centro", Toast.LENGTH_SHORT).show()
                     }
                 }
-
             } catch (e: Exception) {
                 Log.e("Error", e.message.toString())
             }
         }
-
     }
-
 }

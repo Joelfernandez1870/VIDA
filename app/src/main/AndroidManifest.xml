@@ -16,7 +16,10 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
-            android:name=".Probando"
+            android:name=".view.SeleccionRegistro"
+            android:exported="false" />
+        <activity
+            android:name=".view.SeleccionRegistro"
             android:exported="false" />
         <activity
             android:name=".view.Mensajes"

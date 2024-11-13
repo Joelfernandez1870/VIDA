@@ -10,7 +10,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.vida.Probando
 import com.example.vida.R
 import com.example.vida.data.database.MySqlConexion
 import java.sql.Connection
@@ -36,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Acción para redirigir al presionar el enlace de "Registrarse"
         registerLink.setOnClickListener {
-            val intent = Intent(this@LoginActivity, Probando::class.java)
+            val intent = Intent(this@LoginActivity, SeleccionRegistro::class.java)
             startActivity(intent)
         }
 
