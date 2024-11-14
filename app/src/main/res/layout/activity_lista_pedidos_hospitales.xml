@@ -1,13 +1,15 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".view.ListaPedidosHospitales">
 
     <!-- Encabezado -->
     <TextView
-        android:id="@+id/titleChats"
+        android:id="@+id/titlePedidosHospitales"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorPrimary"
@@ -22,27 +24,27 @@
 
     <!-- Filtro de búsqueda -->
     <SearchView
-        android:id="@+id/searchViewChats"
+        android:id="@+id/searchViewPedidos"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:queryHint="Buscar pedidos"
-        app:layout_constraintTop_toBottomOf="@id/titleChats"
+        app:layout_constraintTop_toBottomOf="@id/titlePedidosHospitales"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Lista de chats -->
-    <ListView
-        android:id="@+id/listViewChats"
+    <!-- Lista de pedidos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPedidosHospitales"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/searchViewChats"
+        app:layout_constraintTop_toBottomOf="@id/searchViewPedidos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fabAgregarPedido" />
 
-    <!-- Botón para agregar chats -->
+    <!-- Botón para agregar pedido -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAgregarPedido"
         android:layout_width="wrap_content"
