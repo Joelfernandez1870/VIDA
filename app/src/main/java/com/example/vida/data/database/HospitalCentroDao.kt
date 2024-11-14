@@ -11,7 +11,7 @@ object HospitalCentroDao {
 
     fun insert(hospitalCentro: HospitalCentro): Boolean {
         val connection = MySqlConexion.getConexion()
-        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPÓ_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
+        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
 
         try {
             val ps = connection?.prepareStatement(sql)
