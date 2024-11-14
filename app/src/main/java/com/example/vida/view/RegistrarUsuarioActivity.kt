@@ -105,7 +105,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
             return
         }
         if (!contrasena.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$".toRegex())) {
-            inputContrasena.error = "Contraseña debe contener al menos 6 caracteres, incluyendo letras y números"
+            inputContrasena.error = "Contrasenia debe contener al menos 6 caracteres, incluyendo letras y números"
             return
         }
         if (!esGrupoSanguineoValido(grupoSanguineo)) {
@@ -131,7 +131,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
             nombre = nombre,
             apellido = apellido,
             email = email,
-            contraseña = contrasena,
+            contrasenia = contrasena,
             grupoSanguineo = grupoSanguineo,
             fechaNacimiento = fechaNacimiento,
             ciudad = ciudad,

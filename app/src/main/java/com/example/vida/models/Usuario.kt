@@ -5,7 +5,7 @@ data class Usuario(
     val nombre: String,
     val apellido: String,
     val email: String,
-    val contraseña: String,
+    val contrasenia: String,
     val grupoSanguineo: String,
     val fechaNacimiento: String, // Cambiado a String
     val ciudad: String,

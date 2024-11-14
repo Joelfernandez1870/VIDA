@@ -11,7 +11,7 @@ object UsuarioDao {
     fun insert(usuario: Usuario): Boolean {
         val connection = MySqlConexion.getConexion()
         val sql = """
-            INSERT INTO USUARIO (DNI, NOMBRE, APELLIDO, EMAIL, CONTRASEÑA, GRUPO_SANGUINEO, FECHA_NACIMIENTO, CIUDAD, PAIS) 
+            INSERT INTO USUARIO (DNI, NOMBRE, APELLIDO, EMAIL, contrasenia, GRUPO_SANGUINEO, FECHA_NACIMIENTO, CIUDAD, PAIS) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
@@ -22,7 +22,7 @@ object UsuarioDao {
                 setString(2, usuario.nombre)
                 setString(3, usuario.apellido)
                 setString(4, usuario.email)
-                setString(5, usuario.contraseña)
+                setString(5, usuario.contrasenia)
                 setString(6, usuario.grupoSanguineo)
                 setString(7, usuario.fechaNacimiento) // Ahora se establece como String
                 setString(8, usuario.ciudad)
@@ -43,7 +43,7 @@ object UsuarioDao {
     fun update(usuario: Usuario): Boolean {
         val connection: Connection = MySqlConexion.getConexion() ?: return false
         val sql = """
-            UPDATE USUARIO SET NOMBRE = ?, APELLIDO = ?, EMAIL = ?, CONTRASEÑA = ?, GRUPO_SANGUINEO = ?, 
+            UPDATE USUARIO SET NOMBRE = ?, APELLIDO = ?, EMAIL = ?, contrasenia = ?, GRUPO_SANGUINEO = ?, 
             FECHA_NACIMIENTO = ?, CIUDAD = ?, PAIS = ?, PUNTOS = ? WHERE DNI = ?
         """
 
@@ -52,7 +52,7 @@ object UsuarioDao {
             ps.setString(1, usuario.nombre)
             ps.setString(2, usuario.apellido)
             ps.setString(3, usuario.email)
-            ps.setString(4, usuario.contraseña)
+            ps.setString(4, usuario.contrasenia)
             ps.setString(5, usuario.grupoSanguineo)
             ps.setString(6, usuario.fechaNacimiento) // Ahora se establece como String
             ps.setString(7, usuario.ciudad)
@@ -90,7 +90,7 @@ object UsuarioDao {
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),
                     email = resultSet.getString("EMAIL"),
-                    contraseña = resultSet.getString("CONTRASEÑA"),
+                    contrasenia = resultSet.getString("contrasenia"),
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
                     fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"), // Ahora se obtiene como String
                     ciudad = resultSet.getString("CIUDAD"),
@@ -120,7 +120,7 @@ object UsuarioDao {
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),
                     email = resultSet.getString("EMAIL"),
-                    contraseña = resultSet.getString("CONTRASENIA"),
+                    contrasenia = resultSet.getString("CONTRASENIA"),
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
                     fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"), // Ahora se obtiene como String
                     ciudad = resultSet.getString("CIUDAD"),
