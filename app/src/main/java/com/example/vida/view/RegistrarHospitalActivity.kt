@@ -1,7 +1,9 @@
 package com.example.vida.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -26,7 +28,6 @@ class RegistrarHospitalActivity : AppCompatActivity() {
     private lateinit var et_claverepetida: EditText
     private lateinit var et_correo: EditText
     private lateinit var et_direccion: EditText
-
     private lateinit var btnGuardarHospital: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,16 +60,65 @@ class RegistrarHospitalActivity : AppCompatActivity() {
         val pais = et_pais.text.toString()
         val longitud = et_longitud.text.toString().toDoubleOrNull() ?: 0.0
         val latitud = et_latitud.text.toString().toDoubleOrNull() ?: 0.0
+        val codigo = et_codigo.text.toString()
+        val clave = et_clave.text.toString()
+        val claverepetida = et_claverepetida.text.toString()
+        val correo = et_correo.text.toString()
+        val direccion = et_direccion.text.toString()
+        val tipo_usuario = 0;
 
-        // Crear el objeto HospitalCentro con los parámetros correctos
+
+        // Validación de los campos
+        if (!nombreLugar.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
+            et_nombreLugar.error = "Nombre del lugar solo debe contener letras"
+            return
+        }
+
+        if (!ciudad.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
+            et_ciudad.error = "Ciudad solo debe contener letras"
+            return
+        }
+
+        if (!pais.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
+            et_pais.error = "País solo debe contener letras"
+            return
+        }
+
+        if (codigo.isEmpty() || !codigo.matches("[A-Za-z0-9]+".toRegex())) {
+            et_codigo.error = "Código de habilitación inválido"
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            et_correo.error = "Email inválido"
+            return
+        }
+
+        if (!clave.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$".toRegex())) {
+            et_clave.error = "Contraseña debe contener al menos 6 caracteres, incluyendo letras y números"
+            return
+        }
+
+        if (clave != claverepetida) {
+            et_claverepetida.error = "Las claves no coinciden"
+            return
+        }
+
+        // Crear el objeto HospitalCentro con los parámetros validados
         val hospitalCentro = HospitalCentro(
             tipoLugar = tipoLugar,
             nombreLugar = nombreLugar,
             ciudad = ciudad,
             pais = pais,
             longitud = longitud,
-            latitud = latitud
+            latitud = latitud,
+            codigo = codigo,
+            clave = clave,
+            correo = correo,
+            direccion = direccion,
+            tipo_usuario = tipo_usuario
         )
+
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -77,6 +127,8 @@ class RegistrarHospitalActivity : AppCompatActivity() {
                     if (exito) {
                         Toast.makeText(applicationContext, "Hospital/Centro agregado exitosamente", Toast.LENGTH_SHORT).show()
                         // limpiarFormulario() // Descomentar si se implementa la función para limpiar el formulario
+                        // REGRESO A LA ACTIVIDAD ANTERIOR
+                        RegresoLoginActivity();
                     } else {
                         Toast.makeText(applicationContext, "Error al agregar el Hospital/Centro", Toast.LENGTH_SHORT).show()
                     }
@@ -85,5 +137,11 @@ class RegistrarHospitalActivity : AppCompatActivity() {
                 Log.e("Error", e.message.toString())
             }
         }
+    }
+
+    private fun RegresoLoginActivity ()
+    {
+        val intent = Intent(this@RegistrarHospitalActivity, LoginActivity::class.java)
+        startActivity(intent)
     }
 }

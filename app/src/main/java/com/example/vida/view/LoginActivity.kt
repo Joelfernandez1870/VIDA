@@ -23,6 +23,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var registerLink: TextView
     private lateinit var loading: ProgressBar
 
+    // Variable global para almacenar el hospitalId
+    companion object {
+        var sesionGlobal: Int? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -50,6 +55,8 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
     private fun validateLogin(email: String, password: String) {
@@ -61,23 +68,52 @@ class LoginActivity : AppCompatActivity() {
 
             try {
                 connection = MySqlConexion.getConexion()
-                val query = "SELECT ES_ADMIN FROM USUARIO WHERE EMAIL = ? AND CONTRASEÑA = ?"
+                val query = """
+                      SELECT TIPO_USUARIO, ID_USUARIO, ID_HOSPITALES_CENTRO
+                        FROM (
+                            SELECT TIPO_USUARIO, ID_USUARIO, NULL AS ID_HOSPITALES_CENTRO FROM USUARIO WHERE EMAIL = ? AND CONTRASENIA = ?
+                            UNION
+                            SELECT TIPO_USUARIO, NULL AS ID_USUARIO, ID_HOSPITALES_CENTRO FROM HOSPITALES_CENTROS WHERE EMAIL = ? AND CONTRASENIA = ?
+                        ) AS usuarios_comb
+                        LIMIT 1;
+                    """.trimIndent()
+
+
                 preparedStatement = connection?.prepareStatement(query)
                 preparedStatement?.setString(1, email)
                 preparedStatement?.setString(2, password)
+                preparedStatement?.setString(3, email)
+                preparedStatement?.setString(4, password)
 
                 resultSet = preparedStatement?.executeQuery()
 
                 if (resultSet?.next() == true) {
 
-                    val esAdmin = resultSet.getBoolean("ES_ADMIN")
+                    // AGARRO EL TIPO DE USUARIO
+                    val tipoUsuario = resultSet.getInt("TIPO_USUARIO")
+
+                    // Dependiendo del tipo de usuario, guardamos el ID en la variable global
+                    if (tipoUsuario == 1) {  // Usuario
+                        sesionGlobal = resultSet.getInt("ID_USUARIO")
+                    } else if (tipoUsuario == 0) {  // Hospital
+                        sesionGlobal = resultSet.getInt("ID_HOSPITALES_CENTRO")
+                    }
+
                     // Credenciales válidas
                     runOnUiThread {
                         loading.visibility = View.GONE
-                        val intent = if (esAdmin) {Intent(this@LoginActivity, InicioHospitalesYCentros::class.java)
-                        } else {
+                        val intent = if (tipoUsuario == 1) {
+                            // Si es usuario, redirige a InicioUsuario
                             Intent(this@LoginActivity, InicioUsuario::class.java)
+                        } else if (tipoUsuario == 0) {
+                            // Si es hospital, redirige a InicioHospitalesYCentros
+                            Intent(this@LoginActivity, InicioHospitalesYCentros::class.java)
+                        } else {
+                            // Si no se encuentra el tipo de usuario
+                            Toast.makeText(this@LoginActivity, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
+                            return@runOnUiThread
                         }
+
                         startActivity(intent)
                         finish() // Finaliza la actividad de login
                     }
@@ -105,5 +141,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }.start()
     }
+
 }
 

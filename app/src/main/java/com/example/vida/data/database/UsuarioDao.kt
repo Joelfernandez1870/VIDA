@@ -120,13 +120,12 @@ object UsuarioDao {
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),
                     email = resultSet.getString("EMAIL"),
-                    contraseña = resultSet.getString("CONTRASEÑA"),
+                    contraseña = resultSet.getString("CONTRASENIA"),
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
                     fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"), // Ahora se obtiene como String
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     puntos = resultSet.getInt("PUNTOS").takeIf { !resultSet.wasNull() },
-//                    es_admin = resultSet.getBoolean("ES_ADMIN")
                 )
                 usuarios.add(usuario)
             }

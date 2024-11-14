@@ -20,101 +20,78 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Campo para el nombre -->
-    <EditText
-        android:id="@+id/inputNombre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Nombre"
-        android:inputType="textPersonName"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/titleRegistrarDonacion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para el apellido -->
-    <EditText
-        android:id="@+id/inputApellido"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Apellido"
-        android:inputType="textPersonName"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputNombre"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para el DNI -->
-    <EditText
-        android:id="@+id/inputDNI"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="DNI"
-        android:inputType="number"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputApellido"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para la fecha de la donación -->
-    <EditText
-        android:id="@+id/inputFechaDonacion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Fecha de Donación"
-        android:inputType="date"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputDNI"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para el tipo de sangre -->
-    <EditText
-        android:id="@+id/inputTipoSangre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Tipo de Sangre"
-        android:inputType="text"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputFechaDonacion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para el hospital o centro de donación -->
-    <EditText
-        android:id="@+id/inputCentroDonacion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Centro de Donación"
-        android:inputType="text"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputTipoSangre"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <!-- Spinner para seleccionar el usuario (nombre y apellido) -->
     <Spinner
         android:id="@+id/spinnerUsuario"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inputCentroDonacion"
+        app:layout_constraintTop_toBottomOf="@id/titleRegistrarDonacion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Spinner para seleccionar el hospital o centro de donación -->
+    <!-- TextViews para mostrar los datos del usuario seleccionado -->
+    <TextView
+        android:id="@+id/txtNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nombre: "
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/spinnerUsuario"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txtApellido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Apellido: "
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/txtNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txtDni"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="DNI: "
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/txtApellido"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTipoSangre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Tipo de Sangre: "
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/txtDni"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Campo para la fecha de la donación (con calendario) -->
+    <EditText
+        android:id="@+id/inputFechaDonacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Fecha de Donación"
+        android:focusable="false"
+        android:clickable="true"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/txtTipoSangre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Spinner para seleccionar el tipo de donación -->
     <Spinner
-        android:id="@+id/spinnerHospital"
+        android:id="@+id/spinnerTipoDonacion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/spinnerUsuario"
+        app:layout_constraintTop_toBottomOf="@id/inputFechaDonacion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -127,7 +104,7 @@
         android:layout_marginTop="24dp"
         android:padding="16dp"
         android:background="?android:attr/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/spinnerHospital"
+        app:layout_constraintTop_toBottomOf="@id/spinnerTipoDonacion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -11,19 +11,22 @@ object HospitalCentroDao {
 
     fun insert(hospitalCentro: HospitalCentro): Boolean {
         val connection = MySqlConexion.getConexion()
-        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, CIUDAD, PAIS, LONGITUD, LATITUD) VALUES (?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPÓ_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
 
         try {
             val ps = connection?.prepareStatement(sql)
 
-            //Log.d("HospitalCentro", hospitalCentro.toString())
-
             ps?.setString(1, hospitalCentro.tipoLugar)
             ps?.setString(2, hospitalCentro.nombreLugar)
-            ps?.setString(3, hospitalCentro.ciudad)
-            ps?.setString(4, hospitalCentro.pais)
-            ps?.setDouble(5, hospitalCentro.longitud)
-            ps?.setDouble(6, hospitalCentro.latitud)
+            ps?.setString(3, hospitalCentro.direccion)
+            ps?.setString(4, hospitalCentro.correo )
+            ps?.setString(5, hospitalCentro.clave)
+            ps?.setString(6, hospitalCentro.codigo)
+            ps?.setString(7, hospitalCentro.ciudad)
+            ps?.setString(8, hospitalCentro.pais)
+            ps?.setDouble(9, hospitalCentro.longitud)
+            ps?.setDouble(10,hospitalCentro.latitud)
+            ps?.setInt(11, hospitalCentro.tipo_usuario)
 
             val rowsInserted = ps?.executeUpdate()  // Ejecutamos la inserción
             ps?.close()
@@ -36,6 +39,7 @@ object HospitalCentroDao {
             return false
         }
     }
+    /*
     fun update(hospitalCentro: HospitalCentro) {
         val connection: Connection = MySqlConexion.getConexion()!!
         val statement: PreparedStatement = connection.prepareStatement(
@@ -100,5 +104,5 @@ object HospitalCentroDao {
             )
         }
         return null
-    }
+    }*/
 }
