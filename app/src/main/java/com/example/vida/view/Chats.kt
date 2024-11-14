@@ -39,41 +39,8 @@ class Chats : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Obtener nombre del usuario y cargar mensajes
-        obtenerIdUsuario()
+        // Cargar mensajes
         cargarMensajes()
-    }
-
-    private fun obtenerIdUsuario() {
-        Thread {
-            var connection: Connection? = null
-            var preparedStatement: PreparedStatement? = null
-
-            try {
-                connection = MySqlConexion.getConexion()
-                val query = "SELECT ID_USUARIO FROM USUARIO WHERE NOMBRE = ?"
-                preparedStatement = connection?.prepareStatement(query)
-                preparedStatement?.setString(1, "nombre_del_usuario") // Cambiar a la lógica deseada
-
-                val resultSet = preparedStatement?.executeQuery()
-                if (resultSet?.next() == true) {
-                    idUsuario = resultSet.getInt("ID_USUARIO")
-                    Log.i("Info", "ID de usuario obtenido: $idUsuario")
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (ex: Exception) {
-                Log.e("Error", ex.message.toString())
-                runOnUiThread {
-                    Toast.makeText(this, "Error al conectar a la base de datos", Toast.LENGTH_SHORT).show()
-                }
-            } finally {
-                preparedStatement?.close()
-                connection?.close()
-            }
-        }.start()
     }
 
     private fun cargarMensajes() {
@@ -88,10 +55,9 @@ class Chats : AppCompatActivity() {
                     SELECT M.ID_MENSAJE, U.NOMBRE AS NOMBRE_USUARIO, M.CONTENIDO, M.FECHA_ENVIO
                     FROM MENSAJES M
                     JOIN USUARIO U ON M.ID_USUARIO = U.ID_USUARIO
-                    WHERE M.ID_USUARIO = ?
+                    ORDER BY M.FECHA_ENVIO DESC
                 """
                 preparedStatement = connection?.prepareStatement(query)
-                preparedStatement?.setInt(1, idUsuario)
 
                 val resultSet = preparedStatement?.executeQuery()
                 while (resultSet?.next() == true) {

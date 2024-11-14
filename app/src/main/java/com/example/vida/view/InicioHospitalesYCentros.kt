@@ -40,13 +40,24 @@ class InicioHospitalesYCentros : AppCompatActivity() {
         // Obtener referencia al botón "Pedidos de donacion"
         val btnListaPedidosDonacion = findViewById<Button>(R.id.btnListaPedidosDonacion)
 
-// Crear el Intent para iniciar la actividad Pedidos de donacion del Hospital
+// Crear el Intent para iniciar la actividad agregar paciente
         btnListaPedidosDonacion.setOnClickListener { v: View? ->
 
             val intent =
                 Intent(this, ListaPedidosHospitales::class.java)
             startActivity(intent)
         }
+        // Obtener referencia al botón "Pedidos de donacion"
+        val btnAgregarPaciente = findViewById<Button>(R.id.btnAgregarPaciente)
+
+// Crear el Intent para iniciar la actividad agregar paciente
+        btnAgregarPaciente.setOnClickListener { v: View? ->
+
+            val intent =
+                Intent(this, CargarPaciente::class.java)
+            startActivity(intent)
+        }
+
 
 
         // Obtener referencia al botón "Cerrar Sesión"
@@ -61,5 +72,7 @@ class InicioHospitalesYCentros : AppCompatActivity() {
             startActivity(intent)
             finish() // Finaliza la actividad actual para que no esté en la pila
         }
+
+
     }
 }

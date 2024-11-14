@@ -19,7 +19,17 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
-            android:name=".MuestraMensaje"
+            android:name=".view.CargarPaciente"
+            android:exported="false" />
+        <activity
+            android:name=".CargaPaciente"
+            android:exported="false"
+            android:theme="@style/Theme.VIDA" />
+        <activity
+            android:name=".view.Paciente"
+            android:exported="false" />
+        <activity
+            android:name=".view.MuestraMensaje"
             android:exported="false" />
         <activity
             android:name=".view.SeleccionRegistro"

@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+        android:background="?android:attr/colorPrimary" />
 
     <!-- Botón Notificación Urgente -->
     <Button
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+        android:background="?android:attr/colorPrimary" />
 
     <!-- Botón Lista de Pedidos de Donación -->
     <Button
@@ -54,7 +54,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/colorPrimary" /> <!-- Color igual al encabezado -->
+        android:background="?android:attr/colorPrimary" />
+
+    <!-- Botón Agregar Paciente -->
+    <Button
+        android:id="@+id/btnAgregarPaciente"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Agregar Paciente"
+        app:layout_constraintTop_toBottomOf="@id/btnListaPedidosDonacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/colorPrimary" />
 
     <!-- Botón de Cerrar Sesión -->
     <Button

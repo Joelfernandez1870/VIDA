@@ -17,13 +17,23 @@ import java.util.Locale
 
 class Mensajes : AppCompatActivity() {
 
-    private var idUsuario: Int = 1 // Aquí puedes obtener el ID del usuario actual de una manera más dinámica
+    private var idUsuario: Int? = null // Se inicializa como null
     private var fechaActual: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_mensajes)
+
+        // Obtener el ID del usuario desde LoginActivity.sesionGlobal
+        idUsuario = LoginActivity.sesionGlobal
+
+        // Verifica si el ID de usuario es válido
+        if (idUsuario == null) {
+            Toast.makeText(this, "ID de usuario no disponible", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         // Mostrar la fecha actual en el TextView textFecha
         val textFecha = findViewById<TextView>(R.id.textFecha)
@@ -42,7 +52,7 @@ class Mensajes : AppCompatActivity() {
 
             if (contenidoMensaje.isNotBlank()) {
                 // Insertar el mensaje en la base de datos
-                insertarMensaje(idUsuario, contenidoMensaje, fechaActual)
+                insertarMensaje(idUsuario!!, contenidoMensaje, fechaActual)
             } else {
                 Toast.makeText(this, "El mensaje no puede estar vacío", Toast.LENGTH_SHORT).show()
             }
@@ -58,7 +68,7 @@ class Mensajes : AppCompatActivity() {
                 connection = MySqlConexion.getConexion()
                 val query = "SELECT NOMBRE FROM USUARIO WHERE ID_USUARIO = ?"
                 preparedStatement = connection?.prepareStatement(query)
-                preparedStatement?.setInt(1, idUsuario) // Usar el ID de usuario actual
+                preparedStatement?.setInt(1, idUsuario!!)
 
                 val resultSet = preparedStatement?.executeQuery()
 
