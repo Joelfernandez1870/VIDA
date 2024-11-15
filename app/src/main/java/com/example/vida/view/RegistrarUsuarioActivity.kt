@@ -1,5 +1,6 @@
 package com.example.vida.view
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.TextUtils
@@ -71,7 +72,6 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedItem = parent.getItemAtPosition(position) as String
-                Toast.makeText(this@RegistrarUsuarioActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT).show()
                  grupoSanguineo = selectedItem
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -81,6 +81,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun mostrarDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar[Calendar.YEAR]
