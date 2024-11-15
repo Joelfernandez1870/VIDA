@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
 import com.example.vida.data.database.MySqlConexion
-import com.example.vida.models.PedidoHospital
+import com.example.vida.models.PedidosUsuario
 import java.sql.Connection
 import java.sql.PreparedStatement
 
 class ListaPedidosUsuario : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var pedidoHospitalAdapter: PedidoHospitalAdapter
+    private lateinit var pedidoUsuarioAdapter: pedidoUsuarioAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class ListaPedidosUsuario : AppCompatActivity() {
 
     private fun cargarPedidosDeDonacion() {
         Thread {
-            val pedidos = mutableListOf<PedidoHospital>()
+            val pedidos = mutableListOf<PedidosUsuario>()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
@@ -70,14 +70,14 @@ class ListaPedidosUsuario : AppCompatActivity() {
                     val estado = resultSet.getString("ESTADO")
 
                     // Crear objeto PedidoHospital
-                    val pedido = PedidoHospital(idEmergencia, nombrePaciente, nombreHospital, descripcion, fecha, estado)
+                    val pedido = PedidosUsuario(idEmergencia, nombrePaciente, nombreHospital, descripcion, fecha, estado)
                     pedidos.add(pedido)
                 }
 
                 runOnUiThread {
                     // Actualizar el RecyclerView con los pedidos cargados
-                    pedidoHospitalAdapter = PedidoHospitalAdapter(pedidos)
-                    recyclerView.adapter = pedidoHospitalAdapter
+                    pedidoUsuarioAdapter = pedidoUsuarioAdapter(pedidos)
+                    recyclerView.adapter = pedidoUsuarioAdapter
                 }
             } catch (ex: Exception) {
                 runOnUiThread {
