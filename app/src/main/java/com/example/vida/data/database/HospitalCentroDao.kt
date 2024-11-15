@@ -2,16 +2,19 @@ package com.example.vida.data.database
 
 import android.util.Log
 import com.example.vida.models.HospitalCentro
+import java.io.Console
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
+import kotlin.math.log
 
 object HospitalCentroDao {
 
     fun insert(hospitalCentro: HospitalCentro): Boolean {
         val connection = MySqlConexion.getConexion()
-        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
+        val sql =
+            "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
 
         try {
             val ps = connection?.prepareStatement(sql)
@@ -19,13 +22,13 @@ object HospitalCentroDao {
             ps?.setString(1, hospitalCentro.tipoLugar)
             ps?.setString(2, hospitalCentro.nombreLugar)
             ps?.setString(3, hospitalCentro.direccion)
-            ps?.setString(4, hospitalCentro.correo )
+            ps?.setString(4, hospitalCentro.correo)
             ps?.setString(5, hospitalCentro.clave)
             ps?.setString(6, hospitalCentro.codigo)
             ps?.setString(7, hospitalCentro.ciudad)
             ps?.setString(8, hospitalCentro.pais)
             ps?.setDouble(9, hospitalCentro.longitud)
-            ps?.setDouble(10,hospitalCentro.latitud)
+            ps?.setDouble(10, hospitalCentro.latitud)
             ps?.setInt(11, hospitalCentro.tipo_usuario)
 
             val rowsInserted = ps?.executeUpdate()  // Ejecutamos la inserción
@@ -39,6 +42,53 @@ object HospitalCentroDao {
             return false
         }
     }
+
+    fun verifiarCodigo(codidigo: String): Boolean {
+        val connection = MySqlConexion.getConexion()
+        if (connection != null) {
+            val statement: PreparedStatement = connection.prepareStatement(
+                "SELECT EXISTS(SELECT 1 FROM HOSPITALES_CENTROS WHERE CODIGO_HABILITACION = ?)"
+            )
+            try {
+                statement.setString(1, codidigo) // Set the parameter value
+                val resultSet: ResultSet = statement.executeQuery()
+                if (resultSet.next()) {
+                    val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value
+                    return exists// Use the 'exists' variable
+                }else{
+                    return false
+                }
+                connection.close()
+
+            } catch (e: SQLException) {
+                e.printStackTrace()
+                return false
+            }
+        } else {
+            println("error: conexion null")
+            return false
+        }
+    }
+
+//        val connection = MySqlConexion.getConexion()
+//        val sql = "SELECT * EXISTS(SELECT 1 FROM HOSPITALES_CENTROS WHERE CODIGO_HABILITACION = ?)"
+//
+//        try {
+//            val ps = connection?.prepareStatement(sql)
+//
+//            ps?.setString(1, codidigo)
+//            val rowsSelected = ps?.executeQuery()
+//            ps?.close()
+//            connection?.close()
+//
+//            if (rowsSelected != null) {
+//                return rowsSelected.getBoolean(1)
+//            }
+//        } catch (e: SQLException) {
+//            e.printStackTrace()
+//            return false
+//        }
+//    }
     /*
     fun update(hospitalCentro: HospitalCentro) {
         val connection: Connection = MySqlConexion.getConexion()!!
@@ -105,4 +155,5 @@ object HospitalCentroDao {
         }
         return null
     }*/
+
 }
