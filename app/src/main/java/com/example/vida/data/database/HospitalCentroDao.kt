@@ -39,6 +39,52 @@ object HospitalCentroDao {
             return false
         }
     }
+
+    fun getAllHospitalesCentros(): List<HospitalCentro> {
+        val hospitalesCentros = mutableListOf<HospitalCentro>()
+        val connection: Connection? = MySqlConexion.getConexion()
+        if (connection == null) {
+            Log.e("HospitalCentroDao", "No se pudo establecer conexión con la base de datos")
+            return hospitalesCentros
+        }
+        val sql = "SELECT TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION, EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO FROM HOSPITALES_CENTROS"
+
+        var statement: PreparedStatement? = null
+        var resultSet: ResultSet? = null
+
+        try {
+            statement = connection.prepareStatement(sql)
+            resultSet = statement.executeQuery()
+
+            while (resultSet.next()) {
+                val hospitalCentro = HospitalCentro(
+                    tipoLugar = resultSet.getString("TIPO_LUGAR"),
+                    nombreLugar = resultSet.getString("NOMBRE_LUGAR"),
+                    direccion = resultSet.getString("DIRECCION"),
+                    correo = resultSet.getString("EMAIL"),
+                    clave = resultSet.getString("CONTRASENIA"),
+                    codigo = resultSet.getString("CODIGO_HABILITACION"),
+                    ciudad = resultSet.getString("CIUDAD"),
+                    pais = resultSet.getString("PAIS"),
+                    longitud = resultSet.getDouble("LONGITUD"),
+                    latitud = resultSet.getDouble("LATITUD"),
+                    tipo_usuario = resultSet.getInt("TIPO_USUARIO")
+                )
+                hospitalesCentros.add(hospitalCentro)
+            }
+
+            Log.d("HospitalCentroDao", "Cantidad de hospitales obtenidos: ${hospitalesCentros.size}")
+
+        } catch (e: SQLException) {
+            Log.e("HospitalCentroDao", "Error al obtener los hospitales", e)
+        } finally {
+            resultSet?.close()
+            statement?.close()
+            connection?.close()
+        }
+
+        return hospitalesCentros
+    }
     /*
     fun update(hospitalCentro: HospitalCentro) {
         val connection: Connection = MySqlConexion.getConexion()!!
