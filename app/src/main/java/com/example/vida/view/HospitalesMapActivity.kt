@@ -1,5 +1,7 @@
 package com.example.vida.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -14,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -89,11 +92,14 @@ class HospitalesMapActivity : AppCompatActivity(), OnMapReadyCallback {
             withContext(Dispatchers.Main) {
                 hospitalesList.forEach { hospital ->
                     val position = LatLng(hospital.latitud, hospital.longitud)
+                    val originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.hospital_icon)
+                    val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, 80, 80, false)
                     val marker = map.addMarker(
                         MarkerOptions()
                             .position(position)
                             .title(hospital.nombreLugar)
                             .snippet(hospital.tipoLugar)
+                            .icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap))
                     )
                     // Guardar el marcador en el mapa de marcadores
                     marker?.let { markerMap[hospital.nombreLugar] = it }
