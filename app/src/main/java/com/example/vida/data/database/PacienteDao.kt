@@ -9,6 +9,25 @@ import java.sql.SQLException
 
 object PacienteDao {
 
+    // Método para verificar si un DNI ya está registrado
+    private fun isDniRegistered(dni: String): Boolean {
+        val connection: Connection = MySqlConexion.getConexion() ?: return false
+        val sql = "SELECT DNI FROM PACIENTE WHERE DNI = ?"
+
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setString(1, dni)
+            val resultSet: ResultSet = ps.executeQuery()
+            val exists = resultSet.next()
+            resultSet.close()
+            ps.close()
+            exists
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
     // Insertar un paciente en la base de datos
     fun insert(paciente: Paciente): Boolean {
         val connection = MySqlConexion.getConexion()
@@ -18,6 +37,12 @@ object PacienteDao {
         """
 
         return try {
+            // Verificar si el DNI ya está registrado
+            if (isDniRegistered(paciente.dni)) {
+                throw IllegalArgumentException("El DNI ingresado ya está registrado.")
+            }
+
+            // Proceder con la inserción
             val ps: PreparedStatement? = connection?.prepareStatement(sql)
             ps?.apply {
                 setString(1, paciente.dni)
@@ -35,6 +60,10 @@ object PacienteDao {
 
             rowsInserted != null && rowsInserted > 0
 
+        } catch (e: IllegalArgumentException) {
+            // Mostrar mensaje específico para DNI duplicado
+            println(e.message)
+            false
         } catch (e: SQLException) {
             e.printStackTrace()
             false
@@ -76,10 +105,11 @@ object PacienteDao {
         }
     }
 
+    // Obtener pacientes para un Spinner
     fun getPacientesForSpinner(): List<PacienteSpinner> {
         val pacientesList = mutableListOf<PacienteSpinner>()
         val connection = MySqlConexion.getConexion() ?: return pacientesList
-        val sql = "SELECT ID_PACIENTE, nombre FROM PACIENTE" // Solo seleccionamos el nombre
+        val sql = "SELECT ID_PACIENTE, NOMBRE FROM PACIENTE" // Solo seleccionamos el nombre
 
         return try {
             val ps: PreparedStatement = connection.prepareStatement(sql)
@@ -87,7 +117,7 @@ object PacienteDao {
 
             while (resultSet.next()) {
                 val id = resultSet.getInt("ID_PACIENTE")  // Usamos el nombre correcto de la columna
-                val nombre = resultSet.getString("nombre") ?: "" // Aseguramos que 'nombre' no sea nulo
+                val nombre = resultSet.getString("NOMBRE") ?: "" // Aseguramos que 'nombre' no sea nulo
 
                 // Crear un objeto PacienteSpinner solo con el nombre
                 pacientesList.add(PacienteSpinner(id, nombre))
@@ -103,6 +133,4 @@ object PacienteDao {
             pacientesList
         }
     }
-
 }
-

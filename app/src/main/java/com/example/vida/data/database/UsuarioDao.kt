@@ -8,14 +8,64 @@ import java.sql.SQLException
 
 object UsuarioDao {
 
+    // Método para verificar si un DNI ya está registrado
+    private fun isDniRegistered(dni: String): Boolean {
+        val connection: Connection = MySqlConexion.getConexion() ?: return false
+        val sql = "SELECT DNI FROM USUARIO WHERE DNI = ?"
+
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setString(1, dni)
+            val resultSet: ResultSet = ps.executeQuery()
+            val exists = resultSet.next()
+            resultSet.close()
+            ps.close()
+            exists
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    // Método para verificar si un Email ya está registrado
+    private fun isEmailRegistered(email: String): Boolean {
+        val connection: Connection = MySqlConexion.getConexion() ?: return false
+        val sql = "SELECT EMAIL FROM USUARIO WHERE LOWER(EMAIL) = LOWER(?)"
+
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setString(1, email)
+            val resultSet: ResultSet = ps.executeQuery()
+            val exists = resultSet.next()
+            resultSet.close()
+            ps.close()
+            exists
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    // Método para insertar un nuevo usuario
     fun insert(usuario: Usuario): Boolean {
         val connection = MySqlConexion.getConexion()
         val sql = """
-            INSERT INTO USUARIO (DNI, NOMBRE, APELLIDO, EMAIL, contrasenia, GRUPO_SANGUINEO, FECHA_NACIMIENTO, CIUDAD, PAIS) 
+            INSERT INTO USUARIO (DNI, NOMBRE, APELLIDO, EMAIL, CONTRASENIA, GRUPO_SANGUINEO, FECHA_NACIMIENTO, CIUDAD, PAIS) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
         return try {
+            // Verificamos si el DNI ya está registrado
+            if (isDniRegistered(usuario.dni)) {
+                throw IllegalArgumentException("El DNI ingresado ya está registrado.")
+            }
+
+            // Verificamos si el Email ya está registrado
+            if (isEmailRegistered(usuario.email)) {
+                throw IllegalArgumentException("El email ingresado ya está registrado.")
+            }
+
+            // Procedemos a insertar el nuevo usuario
             val ps: PreparedStatement? = connection?.prepareStatement(sql)
             ps?.apply {
                 setString(1, usuario.dni)
@@ -24,7 +74,7 @@ object UsuarioDao {
                 setString(4, usuario.email)
                 setString(5, usuario.contrasenia)
                 setString(6, usuario.grupoSanguineo)
-                setString(7, usuario.fechaNacimiento) // Ahora se establece como String
+                setString(7, usuario.fechaNacimiento)
                 setString(8, usuario.ciudad)
                 setString(9, usuario.pais)
             }
@@ -34,16 +84,21 @@ object UsuarioDao {
 
             rowsInserted != null && rowsInserted > 0
 
+        } catch (e: IllegalArgumentException) {
+            // Aquí mostramos el mensaje de error especificado para el campo duplicado
+            println(e.message)
+            false
         } catch (e: SQLException) {
             e.printStackTrace()
             false
         }
     }
 
+    // Método para actualizar un usuario existente
     fun update(usuario: Usuario): Boolean {
         val connection: Connection = MySqlConexion.getConexion() ?: return false
         val sql = """
-            UPDATE USUARIO SET NOMBRE = ?, APELLIDO = ?, EMAIL = ?, contrasenia = ?, GRUPO_SANGUINEO = ?, 
+            UPDATE USUARIO SET NOMBRE = ?, APELLIDO = ?, EMAIL = ?, CONTRASENIA = ?, GRUPO_SANGUINEO = ?, 
             FECHA_NACIMIENTO = ?, CIUDAD = ?, PAIS = ?, PUNTOS = ? WHERE DNI = ?
         """
 
@@ -54,7 +109,7 @@ object UsuarioDao {
             ps.setString(3, usuario.email)
             ps.setString(4, usuario.contrasenia)
             ps.setString(5, usuario.grupoSanguineo)
-            ps.setString(6, usuario.fechaNacimiento) // Ahora se establece como String
+            ps.setString(6, usuario.fechaNacimiento)
             ps.setString(7, usuario.ciudad)
             ps.setString(8, usuario.pais)
             if (usuario.puntos != null) {
@@ -75,6 +130,7 @@ object UsuarioDao {
         }
     }
 
+    // Método para obtener un usuario por DNI
     fun getUsuarioByDni(dni: String): Usuario? {
         val connection: Connection = MySqlConexion.getConexion() ?: return null
         val sql = "SELECT * FROM USUARIO WHERE DNI = ?"
@@ -84,27 +140,33 @@ object UsuarioDao {
             ps.setString(1, dni)
             val resultSet: ResultSet = ps.executeQuery()
 
-            if (resultSet.next()) {
+            val usuario = if (resultSet.next()) {
                 Usuario(
                     dni = resultSet.getString("DNI"),
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),
                     email = resultSet.getString("EMAIL"),
-                    contrasenia = resultSet.getString("contrasenia"),
+                    contrasenia = resultSet.getString("CONTRASENIA"),
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
-                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"), // Ahora se obtiene como String
+                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"),
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     puntos = resultSet.getInt("PUNTOS").takeIf { !resultSet.wasNull() },
-//                    es_admin = resultSet.getBoolean("ES_ADMIN")
                 )
             } else null
+
+            resultSet.close()
+            ps.close()
+            connection.close()
+
+            usuario
         } catch (e: SQLException) {
             e.printStackTrace()
             null
         }
     }
 
+    // Método para obtener todos los usuarios
     fun getAllUsuarios(): List<Usuario> {
         val connection: Connection = MySqlConexion.getConexion() ?: return emptyList()
         val usuarios = mutableListOf<Usuario>()
@@ -122,7 +184,7 @@ object UsuarioDao {
                     email = resultSet.getString("EMAIL"),
                     contrasenia = resultSet.getString("CONTRASENIA"),
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
-                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"), // Ahora se obtiene como String
+                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"),
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     puntos = resultSet.getInt("PUNTOS").takeIf { !resultSet.wasNull() },

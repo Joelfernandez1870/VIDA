@@ -1,10 +1,8 @@
 package com.example.vida.view
 
-
-
-
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +11,6 @@ import com.example.vida.data.database.MySqlConexion
 import com.example.vida.models.PedidoHospital
 import java.sql.Connection
 import java.sql.PreparedStatement
-import androidx.activity.enableEdgeToEdge
 
 class ListaPedidosUsuario : AppCompatActivity() {
 
@@ -27,8 +24,11 @@ class ListaPedidosUsuario : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewPedidosUsuario)
         recyclerView.layoutManager = LinearLayoutManager(this)
+    }
 
-        // Cargar los pedidos de donación
+    override fun onResume() {
+        super.onResume()
+        // Cargar los pedidos de donación al reanudar la actividad
         cargarPedidosDeDonacion()
     }
 
