@@ -9,9 +9,7 @@ data class HospitalCentro(
     val pais: String,
     val longitud: Double,
     val latitud: Double,
-    val codigo: String,
     val clave: String,
     val correo: String,
     val direccion: String,
-    val tipo_usuario: Int
 )

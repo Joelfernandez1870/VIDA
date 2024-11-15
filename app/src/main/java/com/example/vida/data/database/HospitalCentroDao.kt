@@ -11,7 +11,7 @@ object HospitalCentroDao {
 
     fun insert(hospitalCentro: HospitalCentro): Boolean {
         val connection = MySqlConexion.getConexion()
-        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
+        val sql = "INSERT INTO HOSPITALES_CENTROS (TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION,EMAIL, CONTRASENIA, CIUDAD, PAIS, LONGITUD, LATITUD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         try {
             val ps = connection?.prepareStatement(sql)
@@ -21,12 +21,11 @@ object HospitalCentroDao {
             ps?.setString(3, hospitalCentro.direccion)
             ps?.setString(4, hospitalCentro.correo )
             ps?.setString(5, hospitalCentro.clave)
-            ps?.setString(6, hospitalCentro.codigo)
-            ps?.setString(7, hospitalCentro.ciudad)
-            ps?.setString(8, hospitalCentro.pais)
-            ps?.setDouble(9, hospitalCentro.longitud)
-            ps?.setDouble(10,hospitalCentro.latitud)
-            ps?.setInt(11, hospitalCentro.tipo_usuario)
+            ps?.setString(6, hospitalCentro.ciudad)
+            ps?.setString(7, hospitalCentro.pais)
+            ps?.setDouble(8, hospitalCentro.longitud)
+            ps?.setDouble(9, hospitalCentro.latitud)
+
 
             val rowsInserted = ps?.executeUpdate()  // Ejecutamos la inserción
             ps?.close()
@@ -47,7 +46,7 @@ object HospitalCentroDao {
             Log.e("HospitalCentroDao", "No se pudo establecer conexión con la base de datos")
             return hospitalesCentros
         }
-        val sql = "SELECT TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION, EMAIL, CONTRASENIA, CODIGO_HABILITACION, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO FROM HOSPITALES_CENTROS"
+        val sql = "SELECT TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION, EMAIL, CONTRASENIA, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO FROM HOSPITALES_CENTROS"
 
         var statement: PreparedStatement? = null
         var resultSet: ResultSet? = null
@@ -63,12 +62,10 @@ object HospitalCentroDao {
                     direccion = resultSet.getString("DIRECCION"),
                     correo = resultSet.getString("EMAIL"),
                     clave = resultSet.getString("CONTRASENIA"),
-                    codigo = resultSet.getString("CODIGO_HABILITACION"),
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
                     longitud = resultSet.getDouble("LONGITUD"),
                     latitud = resultSet.getDouble("LATITUD"),
-                    tipo_usuario = resultSet.getInt("TIPO_USUARIO")
                 )
                 hospitalesCentros.add(hospitalCentro)
             }
@@ -87,14 +84,14 @@ object HospitalCentroDao {
     }
 
 
-    fun verifiarCodigo(codidigo: String): Boolean {
+    fun verifiarCodigo(codigo: String): Boolean {
         val connection = MySqlConexion.getConexion()
         if (connection != null) {
             val statement: PreparedStatement = connection.prepareStatement(
-                "SELECT EXISTS(SELECT 1 FROM HOSPITALES_CENTROS WHERE CODIGO_HABILITACION = ?)"
+                "SELECT EXISTS(SELECT 1 FROM CODIGO_HABILITACION WHERE CODIGO = ?)"
             )
             try {
-                statement.setString(1, codidigo) // Set the parameter value
+                statement.setString(1, codigo) // Set the parameter value
                 val resultSet: ResultSet = statement.executeQuery()
                 if (resultSet.next()) {
                     val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value

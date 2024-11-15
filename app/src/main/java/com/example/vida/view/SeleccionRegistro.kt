@@ -55,7 +55,7 @@ class SeleccionRegistro : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (exito) {
                         Toast.makeText(applicationContext, "Codigo verificado", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(applicationContext, SeleccionRegistro::class.java)
+                        val intent = Intent(applicationContext, RegistrarHospitalActivity::class.java)
                         startActivity(intent)
                     } else {
                         Toast.makeText(applicationContext, "El codigo no existe", Toast.LENGTH_SHORT).show()

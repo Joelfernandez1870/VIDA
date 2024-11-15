@@ -28,10 +28,9 @@ import kotlinx.coroutines.withContext
 
 class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
 
-    private lateinit var et_nombreLugar: EditText
+
     private lateinit var et_ciudad: EditText
     private lateinit var et_pais: EditText
-    private lateinit var et_codigo: EditText
     private lateinit var et_clave: EditText
     private lateinit var et_claverepetida: EditText
     private lateinit var et_correo: EditText
@@ -58,7 +57,6 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
         et_clave = findViewById(R.id.et_clave)
         et_claverepetida = findViewById(R.id.et_claverepetida)
         et_correo = findViewById(R.id.et_correo)
-        et_codigo = findViewById(R.id.et_codigo)
         btnGuardarHospital = findViewById(R.id.btnGuardarHospital)
 
         // Configurar el AutocompleteSupportFragment
@@ -84,12 +82,11 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
         // Obtener los valores de los campos de entrada
         val ciudad = et_ciudad.text.toString()
         val pais = et_pais.text.toString()
-        val codigo = et_codigo.text.toString()
         val clave = et_clave.text.toString()
         val claverepetida = et_claverepetida.text.toString()
         val correo = et_correo.text.toString()
         val tipoLugar = "Hospital"
-        val tipo_usuario = 0
+
 
         // Validación de los campos y creación del objeto HospitalCentro
 
@@ -100,11 +97,9 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
             pais = pais,
             longitud = longitud,
             latitud = latitud,
-            codigo = codigo,
             clave = clave,
             correo = correo,
-            direccion = direccion,
-            tipo_usuario = tipo_usuario
+            direccion = direccion
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
