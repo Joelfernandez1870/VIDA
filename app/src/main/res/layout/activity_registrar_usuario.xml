@@ -86,8 +86,8 @@
         android:layout_marginTop="16dp" />
 
     <!-- Campo para Grupo Sanguíneo -->
-    <EditText
-        android:id="@+id/inputGrupoSanguineo"
+    <Spinner
+        android:id="@+id/spGrupoSanguineo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Grupo Sanguíneo"
@@ -108,7 +108,7 @@
         android:clickable="true"
         android:padding="12dp"
         android:inputType="date"
-        app:layout_constraintTop_toBottomOf="@id/inputGrupoSanguineo"
+        app:layout_constraintTop_toBottomOf="@id/spGrupoSanguineo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
