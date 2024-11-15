@@ -2,7 +2,6 @@ package com.example.vida.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import com.example.vida.models.PedidoHospital
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.sql.Connection
 import java.sql.PreparedStatement
-
 
 class ListaPedidosHospitales : AppCompatActivity() {
 
@@ -29,15 +27,18 @@ class ListaPedidosHospitales : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewPedidosHospitales)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Cargar los datos en el RecyclerView
-        cargarPedidosHospitales()
-
         // Configurar FloatingActionButton para agregar un nuevo pedido
         val fabAgregarPedido = findViewById<FloatingActionButton>(R.id.fabAgregarPedido)
         fabAgregarPedido.setOnClickListener {
             val intent = Intent(this, RegistrarPedidoHospital::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Recargar los datos cada vez que la actividad vuelva al primer plano
+        cargarPedidosHospitales()
     }
 
     private fun cargarPedidosHospitales() {
