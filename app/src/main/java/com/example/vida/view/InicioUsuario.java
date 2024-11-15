@@ -16,17 +16,11 @@ public class InicioUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_inicio_usuario);
 
         // Obtener referencia al botón "Centro de Donaciones"
-        Button btnCentroDonaciones = findViewById(R.id.btnHospitales);
+        Button btnCentroDonaciones = findViewById(R.id.btnHospitalesMap);
 
-        Button btnMapaHospitales = findViewById(R.id.btnHospitalesMap);
-        btnMapaHospitales.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this, HospitalesMapActivity.class);
-            startActivity(intent);
-        });
 
-        // Configurar el OnClickListener para iniciar la actividad Centro_Donaciones
         btnCentroDonaciones.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this, CentroDonaciones.class);
+            Intent intent = new Intent(InicioUsuario.this, HospitalesMapActivity.class);
             startActivity(intent);
         });
 
