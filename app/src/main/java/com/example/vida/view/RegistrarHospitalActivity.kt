@@ -1,5 +1,6 @@
 package com.example.vida.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.example.vida.BuildConfig
 import com.example.vida.R
@@ -42,6 +44,7 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
     private var nombreLugar: String = ""
     private var direccion: String = ""
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_hospital)
@@ -69,6 +72,7 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
         ))
         autocompleteFragment.setHint("Nombre del Lugar")
         autocompleteFragment.setOnPlaceSelectedListener(this)
+
 
         // Botón para guardar el hospital
         btnGuardarHospital.setOnClickListener {

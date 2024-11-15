@@ -4,16 +4,24 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import com.example.vida.R
+import com.example.vida.data.database.HospitalCentroDao
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class SeleccionRegistro : AppCompatActivity(), OnMapReadyCallback {
@@ -27,23 +35,58 @@ class SeleccionRegistro : AppCompatActivity(), OnMapReadyCallback {
 
         // Configurar el OnClickListener para iniciar la actividad RegistrarUsuarioActivity
         btnUsuarioParticular.setOnClickListener {
+
             val intent = Intent(this, RegistrarUsuarioActivity::class.java)
             startActivity(intent)
         }
 
         // Obtener referencia al botón "Hospital"
         val btnHospital = findViewById<Button>(R.id.btnHospital)
-
-        // Configurar el OnClickListener para iniciar la actividad RegistrarHospitalActivity
+        val myCardView = findViewById<CardView>(R.id.myCardViewInclude)
+        // Configurar el OnClickListener para iniciar el card view de codigo habilitacion
         btnHospital.setOnClickListener {
-            val intent = Intent(this, RegistrarHospitalActivity::class.java)
-            startActivity(intent)
+            myCardView.visibility = View.VISIBLE
         }
+
+        val cardViewButtonEnviar = myCardView.findViewById<Button>(R.id.btnCardViewEnviar)
+        // OnClickListener para iniciar la actividad RegistrarHospitalActivity
+
+        cardViewButtonEnviar.setOnClickListener {
+
+
+            val codigo = myCardView.findViewById<EditText>(R.id.etCardview)
+            val codigoString = codigo.text.toString()
+            if (!codigoString.matches("\\d{8}".toRegex())) {
+                codigo.error = "El codigo debe tener 8 dígitos"
+            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                val exito = HospitalCentroDao.verifiarCodigo (codigoString)
+
+                withContext(Dispatchers.Main) {
+                    if (exito) {
+                        Toast.makeText(applicationContext, "Codigo verificado", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(applicationContext, SeleccionRegistro::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(applicationContext, "El codigo no existe", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        val cardViewButtonCancelar = myCardView.findViewById<Button>(R.id.btnCardViewCancelar)
+        cardViewButtonCancelar.setOnClickListener {
+            myCardView.visibility = View.GONE
+        }
+
 
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
     }
+
+
+
 
     override fun onMapReady(map: GoogleMap?) {
         val latitud = -34.42333

@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".LoginActivity">
+    android:padding="16dp">
+    <!-- tools:context=".LoginActivity">-->
 
-    <!-- Encabezado -->
+  <!-- Encabezado -->
+
     <TextView
         android:id="@+id/titleRegistrar"
         android:layout_width="0dp"
@@ -23,6 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Botón Usuario Particular -->
+
     <Button
         android:id="@+id/btnUsuarioParticular"
         android:layout_width="0dp"
@@ -49,6 +51,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnUsuarioParticular" />
+
+    <include
+        android:id="@+id/myCardViewInclude"
+        layout="@layout/card_view"
+        android:visibility="gone"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map_fragment"
