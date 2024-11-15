@@ -151,7 +151,6 @@ class RegistrarDonacion : AppCompatActivity() {
     }
 
     private fun CargaDePuntos(dni: String) {
-
         val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(dni)
         if (UsuarioEncontrado != null) {
             UsuarioEncontrado.puntos = UsuarioEncontrado.puntos?.plus(10)

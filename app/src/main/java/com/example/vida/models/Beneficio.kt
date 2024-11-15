@@ -1,5 +1,4 @@
 package com.example.vida.models
-
 data class Beneficio(
     val idBeneficio: Int,
     val descripcion: String,
