@@ -113,7 +113,7 @@ object UsuarioDao {
             ps.setString(7, usuario.ciudad)
             ps.setString(8, usuario.pais)
             if (usuario.puntos != null) {
-                ps.setInt(9, usuario.puntos)
+                ps.setInt(1, usuario.puntos ?: 0)
             } else {
                 ps.setNull(9, java.sql.Types.INTEGER)
             }
@@ -200,6 +200,28 @@ object UsuarioDao {
         } catch (e: SQLException) {
             e.printStackTrace()
             emptyList()
+        }
+    }
+
+    fun UpdatePuntos(usuario: Usuario): Boolean {
+        val connection: Connection = MySqlConexion.getConexion() ?: return false
+        val sql = """
+        UPDATE USUARIO SET PUNTOS = ? WHERE DNI = ?
+        """
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setInt(1, usuario.puntos ?: 0)
+            ps.setString(2, usuario.dni)
+
+            val rowsUpdated = ps.executeUpdate()
+
+            ps.close()
+            connection.close()
+
+            rowsUpdated > 0  // Retorna true si al menos una fila fue actualizada
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
         }
     }
 }

@@ -117,6 +117,7 @@ class RegistrarDonacion : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (insertado) {
                         Toast.makeText(this@RegistrarDonacion, "Donacion registrado exitosamente", Toast.LENGTH_SHORT).show()
+                        CargaDePuntos(donacion.dniUsuario);
                         RegresoInterfazHospital()  // Regreso a la pagina principal del hospital.
                     } else {
                         Toast.makeText(this@RegistrarDonacion, "Error al registrar la donacion", Toast.LENGTH_SHORT).show()
@@ -147,5 +148,14 @@ class RegistrarDonacion : AppCompatActivity() {
     {
         val intent = Intent(this@RegistrarDonacion, InicioHospitalesYCentros::class.java)
         startActivity(intent)
+    }
+
+    private fun CargaDePuntos(dni: String) {
+
+        val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(dni)
+        if (UsuarioEncontrado != null) {
+            UsuarioEncontrado.puntos = UsuarioEncontrado.puntos?.plus(10)
+            UsuarioDao.UpdatePuntos(UsuarioEncontrado)
+        }
     }
 }
