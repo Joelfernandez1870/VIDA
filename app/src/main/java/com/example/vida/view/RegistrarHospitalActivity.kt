@@ -80,6 +80,7 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
 
     private fun insertHospitalCentro() {
         // Obtener los valores de los campos de entrada
+        val direction = et_direccion.text.toString()
         val ciudad = et_ciudad.text.toString()
         val pais = et_pais.text.toString()
         val clave = et_clave.text.toString()
@@ -89,6 +90,27 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
 
 
         // Validación de los campos y creación del objeto HospitalCentro
+        if (direction.isEmpty() || ciudad.isEmpty() || pais.isEmpty() || clave.isEmpty() || claverepetida.isEmpty() || correo.isEmpty()) {
+            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!pais.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
+            et_pais.error = "País solo debe contener letras"
+            return
+        }
+        if (clave != claverepetida) {
+            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            et_correo.error = "Email inválido"
+            return
+        }
+        if (!clave.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$".toRegex())) {
+            et_clave.error = "Contrasenia debe contener al menos 6 caracteres, incluyendo letras y números"
+            return
+        }
 
         val hospitalCentro = HospitalCentro(
             tipoLugar = tipoLugar,
