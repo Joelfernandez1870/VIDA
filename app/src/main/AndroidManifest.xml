@@ -22,6 +22,15 @@
             android:name=".Recordatorios_Usuario"
             android:exported="false" />
         <activity
+            android:name=".ItemGrupo"
+            android:exported="false" />
+        <activity
+            android:name=".view.NuevoGrupo"
+            android:exported="false" />
+        <activity
+            android:name=".view.GruposChats"
+            android:exported="false" />
+        <activity
             android:name=".view.MuestraPedidoUsuario"
             android:exported="false" />
         <activity
