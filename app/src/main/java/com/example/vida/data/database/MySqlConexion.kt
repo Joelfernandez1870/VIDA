@@ -12,9 +12,9 @@ object MySqlConexion {
 //    private const val USER = "freedb_grupo9"
 //    private const val PASS = "w"+"$"+"VEVZ9CN*MGR#4"
 
-    private const val URL = "jdbc:mysql://10.0.2.2:3306/vida"
+    private const val URL = "jdbc:mysql://10.0.2.2:3306/freedb_vida_db"
     private const val USER = "root"
-    private const val PASS = "root"
+    private const val PASS = ""
 
     fun getConexion(): Connection? {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
