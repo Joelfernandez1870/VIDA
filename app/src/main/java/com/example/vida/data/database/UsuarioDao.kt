@@ -224,4 +224,30 @@ object UsuarioDao {
             false
         }
     }
+
+    fun getDNIById(id: Int): Int? {
+        val connection: Connection = MySqlConexion.getConexion() ?: return null
+        val sql = "SELECT DNI FROM USUARIO WHERE ID_USUARIO = ?"
+
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setInt(1, id)
+            val resultSet: ResultSet = ps.executeQuery()
+
+            if (resultSet.next()) {
+                resultSet.getInt("DNI") // Retorna el valor del DNI
+            } else {
+                null
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            null
+        } finally {
+            try {
+                connection.close()
+            } catch (e: SQLException) {
+                e.printStackTrace()
+            }
+        }
+    }
 }
