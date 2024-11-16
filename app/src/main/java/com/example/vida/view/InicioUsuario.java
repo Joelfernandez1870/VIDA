@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.vida.R;
+import com.example.vida.Recordatorios_Usuario;
 
 public class InicioUsuario extends AppCompatActivity {
 
@@ -18,6 +19,13 @@ public class InicioUsuario extends AppCompatActivity {
         // Obtener referencia al botón "Centro de Donaciones"
         Button btnCentroDonaciones = findViewById(R.id.btnHospitalesMap);
 
+        //Obtengo otra referencia para el boton "Recordatorios"
+        Button btnRecordatorio = findViewById(R.id.btnRecordatorio);
+
+        btnRecordatorio.setOnClickListener(v -> {
+            Intent intent = new Intent(InicioUsuario.this, Recordatorios_Usuario.class);
+            startActivity(intent);
+        });
 
         btnCentroDonaciones.setOnClickListener(v -> {
             Intent intent = new Intent(InicioUsuario.this, HospitalesMapActivity.class);

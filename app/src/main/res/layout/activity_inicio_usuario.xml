@@ -113,6 +113,18 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <Button
+        android:id="@+id/btnRecordatorio"
+        android:layout_width="139dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="256dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="8dp"
+        android:text="Recordatorios"
+        app:layout_constraintBottom_toTopOf="@+id/btnDonaciones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleMain" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

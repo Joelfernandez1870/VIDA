@@ -1,6 +1,7 @@
 package com.example.vida.models
 
 data class Usuario(
+    val id: Int? = null,
     val dni: String,
     val nombre: String,
     val apellido: String,
