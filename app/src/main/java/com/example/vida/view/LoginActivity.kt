@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
 import com.example.vida.data.database.MySqlConexion
+import com.example.vida.data.database.UsuarioDao
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
     // Variable global para almacenar el hospitalId
     companion object {
         var sesionGlobal: Int? = null
+        var sesionGlobalDni: Int? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +97,7 @@ class LoginActivity : AppCompatActivity() {
                     // Dependiendo del tipo de usuario, guardamos el ID en la variable global
                     if (tipoUsuario == 1) {  // Usuario
                         sesionGlobal = resultSet.getInt("ID_USUARIO")
+                        sesionGlobalDni = UsuarioDao.getDNIById(resultSet.getInt("ID_USUARIO"));
                     } else if (tipoUsuario == 0) {  // Hospital
                         sesionGlobal = resultSet.getInt("ID_HOSPITALES_CENTRO")
                     }
@@ -140,6 +143,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }.start()
+
+
     }
 
 }

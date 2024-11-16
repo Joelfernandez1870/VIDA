@@ -4,19 +4,22 @@ import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
 import com.example.vida.data.database.BeneficioDao
+import com.example.vida.data.database.UsuarioDao
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
-data class Beneficio(val nombre: String, val puntosRequeridos: Int, val desbloqueado: Boolean)
 
 class Beneficios : AppCompatActivity() {
+
+    private lateinit var puntosEditText: EditText // Aqui cargo los puntos del usuario
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +27,12 @@ class Beneficios : AppCompatActivity() {
 
         val listViewBeneficios = findViewById<ListView>(R.id.listViewBeneficios)
 
+        val puntosEditText = findViewById<EditText>(R.id.puntosEditText)
+
+        puntosEditText.setText("Tus puntos: ${puntosUsuario().toString()}")
+
         // Simulo punto (prubea) REEMPLAZAR POR PUNTOS DE USUARIO EN SESION
-        val puntosUsuario = 25
+        val puntosUsuario = puntosUsuario ()
 
         val beneficios = BeneficioDao.getAllBeneficios()
 
@@ -45,23 +52,23 @@ class Beneficios : AppCompatActivity() {
 
 
 
-            // Crear lista de beneficios desbloqueados y bloqueados
-            val listaBeneficiosConEstado = beneficios.map { beneficio ->
-                if (puntosUsuario >= beneficio.puntos_necesario) {
-                    "✅ ${beneficio.descripcion} - Desbloqueado"
-                } else {
-                    "🔒 ${beneficio.descripcion} - Requiere ${beneficio.puntos_necesario} puntos"
-                }
+        // Crear lista de beneficios desbloqueados y bloqueados
+        val listaBeneficiosConEstado = beneficios.map { beneficio ->
+            if (puntosUsuario >= beneficio.puntos_necesario) {
+                "✅ ${beneficio.descripcion} - Desbloqueado"
+            } else {
+                "🔒 ${beneficio.descripcion} - Requiere ${beneficio.puntos_necesario} puntos"
             }
-
-            // Configurar el adaptador para mostrar la lista
-            val adapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                listaBeneficiosConEstado
-            )
-            listViewBeneficios.adapter = adapter
         }
+
+        // Configurar el adaptador para mostrar la lista
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            listaBeneficiosConEstado
+        )
+        listViewBeneficios.adapter = adapter
+    }
 
         // Manejar clic en los beneficios
         listViewBeneficios.setOnItemClickListener { _, _, position, _ ->
@@ -106,4 +113,21 @@ class Beneficios : AppCompatActivity() {
     private fun showToast(message: String) {
         android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
     }
+
+    private fun puntosUsuario (): Int {
+
+        val DniUsuario = LoginActivity.sesionGlobalDni!!//OBTENGO EL DATO DE LA VARIABLE GLOBAL
+        val DniUsuarioString = DniUsuario.toString() //casteo por que no coincide el tipo de dato
+
+        val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(DniUsuarioString)
+
+        if (UsuarioEncontrado != null) {
+            return UsuarioEncontrado.puntos!!
+        }
+        else {
+            return 0
+        }
+    }
+
+
 }
