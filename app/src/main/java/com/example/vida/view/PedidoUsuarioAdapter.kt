@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
-import com.example.vida.models.PedidoHospital
+import com.example.vida.models.PedidosUsuario
 
-class pedidoUsuarioAdapter(private val listaPedidos: List<PedidoHospital>) : RecyclerView.Adapter<pedidoUsuarioAdapter.PedidoViewHolder>() {
+class pedidoUsuarioAdapter(private val listaPedidos: List<PedidosUsuario>) : RecyclerView.Adapter<pedidoUsuarioAdapter.PedidoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_muestra_pedido_usuario, parent, false)
@@ -25,11 +25,11 @@ class pedidoUsuarioAdapter(private val listaPedidos: List<PedidoHospital>) : Rec
     inner class PedidoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombrePacienteTextView: TextView = itemView.findViewById(R.id.nombrePaciente)
         private val nombreHospitalTextView: TextView = itemView.findViewById(R.id.nombreHospital)
-        private val descripcionTextView: TextView = itemView.findViewById(R.id.descripcionPedido)
-        private val fechaTextView: TextView = itemView.findViewById(R.id.fechaPedido)
-        private val estadoTextView: TextView = itemView.findViewById(R.id.estadoPedido)
+        private val descripcionTextView: TextView = itemView.findViewById(R.id.descripcion)
+        private val fechaTextView: TextView = itemView.findViewById(R.id.fecha)
+        private val estadoTextView: TextView = itemView.findViewById(R.id.estado)
 
-        fun bind(pedido: PedidoHospital) {
+        fun bind(pedido: PedidosUsuario) {
             nombrePacienteTextView.text = pedido.nombrePaciente
             nombreHospitalTextView.text = pedido.nombreHospital
             descripcionTextView.text = pedido.descripcion
