@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,26 +21,17 @@ class Chats : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var mensajeAdapter: MensajeAdapter
-    private var idUsuario: Int = 1 // ID predeterminado, ajusta según sea necesario
-    private var idGrupo: Int = -1 // ID del grupo, se recibirá desde la otra actividad
 
-    private val handler = Handler(Looper.getMainLooper()) // Handler para tareas periódicas
-    private val refreshInterval = 5000L // Intervalo de refresco en milisegundos (5 segundos)
+    private var idUsuario: Int = 1 // ID predeterminado del usuario
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val refreshInterval = 5000L // Intervalo de refresco (5 segundos)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chats)
 
-        // Obtener el ID del grupo desde el Intent
-        idGrupo = intent.getIntExtra("ID_GRUPO", -1)
-
-        if (idGrupo == -1) {
-            Toast.makeText(this, "ID de grupo no válido", Toast.LENGTH_SHORT).show()
-            finish() // Cierra la actividad si el ID no es válido
-            return
-        }
-
-        // Inicializar el RecyclerView y el adapter
+        // Inicializar RecyclerView y Adapter
         recyclerView = findViewById(R.id.recyclerViewChats)
         recyclerView.layoutManager = LinearLayoutManager(this)
         mensajeAdapter = MensajeAdapter()
@@ -50,14 +42,13 @@ class Chats : AppCompatActivity() {
         fabAgregarChat.setOnClickListener {
             val intent = Intent(this, Mensajes::class.java)
             intent.putExtra("idUsuario", idUsuario)
-            intent.putExtra("ID_GRUPO", idGrupo) // Pasar también el ID del grupo
             startActivityForResult(intent, 1)
         }
 
-        // Iniciar la carga inicial de mensajes
+        // Cargar mensajes iniciales
         cargarMensajes()
 
-        // Configurar refresco periódico
+        // Configurar refresco automático
         iniciarRefrescoAutomatico()
     }
 
@@ -73,11 +64,9 @@ class Chats : AppCompatActivity() {
                     SELECT M.ID_MENSAJE, U.NOMBRE AS NOMBRE_USUARIO, M.CONTENIDO, M.FECHA_ENVIO
                     FROM MENSAJES M
                     JOIN USUARIO U ON M.ID_USUARIO = U.ID_USUARIO
-                    WHERE M.ID_GRUPO = ? -- Filtrar por ID_GRUPO
                     ORDER BY M.FECHA_ENVIO DESC
                 """
                 preparedStatement = connection?.prepareStatement(query)
-                preparedStatement?.setInt(1, idGrupo) // Pasar el ID del grupo
 
                 val resultSet = preparedStatement?.executeQuery()
                 while (resultSet?.next() == true) {
@@ -90,7 +79,12 @@ class Chats : AppCompatActivity() {
                 }
 
                 runOnUiThread {
-                    mensajeAdapter.updateMensajes(mensajes)
+                    if (mensajes.isEmpty()) {
+                        recyclerView.visibility = RecyclerView.GONE
+                    } else {
+                        recyclerView.visibility = RecyclerView.VISIBLE
+                        mensajeAdapter.updateMensajes(mensajes)
+                    }
                 }
             } catch (ex: Exception) {
                 Log.e("Chats", "Error al cargar mensajes: ${ex.message}")
@@ -115,7 +109,7 @@ class Chats : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null) // Detener el handler para evitar fugas de memoria
+        handler.removeCallbacksAndMessages(null) // Detener tareas del handler
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -125,4 +119,4 @@ class Chats : AppCompatActivity() {
             cargarMensajes()
         }
     }
-}
+} 
