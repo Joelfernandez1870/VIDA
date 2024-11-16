@@ -18,6 +18,7 @@ class ListaPedidosHospitales : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var pedidoHospitalAdapter: PedidoHospitalAdapter
+    private var listaPedidos: MutableList<PedidoHospital> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,6 @@ class ListaPedidosHospitales : AppCompatActivity() {
 
     private fun cargarPedidosHospitales() {
         Thread {
-            val pedidos = mutableListOf<PedidoHospital>()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
@@ -67,6 +67,7 @@ class ListaPedidosHospitales : AppCompatActivity() {
                 preparedStatement = connection?.prepareStatement(query)
 
                 val resultSet = preparedStatement?.executeQuery()
+                listaPedidos.clear() // Limpiar lista antes de recargar
                 while (resultSet?.next() == true) {
                     val idEmergencia = resultSet.getInt("ID_EMERGENCIA")
                     val nombrePaciente = resultSet.getString("NOMBRE_PACIENTE")
@@ -76,16 +77,56 @@ class ListaPedidosHospitales : AppCompatActivity() {
                     val estado = resultSet.getString("ESTADO")
 
                     val pedido = PedidoHospital(idEmergencia, nombrePaciente, nombreHospital, descripcion, fecha, estado)
-                    pedidos.add(pedido)
+                    listaPedidos.add(pedido)
                 }
 
                 runOnUiThread {
-                    pedidoHospitalAdapter = PedidoHospitalAdapter(pedidos)
+                    pedidoHospitalAdapter = PedidoHospitalAdapter(listaPedidos,
+                        onModificar = { pedido ->
+                            val intent = Intent(this, ModificarPedidoHospital::class.java)
+                            intent.putExtra("ID_EMERGENCIA", pedido.idEmergencia) // Pasamos el ID para modificar
+                            startActivity(intent)
+                        },
+                        onEliminar = { pedido ->
+                            eliminarPedido(pedido)
+                        })
                     recyclerView.adapter = pedidoHospitalAdapter
                 }
             } catch (ex: Exception) {
                 runOnUiThread {
                     Toast.makeText(this, "Error al cargar los pedidos", Toast.LENGTH_SHORT).show()
+                }
+            } finally {
+                preparedStatement?.close()
+                connection?.close()
+            }
+        }.start()
+    }
+
+    private fun eliminarPedido(pedido: PedidoHospital) {
+        Thread {
+            var connection: Connection? = null
+            var preparedStatement: PreparedStatement? = null
+            try {
+                connection = MySqlConexion.getConexion()
+                val query = "DELETE FROM PEDIDO_DONACION WHERE ID_EMERGENCIA = ?"
+                preparedStatement = connection?.prepareStatement(query)
+                preparedStatement?.setInt(1, pedido.idEmergencia)
+
+                val rowsAffected = preparedStatement?.executeUpdate()
+                if (rowsAffected != null && rowsAffected > 0) {
+                    runOnUiThread {
+                        Toast.makeText(this, "Pedido eliminado con éxito", Toast.LENGTH_SHORT).show()
+                        cargarPedidosHospitales() // Recargar lista después de eliminar
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(this, "Error al eliminar el pedido", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (ex: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "Error al eliminar el pedido", Toast.LENGTH_SHORT).show()
                 }
             } finally {
                 preparedStatement?.close()

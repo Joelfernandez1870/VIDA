@@ -3,12 +3,18 @@ package com.example.vida.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
 import com.example.vida.models.PedidoHospital
 
-class PedidoHospitalAdapter(private val pedidos: List<PedidoHospital>) : RecyclerView.Adapter<PedidoHospitalAdapter.PedidoHospitalViewHolder>() {
+class PedidoHospitalAdapter(
+    private val pedidos: MutableList<PedidoHospital>,
+    private val onModificar: (PedidoHospital) -> Unit,
+    private val onEliminar: (PedidoHospital) -> Unit
+) : RecyclerView.Adapter<PedidoHospitalAdapter.PedidoHospitalViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoHospitalViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_muestra_pedidos_hospital, parent, false)
@@ -24,12 +30,14 @@ class PedidoHospitalAdapter(private val pedidos: List<PedidoHospital>) : Recycle
         return pedidos.size
     }
 
-    class PedidoHospitalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PedidoHospitalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombrePaciente: TextView = itemView.findViewById(R.id.nombrePaciente)
         private val nombreHospital: TextView = itemView.findViewById(R.id.nombreHospital)
         private val descripcion: TextView = itemView.findViewById(R.id.descripcion)
         private val fecha: TextView = itemView.findViewById(R.id.fecha)
         private val estado: TextView = itemView.findViewById(R.id.estado)
+        private val btnModificar: ImageButton = itemView.findViewById(R.id.btnModificar)
+        private val btnEliminar: ImageButton = itemView.findViewById(R.id.btnEliminar)
 
         fun bind(pedido: PedidoHospital) {
             nombrePaciente.text = pedido.nombrePaciente
@@ -37,6 +45,16 @@ class PedidoHospitalAdapter(private val pedidos: List<PedidoHospital>) : Recycle
             descripcion.text = pedido.descripcion
             fecha.text = pedido.fecha
             estado.text = pedido.estado
+
+            // Acción al hacer clic en el botón de Modificar
+            btnModificar.setOnClickListener {
+                onModificar(pedido)
+            }
+
+            // Acción al hacer clic en el botón de Eliminar
+            btnEliminar.setOnClickListener {
+                onEliminar(pedido)
+            }
         }
     }
 }

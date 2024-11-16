@@ -19,6 +19,9 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".view.ModificarPedidoHospital"
+            android:exported="false" />
+        <activity
             android:name=".Recordatorios_Usuario"
             android:exported="false" />
         <activity
