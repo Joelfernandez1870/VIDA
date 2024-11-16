@@ -2,7 +2,7 @@ package com.example.vida.models
 
 data class HospitalCentro(
 
-   // val idHospitalesCentro: Int,
+    val idHospitalesCentro: Int? = null,
     val tipoLugar: String,
     val nombreLugar: String,
     val ciudad: String,

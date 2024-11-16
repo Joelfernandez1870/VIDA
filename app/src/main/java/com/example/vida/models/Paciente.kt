@@ -2,6 +2,7 @@ package com.example.vida.models
 
 data class Paciente(
 
+    val idPaciente: Int? = null,
     val dni: String,
     val nombre: String,
     val apellido: String,

@@ -82,6 +82,7 @@ object PacienteDao {
 
             while (resultSet.next()) {
                 val paciente = Paciente(
+                    idPaciente = resultSet.getInt("ID_PACIENTE"),
                     dni = resultSet.getString("DNI"),
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),

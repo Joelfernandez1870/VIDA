@@ -26,12 +26,12 @@ class InicioHospitalesYCentros : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         // Obtener referencia al botón "Notificaciones Urgentes"
-        val btnNotificacionesUrgentes = findViewById<Button>(R.id.btnNotificacionUrgente)
+        val btnNotificacionUrgente = findViewById<Button>(R.id.btnNotificacionUrgente)
 
 // Crear el Intent para iniciar la actividad Notificaciones Urgentes
-        btnNotificacionesUrgentes.setOnClickListener { v: View? ->
-
+        btnNotificacionUrgente.setOnClickListener { v: View? ->
             val intent =
                 Intent(this, NotificacionesUrgentes::class.java)
             startActivity(intent)

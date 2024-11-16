@@ -46,7 +46,7 @@ object HospitalCentroDao {
             Log.e("HospitalCentroDao", "No se pudo establecer conexión con la base de datos")
             return hospitalesCentros
         }
-        val sql = "SELECT TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION, EMAIL, CONTRASENIA, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO FROM HOSPITALES_CENTROS"
+        val sql = "SELECT ID_HOSPITALES_CENTRO, TIPO_LUGAR, NOMBRE_LUGAR, DIRECCION, EMAIL, CONTRASENIA, CIUDAD, PAIS, LONGITUD, LATITUD, TIPO_USUARIO FROM HOSPITALES_CENTROS"
 
         var statement: PreparedStatement? = null
         var resultSet: ResultSet? = null
@@ -57,6 +57,7 @@ object HospitalCentroDao {
 
             while (resultSet.next()) {
                 val hospitalCentro = HospitalCentro(
+                    idHospitalesCentro = resultSet.getInt("ID_HOSPITALES_CENTRO"),
                     tipoLugar = resultSet.getString("TIPO_LUGAR"),
                     nombreLugar = resultSet.getString("NOMBRE_LUGAR"),
                     direccion = resultSet.getString("DIRECCION"),
