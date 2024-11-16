@@ -61,7 +61,6 @@ class RegistrarDonacion : AppCompatActivity() {
         inputFechaDonacion.setOnClickListener { mostrarDatePicker() }
 
 
-
         val usuarioAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
