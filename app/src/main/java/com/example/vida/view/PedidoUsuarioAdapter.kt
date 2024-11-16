@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
 import com.example.vida.models.PedidoHospital
 
-class pedidoUsuarioAdapter(private val listaPedidos: List<PedidoHospital>) : RecyclerView.Adapter<pedidoUsuarioAdapter.PedidoViewHolder>() {
+class PedidoUsuarioAdapter(private val listaPedidos: List<PedidoHospital>) : RecyclerView.Adapter<PedidoUsuarioAdapter.PedidoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_muestra_pedido_usuario, parent, false)
