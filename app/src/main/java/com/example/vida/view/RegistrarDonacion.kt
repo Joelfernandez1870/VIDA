@@ -17,14 +17,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
 import com.example.vida.data.database.DonacionDao
+import com.example.vida.data.database.RecordatorioDao
 import com.example.vida.data.database.UsuarioDao
 import com.example.vida.models.Donacion
+import com.example.vida.models.Recordatorio
 import com.example.vida.models.Usuario
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class RegistrarDonacion : AppCompatActivity() {
 
@@ -117,6 +122,7 @@ class RegistrarDonacion : AppCompatActivity() {
                     if (insertado) {
                         Toast.makeText(this@RegistrarDonacion, "Donacion registrado exitosamente", Toast.LENGTH_SHORT).show()
                         CargaDePuntos(donacion.dniUsuario);
+                        CargarRecordatorio(donacion.dniUsuario);
                         RegresoInterfazHospital()  // Regreso a la pagina principal del hospital.
                     } else {
                         Toast.makeText(this@RegistrarDonacion, "Error al registrar la donacion", Toast.LENGTH_SHORT).show()
@@ -154,6 +160,41 @@ class RegistrarDonacion : AppCompatActivity() {
         if (UsuarioEncontrado != null) {
             UsuarioEncontrado.puntos = UsuarioEncontrado.puntos?.plus(10)
             UsuarioDao.UpdatePuntos(UsuarioEncontrado)
+        }
+    }
+
+    private fun CargarRecordatorio(dni: String)
+    {
+        val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(dni)
+        if (UsuarioEncontrado != null) {
+
+            // Crear un objeto Calendar para sumar 30 días a la fecha de donacion cargada.
+            val calendar = Calendar.getInstance()
+            calendar.time = Date() // Establezco fecha actual
+            calendar.add(Calendar.DAY_OF_YEAR, 30) // Sumar 30 días
+
+            val fecha_envio = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            val fechaProximaDonacion = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+
+            val mensajedonacion = "Gracias por tu donación, ${UsuarioEncontrado.nombre} ${UsuarioEncontrado.apellido}. " +
+                    "Podrás volver a donar a partir del: $fechaProximaDonacion."
+
+            val RecordatorioPersonal = Recordatorio(
+                id_usuario = UsuarioEncontrado.id!!,
+                fecha_envio = fecha_envio,
+                tipo_recordatorio = "Donación",
+                mensaje_recordatorio = mensajedonacion
+            )
+
+            if (RecordatorioDao.Insert(RecordatorioPersonal))
+            {
+                Toast.makeText(this, "Recordatorio cargado exitosamente", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(this, "Error al cargar el recordatorio", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 }
