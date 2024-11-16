@@ -112,6 +112,32 @@ object HospitalCentroDao {
         }
     }
 
+    fun getHospitalById (id: Int): HospitalCentro? {
+        val connection: Connection = MySqlConexion.getConexion()!!
+        val statement: PreparedStatement = connection.prepareStatement(
+            "SELECT * FROM HOSPITALES_CENTROS WHERE ID_HOSPITALES_CENTRO = ?"
+        )
+        statement.setInt(1, id)
+        val resultSet: ResultSet = statement.executeQuery()
+
+        if (resultSet.next()) {
+            return HospitalCentro(
+                idHospitalesCentro = resultSet.getInt("ID_HOSPITALES_CENTRO"),
+                tipoLugar = resultSet.getString("TIPO_LUGAR"),
+                nombreLugar = resultSet.getString("NOMBRE_LUGAR"),
+                direccion = resultSet.getString("DIRECCION"),
+                correo = resultSet.getString("EMAIL"),
+                clave = resultSet.getString("CONTRASENIA"),
+                ciudad = resultSet.getString("CIUDAD"),
+                pais = resultSet.getString("PAIS"),
+                longitud = resultSet.getDouble("LONGITUD"),
+                latitud = resultSet.getDouble("LATITUD"),
+
+            )
+        }else
+        {return null}
+    }
+
 
     /*
     fun update(hospitalCentro: HospitalCentro) {

@@ -31,18 +31,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Lista de donaciones -->
-    <ListView
-        android:id="@+id/listViewDonaciones"
+    <!-- RecyclerView para la lista de donaciones -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDonaciones"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/searchViewDonaciones"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/fabAgregarDonacion" />
+        app:layout_constraintBottom_toTopOf="@id/fabAgregarDonacion" />
 
-    <!-- Botón para agregar donaciones -->
+    <!-- Botón flotante para agregar donaciones -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAgregarDonacion"
         android:layout_width="wrap_content"
