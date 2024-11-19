@@ -1,13 +1,10 @@
 package com.example.vida.view;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.vida.R;
-import com.example.vida.Recordatorios_Usuario;
 
 public class InicioUsuario extends AppCompatActivity {
 

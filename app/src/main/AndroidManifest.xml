@@ -19,7 +19,7 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
-            android:name=".ItemPaciente"
+            android:name=".view.ItemPaciente"
             android:exported="false" />
         <activity
             android:name=".view.MuestraPaciente"
@@ -28,10 +28,10 @@
             android:name=".view.ModificarPedidoHospital"
             android:exported="false" />
         <activity
-            android:name=".Recordatorios_Usuario"
+            android:name=".view.Recordatorios_Usuario"
             android:exported="false" />
         <activity
-            android:name=".ItemGrupo"
+            android:name=".view.ItemGrupo"
             android:exported="false" />
         <activity
             android:name=".view.NuevoGrupo"

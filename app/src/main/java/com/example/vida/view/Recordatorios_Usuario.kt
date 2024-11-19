@@ -1,4 +1,4 @@
-package com.example.vida
+package com.example.vida.view
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,11 +6,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vida.R
 import com.example.vida.data.database.MySqlConexion
 import com.example.vida.data.database.UsuarioDao
 import com.example.vida.models.Recordatorio
 import com.example.vida.view.LoginActivity.Companion.sesionGlobalDni
-import com.example.vida.view.RecordatorioAdapter
 import java.sql.Connection
 import java.sql.PreparedStatement
 
