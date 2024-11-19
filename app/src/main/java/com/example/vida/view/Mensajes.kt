@@ -7,15 +7,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
 import com.example.vida.data.database.MySqlConexion
 import java.sql.Connection
 import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.sql.ResultSet
 
 class Mensajes : AppCompatActivity() {
 
@@ -24,7 +23,6 @@ class Mensajes : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_mensajes)
 
         // Obtener el ID del usuario desde la sesión global
@@ -62,7 +60,6 @@ class Mensajes : AppCompatActivity() {
 
     // Función para cargar el nombre del usuario desde la base de datos
     private fun cargarNombreUsuario() {
-        // Ejecutar en un hilo separado para evitar bloquear el hilo principal
         Thread {
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
@@ -93,19 +90,12 @@ class Mensajes : AppCompatActivity() {
                         Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()
                     }
                 }
-            } catch (ex: Exception) {
-                Log.e("Error", ex.message.toString())
-                runOnUiThread {
-                    Toast.makeText(this, "Error al cargar el nombre del usuario", Toast.LENGTH_SHORT).show()
-                }
+            } catch (e: Exception) {
+                Log.e("Mensajes", "Error al cargar el nombre del usuario: ${e.message}")
             } finally {
-                try {
-                    resultSet?.close()
-                    preparedStatement?.close()
-                    connection?.close()
-                } catch (ex: Exception) {
-                    Log.e("Error closing", ex.message.toString())
-                }
+                resultSet?.close()
+                preparedStatement?.close()
+                connection?.close()
             }
         }.start()
     }
@@ -117,51 +107,40 @@ class Mensajes : AppCompatActivity() {
             var preparedStatement: PreparedStatement? = null
 
             try {
-                // Establecer la conexión con la base de datos
                 connection = MySqlConexion.getConexion()
 
-                // Consulta para insertar el mensaje
-                val query = "INSERT INTO MENSAJES (ID_USUARIO, CONTENIDO, FECHA_ENVIO) VALUES (?, ?, ?)"
+                // Consulta SQL para insertar un nuevo mensaje
+                val query = """
+                    INSERT INTO MENSAJES (ID_USUARIO, CONTENIDO, FECHA_ENVIO) 
+                    VALUES (?, ?, ?)
+                """
                 preparedStatement = connection?.prepareStatement(query)
                 preparedStatement?.setInt(1, idUsuario)
                 preparedStatement?.setString(2, contenido)
                 preparedStatement?.setString(3, fechaEnvio)
 
-                // Ejecutar la consulta
-                val rowsInserted = preparedStatement?.executeUpdate()
+                // Ejecutar la inserción del mensaje
+                preparedStatement?.executeUpdate()
 
-                if (rowsInserted != null && rowsInserted > 0) {
-                    // Si el mensaje se inserta correctamente
-                    runOnUiThread {
-                        Toast.makeText(this, "Mensaje enviado", Toast.LENGTH_SHORT).show()
-                        val inputCuerpoMensaje = findViewById<EditText>(R.id.inputCuerpoMensaje)
-                        inputCuerpoMensaje.text.clear()
 
-                        // Enviar un broadcast para notificar a otras actividades
-                        val intent = Intent("com.example.vida.REFRESCAR_CHAT")
-                        sendBroadcast(intent)
-
-                        // Cerrar la actividad Mensajes
-                        finish()
-                    }
-                } else {
-                    // Si hubo un error al insertar el mensaje
-                    runOnUiThread {
-                        Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (ex: Exception) {
-                Log.e("Error", ex.message.toString())
+                // Mostrar mensaje de éxito
                 runOnUiThread {
-                    Toast.makeText(this, "Error al conectarse a la base de datos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Mensaje enviado", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                // Limpiar el campo de texto del mensaje
+                runOnUiThread {
+                    findViewById<EditText>(R.id.inputCuerpoMensaje).setText("")
+                }
+            } catch (e: Exception) {
+                Log.e("Mensajes", "Error al insertar mensaje: ${e.message}")
+                runOnUiThread {
+                    Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show()
                 }
             } finally {
-                try {
-                    preparedStatement?.close()
-                    connection?.close()
-                } catch (ex: Exception) {
-                    Log.e("Error closing", ex.message.toString())
-                }
+                preparedStatement?.close()
+                connection?.close()
             }
         }.start()
     }

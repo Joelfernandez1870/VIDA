@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -28,31 +27,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre Paciente"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/dniPaciente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DNI Paciente"
+                android:textStyle="italic"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/nombreHospital"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre Hospital" />
+                android:text="Nombre Hospital"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/descripcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Descripción" />
+                android:text="Descripción"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/fecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha" />
+                android:text="Fecha"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/estado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estado" />
+                android:text="Estado"
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <!-- Botones de acción (Modificar y Eliminar) -->
@@ -69,7 +81,7 @@
                 android:src="@android:drawable/ic_menu_edit"
                 android:contentDescription="Modificar"
                 android:background="?android:attr/selectableItemBackground"
-                android:padding="8dp" />
+                android:padding="8dp"/>
 
             <ImageButton
                 android:id="@+id/btnEliminar"
@@ -78,7 +90,7 @@
                 android:src="@android:drawable/ic_menu_delete"
                 android:contentDescription="Eliminar"
                 android:background="?android:attr/selectableItemBackground"
-                android:padding="8dp" />
+                android:padding="8dp"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -1,8 +1,8 @@
 package com.example.vida.view
 
 import android.os.Bundle
+import android.widget.SearchView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,38 +15,39 @@ import java.sql.PreparedStatement
 class ListaPedidosUsuario : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var pedidoUsuarioAdapter: pedidoUsuarioAdapter
+    private lateinit var pedidoUsuarioAdapter: PedidoUsuarioAdapter
+    private lateinit var searchView: SearchView
+    private val listaCompletaPedidos = mutableListOf<PedidosUsuario>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_lista_pedidos_usuario)
 
         recyclerView = findViewById(R.id.recyclerViewPedidosUsuario)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        searchView = findViewById(R.id.searchViewChats)
+        setupSearchView()
     }
 
     override fun onResume() {
         super.onResume()
-        // Cargar los pedidos de donación al reanudar la actividad
         cargarPedidosDeDonacion()
     }
 
     private fun cargarPedidosDeDonacion() {
         Thread {
-            val pedidos = mutableListOf<PedidosUsuario>()
+            listaCompletaPedidos.clear()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
             try {
-                // Establecer la conexión con la base de datos
                 connection = MySqlConexion.getConexion()
-
-                // Realizar la consulta SQL
                 val query = """
                     SELECT 
                         p.ID_EMERGENCIA,
                         pa.NOMBRE AS NOMBRE_PACIENTE,
+                        pa.DNI AS DNI_PACIENTE,
                         hc.NOMBRE_LUGAR AS NOMBRE_HOSPITAL,
                         p.DESCRIPCION,
                         p.FECHA,
@@ -59,24 +60,22 @@ class ListaPedidosUsuario : AppCompatActivity() {
                         HOSPITALES_CENTROS hc ON p.ID_HOSPITALES_CENTRO = hc.ID_HOSPITALES_CENTRO
                 """
                 preparedStatement = connection?.prepareStatement(query)
-
                 val resultSet = preparedStatement?.executeQuery()
                 while (resultSet?.next() == true) {
-                    val idEmergencia = resultSet.getInt("ID_EMERGENCIA")
-                    val nombrePaciente = resultSet.getString("NOMBRE_PACIENTE")
-                    val nombreHospital = resultSet.getString("NOMBRE_HOSPITAL")
-                    val descripcion = resultSet.getString("DESCRIPCION")
-                    val fecha = resultSet.getString("FECHA")
-                    val estado = resultSet.getString("ESTADO")
-
-                    // Crear objeto PedidoHospital
-                    val pedido = PedidosUsuario(idEmergencia, nombrePaciente, nombreHospital, descripcion, fecha, estado)
-                    pedidos.add(pedido)
+                    val pedido = PedidosUsuario(
+                        resultSet.getInt("ID_EMERGENCIA"),
+                        resultSet.getString("NOMBRE_PACIENTE"),
+                        resultSet.getString("DNI_PACIENTE"),
+                        resultSet.getString("NOMBRE_HOSPITAL"),
+                        resultSet.getString("DESCRIPCION"),
+                        resultSet.getString("FECHA"),
+                        resultSet.getString("ESTADO")
+                    )
+                    listaCompletaPedidos.add(pedido)
                 }
 
                 runOnUiThread {
-                    // Actualizar el RecyclerView con los pedidos cargados
-                    pedidoUsuarioAdapter = pedidoUsuarioAdapter(pedidos)
+                    pedidoUsuarioAdapter = PedidoUsuarioAdapter(listaCompletaPedidos)
                     recyclerView.adapter = pedidoUsuarioAdapter
                 }
             } catch (ex: Exception) {
@@ -84,10 +83,30 @@ class ListaPedidosUsuario : AppCompatActivity() {
                     Toast.makeText(this, "Error al cargar los pedidos", Toast.LENGTH_SHORT).show()
                 }
             } finally {
-                // Cerrar conexiones
                 preparedStatement?.close()
                 connection?.close()
             }
         }.start()
+    }
+
+    private fun setupSearchView() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filtroPorNombre(newText ?: "")
+                return true
+            }
+        })
+    }
+
+    private fun filtroPorNombre(nombre: String) {
+        val listaFiltrada = listaCompletaPedidos.filter {
+            it.nombrePaciente.contains(nombre, ignoreCase = true) ||
+                    it.dniPaciente.contains(nombre, ignoreCase = true)
+        }
+        pedidoUsuarioAdapter.actualizarLista(listaFiltrada)
     }
 }

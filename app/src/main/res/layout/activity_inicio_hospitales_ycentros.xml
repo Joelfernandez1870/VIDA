@@ -68,6 +68,17 @@
         android:layout_marginTop="16dp"
         android:background="?android:attr/colorPrimary" />
 
+    <!-- Botón Lista de Pacientes -->
+    <Button
+        android:id="@+id/btnListaPacientes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Lista de Pacientes"
+        app:layout_constraintTop_toBottomOf="@id/btnAgregarPaciente"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/colorPrimary" />
 
     <!-- Botón de Cerrar Sesión -->
     <Button

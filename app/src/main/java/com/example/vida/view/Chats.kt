@@ -1,11 +1,12 @@
 package com.example.vida.view
 
+
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,40 +22,44 @@ class Chats : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var mensajeAdapter: MensajeAdapter
-
-    private var idUsuario: Int = 1 // ID predeterminado del usuario
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 5000L // Intervalo de refresco (5 segundos)
+    private lateinit var searchEditText: EditText
+    private var mensajes: MutableList<Mensaje> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chats)
 
-        // Inicializar RecyclerView y Adapter
         recyclerView = findViewById(R.id.recyclerViewChats)
         recyclerView.layoutManager = LinearLayoutManager(this)
         mensajeAdapter = MensajeAdapter()
         recyclerView.adapter = mensajeAdapter
 
-        // Configurar FloatingActionButton para agregar mensajes
+        searchEditText = findViewById(R.id.searchEditText)
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filtrarMensajesPorNombre(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         val fabAgregarChat = findViewById<FloatingActionButton>(R.id.fabAgregarChat)
         fabAgregarChat.setOnClickListener {
             val intent = Intent(this, Mensajes::class.java)
-            intent.putExtra("idUsuario", idUsuario)
-            startActivityForResult(intent, 1)
+            startActivity(intent)
         }
 
-        // Cargar mensajes iniciales
-        cargarMensajes()
+        cargarMensajes() // Carga inicial de mensajes
+    }
 
-        // Configurar refresco automático
-        iniciarRefrescoAutomatico()
+    override fun onResume() {
+        super.onResume()
+        cargarMensajes() // Recargar mensajes al reanudar la actividad
     }
 
     private fun cargarMensajes() {
         Thread {
-            val mensajes = mutableListOf<Mensaje>()
+            mensajes.clear()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
@@ -67,24 +72,20 @@ class Chats : AppCompatActivity() {
                     ORDER BY M.FECHA_ENVIO DESC
                 """
                 preparedStatement = connection?.prepareStatement(query)
-
                 val resultSet = preparedStatement?.executeQuery()
+
                 while (resultSet?.next() == true) {
-                    val id = resultSet.getInt("ID_MENSAJE")
-                    val nombreUsuario = resultSet.getString("NOMBRE_USUARIO")
-                    val contenido = resultSet.getString("CONTENIDO")
-                    val fechaEnvio = resultSet.getString("FECHA_ENVIO")
-                    val mensaje = Mensaje(id, nombreUsuario, contenido, fechaEnvio)
+                    val mensaje = Mensaje(
+                        resultSet.getInt("ID_MENSAJE"),
+                        resultSet.getString("NOMBRE_USUARIO"),
+                        resultSet.getString("CONTENIDO"),
+                        resultSet.getString("FECHA_ENVIO")
+                    )
                     mensajes.add(mensaje)
                 }
 
                 runOnUiThread {
-                    if (mensajes.isEmpty()) {
-                        recyclerView.visibility = RecyclerView.GONE
-                    } else {
-                        recyclerView.visibility = RecyclerView.VISIBLE
-                        mensajeAdapter.updateMensajes(mensajes)
-                    }
+                    mensajeAdapter.updateMensajes(mensajes) // Actualización directa
                 }
             } catch (ex: Exception) {
                 Log.e("Chats", "Error al cargar mensajes: ${ex.message}")
@@ -98,25 +99,12 @@ class Chats : AppCompatActivity() {
         }.start()
     }
 
-    private fun iniciarRefrescoAutomatico() {
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                cargarMensajes()
-                handler.postDelayed(this, refreshInterval)
-            }
-        }, refreshInterval)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacksAndMessages(null) // Detener tareas del handler
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            cargarMensajes()
+    private fun filtrarMensajesPorNombre(nombre: String) {
+        val mensajesFiltrados = if (nombre.isEmpty()) {
+            mensajes // Si el nombre está vacío, no hay filtro
+        } else {
+            mensajes.filter { it.nombreUsuario?.contains(nombre, ignoreCase = true) == true }
         }
+        mensajeAdapter.updateMensajes(mensajesFiltrados)
     }
-} 
+}

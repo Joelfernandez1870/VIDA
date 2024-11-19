@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
 import com.example.vida.models.PedidoHospital
 
 class PedidoHospitalAdapter(
-    private val pedidos: MutableList<PedidoHospital>,
+    private var pedidos: MutableList<PedidoHospital>,
     private val onModificar: (PedidoHospital) -> Unit,
     private val onEliminar: (PedidoHospital) -> Unit
 ) : RecyclerView.Adapter<PedidoHospitalAdapter.PedidoHospitalViewHolder>() {
@@ -26,12 +25,16 @@ class PedidoHospitalAdapter(
         holder.bind(pedido)
     }
 
-    override fun getItemCount(): Int {
-        return pedidos.size
+    override fun getItemCount(): Int = pedidos.size
+
+    fun updateList(newPedidos: MutableList<PedidoHospital>) {
+        this.pedidos = newPedidos
+        notifyDataSetChanged()
     }
 
     inner class PedidoHospitalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombrePaciente: TextView = itemView.findViewById(R.id.nombrePaciente)
+        private val dniPaciente: TextView = itemView.findViewById(R.id.dniPaciente)
         private val nombreHospital: TextView = itemView.findViewById(R.id.nombreHospital)
         private val descripcion: TextView = itemView.findViewById(R.id.descripcion)
         private val fecha: TextView = itemView.findViewById(R.id.fecha)
@@ -41,20 +44,14 @@ class PedidoHospitalAdapter(
 
         fun bind(pedido: PedidoHospital) {
             nombrePaciente.text = pedido.nombrePaciente
+            dniPaciente.text = pedido.dniPaciente
             nombreHospital.text = pedido.nombreHospital
             descripcion.text = pedido.descripcion
             fecha.text = pedido.fecha
             estado.text = pedido.estado
 
-            // Acción al hacer clic en el botón de Modificar
-            btnModificar.setOnClickListener {
-                onModificar(pedido)
-            }
-
-            // Acción al hacer clic en el botón de Eliminar
-            btnEliminar.setOnClickListener {
-                onEliminar(pedido)
-            }
+            btnModificar.setOnClickListener { onModificar(pedido) }
+            btnEliminar.setOnClickListener { onEliminar(pedido) }
         }
     }
 }

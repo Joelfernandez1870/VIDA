@@ -19,6 +19,12 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".ItemPaciente"
+            android:exported="false" />
+        <activity
+            android:name=".view.MuestraPaciente"
+            android:exported="false" />
+        <activity
             android:name=".view.ModificarPedidoHospital"
             android:exported="false" />
         <activity

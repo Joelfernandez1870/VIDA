@@ -14,65 +14,59 @@ class InicioHospitalesYCentros : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_inicio_hospitales_ycentros)
 
-
         // Obtener referencia al botón "Carga de Donaciones"
         val btnCargaDonacioness = findViewById<Button>(R.id.btnCargaDonaciones)
 
-// Crear el Intent para iniciar la actividad RegistrarDonacion
+        // Crear el Intent para iniciar la actividad RegistrarDonacion
         btnCargaDonacioness.setOnClickListener { v: View? ->
-
-            val intent =
-                Intent(this, RegistrarDonacion::class.java)
+            val intent = Intent(this, RegistrarDonacion::class.java)
             startActivity(intent)
         }
-
 
         // Obtener referencia al botón "Notificaciones Urgentes"
         val btnNotificacionUrgente = findViewById<Button>(R.id.btnNotificacionUrgente)
 
-// Crear el Intent para iniciar la actividad Notificaciones Urgentes
+        // Crear el Intent para iniciar la actividad Notificaciones Urgentes
         btnNotificacionUrgente.setOnClickListener { v: View? ->
-            val intent =
-                Intent(this, NotificacionesUrgentes::class.java)
+            val intent = Intent(this, NotificacionesUrgentes::class.java)
             startActivity(intent)
         }
 
         // Obtener referencia al botón "Pedidos de donacion"
         val btnListaPedidosDonacion = findViewById<Button>(R.id.btnListaPedidosDonacion)
 
-// Crear el Intent para iniciar la actividad agregar paciente
+        // Crear el Intent para iniciar la actividad ListaPedidosHospitales
         btnListaPedidosDonacion.setOnClickListener { v: View? ->
-
-            val intent =
-                Intent(this, ListaPedidosHospitales::class.java)
+            val intent = Intent(this, ListaPedidosHospitales::class.java)
             startActivity(intent)
         }
-        // Obtener referencia al botón "Pedidos de donacion"
+
+        // Obtener referencia al botón "Agregar Paciente"
         val btnAgregarPaciente = findViewById<Button>(R.id.btnAgregarPaciente)
 
-// Crear el Intent para iniciar la actividad agregar paciente
+        // Crear el Intent para iniciar la actividad CargarPaciente
         btnAgregarPaciente.setOnClickListener { v: View? ->
-
-            val intent =
-                Intent(this, CargarPaciente::class.java)
+            val intent = Intent(this, CargarPaciente::class.java)
             startActivity(intent)
         }
 
+        // Obtener referencia al botón "Lista de Pacientes"
+        val btnListaPacientes = findViewById<Button>(R.id.btnListaPacientes)
 
+        // Crear el Intent para iniciar la actividad MuestraPaciente
+        btnListaPacientes.setOnClickListener { v: View? ->
+            val intent = Intent(this, MuestraPaciente::class.java)
+            startActivity(intent)
+        }
 
         // Obtener referencia al botón "Cerrar Sesión"
         val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesionHospital)
 
-
         // Configurar el OnClickListener para iniciar la actividad de login
         btnCerrarSesion.setOnClickListener { v: View? ->
-            val intent = Intent(
-                this@InicioHospitalesYCentros,LoginActivity::class.java
-            )
+            val intent = Intent(this@InicioHospitalesYCentros, LoginActivity::class.java)
             startActivity(intent)
             finish() // Finaliza la actividad actual para que no esté en la pila
         }
-
-
     }
 }

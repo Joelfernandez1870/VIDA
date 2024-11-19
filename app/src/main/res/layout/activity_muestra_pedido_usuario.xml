@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
@@ -21,6 +20,13 @@
             android:text="Nombre Paciente"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dniPaciente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DNI"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/nombreHospital"
@@ -50,5 +56,4 @@
             android:text="Estado"
             android:textSize="14sp" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

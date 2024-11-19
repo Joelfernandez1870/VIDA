@@ -147,6 +147,9 @@ class ModificarPedidoHospital : AppCompatActivity() {
                     // Establecer el paciente seleccionado
                     val selectedIndex = pacientesIdList.indexOf(idPacienteSeleccionado)
                     spinnerPaciente.setSelection(selectedIndex)
+
+                    // Deshabilitar el Spinner para que no se pueda cambiar el valor
+                    spinnerPaciente.isEnabled = false
                 }
 
             } catch (e: Exception) {

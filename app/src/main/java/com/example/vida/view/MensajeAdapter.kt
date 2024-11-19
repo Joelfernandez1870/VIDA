@@ -24,11 +24,6 @@ class MensajeAdapter : RecyclerView.Adapter<MensajeAdapter.MensajeViewHolder>() 
 
     override fun getItemCount(): Int = mensajes.size
 
-    fun submitList(newMensajes: List<Mensaje>) {
-        mensajes = newMensajes.toMutableList()
-        notifyDataSetChanged()
-    }
-
     fun updateMensajes(nuevosMensajes: List<Mensaje>) {
         mensajes.clear()
         mensajes.addAll(nuevosMensajes)
@@ -41,7 +36,7 @@ class MensajeAdapter : RecyclerView.Adapter<MensajeAdapter.MensajeViewHolder>() 
         private val textFecha: TextView = itemView.findViewById(R.id.textFecha)
 
         fun bind(mensaje: Mensaje) {
-            textNombre.text = mensaje.nombreUsuario  // Mostrar solo el nombre del usuario
+            textNombre.text = mensaje.nombreUsuario
             textContenido.text = mensaje.contenido
             textFecha.text = mensaje.fechaEnvio
         }
