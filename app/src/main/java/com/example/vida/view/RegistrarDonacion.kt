@@ -4,6 +4,7 @@ package com.example.vida.view
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -109,7 +110,7 @@ class RegistrarDonacion : AppCompatActivity() {
 
             // Crear el objeto Donacion
             val donacion = Donacion(
-                dniUsuario = usuarioSeleccionado.dni,  // Usamos el ID del usuario
+                idUsuario = usuarioSeleccionado.id.toString(),  // Usamos el ID del usuario
                 idHospital = idHospitalString,
                 fecha = fechaDonacion,
                 tipoDonacion = tipoDonacionSeleccionado
@@ -121,8 +122,11 @@ class RegistrarDonacion : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (insertado) {
                         Toast.makeText(this@RegistrarDonacion, "Donacion registrado exitosamente", Toast.LENGTH_SHORT).show()
-                        CargaDePuntos(donacion.dniUsuario);
-                        CargarRecordatorio(donacion.dniUsuario);
+                        // Cargo los puntos del usuario.
+                        usuarioSeleccionado.puntos = usuarioSeleccionado.puntos?.plus(10)
+                        UsuarioDao.UpdatePuntos(usuarioSeleccionado)
+
+                        CargarRecordatorio(usuarioSeleccionado);
                         RegresoInterfazHospital()  // Regreso a la pagina principal del hospital.
                     } else {
                         Toast.makeText(this@RegistrarDonacion, "Error al registrar la donacion", Toast.LENGTH_SHORT).show()
@@ -155,18 +159,10 @@ class RegistrarDonacion : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun CargaDePuntos(dni: String) {
-        val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(dni)
-        if (UsuarioEncontrado != null) {
-            UsuarioEncontrado.puntos = UsuarioEncontrado.puntos?.plus(10)
-            UsuarioDao.UpdatePuntos(UsuarioEncontrado)
-        }
-    }
 
-    private fun CargarRecordatorio(dni: String)
+    private fun CargarRecordatorio(usuario: Usuario)
     {
-        val UsuarioEncontrado = UsuarioDao.getUsuarioByDni(dni)
-        if (UsuarioEncontrado != null) {
+           if (usuario != null) {
 
             // Crear un objeto Calendar para sumar 30 días a la fecha de donacion cargada.
             val calendar = Calendar.getInstance()
@@ -176,11 +172,11 @@ class RegistrarDonacion : AppCompatActivity() {
             val fecha_envio = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
             val fechaProximaDonacion = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
-            val mensajedonacion = "Gracias por tu donación, ${UsuarioEncontrado.nombre} ${UsuarioEncontrado.apellido}. " +
+            val mensajedonacion = "Gracias por tu donación, ${usuario.nombre} ${usuario.apellido}. " +
                     "Podrás volver a donar a partir del: $fechaProximaDonacion."
 
             val RecordatorioPersonal = Recordatorio(
-                id_usuario = UsuarioEncontrado.id!!,
+                id_usuario = usuario.id!!,
                 fecha_envio = fecha_envio,
                 tipo_recordatorio = "Donación",
                 mensaje_recordatorio = mensajedonacion

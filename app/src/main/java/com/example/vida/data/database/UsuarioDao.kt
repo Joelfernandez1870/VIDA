@@ -179,6 +179,7 @@ object UsuarioDao {
 
             while (resultSet.next()) {
                 val usuario = Usuario(
+                    id = resultSet.getInt("ID_USUARIO"),
                     dni = resultSet.getString("DNI"),
                     nombre = resultSet.getString("NOMBRE"),
                     apellido = resultSet.getString("APELLIDO"),

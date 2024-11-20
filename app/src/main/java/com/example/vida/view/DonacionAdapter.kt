@@ -19,7 +19,7 @@ class DonacionAdapter(private val donaciones: List<Donacion>) : RecyclerView.Ada
         val donacion = donaciones[position]
 
         // Asigna el texto dinámicamente
-        holder.dniText.text = "DNI: ${donacion.dniUsuario}"
+        holder.dniText.text = "DNI: ${donacion.idUsuario}"
         holder.hospitalText.text = "Hospital: ${donacion.idHospital}"
         holder.tipoDonacionText.text = "Tipo de donación: ${donacion.tipoDonacion}"
         holder.fechaDonacionText.text = "Fecha: ${donacion.fecha}"
