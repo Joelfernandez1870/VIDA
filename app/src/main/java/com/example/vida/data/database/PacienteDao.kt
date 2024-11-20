@@ -32,8 +32,8 @@ object PacienteDao {
     fun insert(paciente: Paciente): Boolean {
         val connection = MySqlConexion.getConexion()
         val sql = """
-            INSERT INTO PACIENTE (DNI, NOMBRE, APELLIDO, FECHA_NACIMIENTO, GRUPO_SANGUINEO, CIUDAD, PAIS, EMAIL) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO PACIENTE (DNI, NOMBRE, APELLIDO, FECHA_NACIMIENTO, GRUPO_SANGUINEO, CIUDAD, PAIS, EMAIL, HOSPITAL_ID ) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
 
         return try {
@@ -52,7 +52,8 @@ object PacienteDao {
                 setString(5, paciente.grupoSanguineo)
                 setString(6, paciente.ciudad)
                 setString(7, paciente.pais)
-                setString(8, paciente.email) // Asegúrate de que aquí se esté asignando el valor de email
+                setString(8, paciente.email)
+                setString(9, paciente.hospitalId.toString())
             }
             val rowsInserted = ps?.executeUpdate()
             ps?.close()
@@ -105,6 +106,43 @@ object PacienteDao {
             emptyList()
         }
     }
+
+    fun getAllPacientesFromHospital(idHospital: String): List<Paciente> {
+        val connection: Connection = MySqlConexion.getConexion() ?: return emptyList()
+        val pacientes = mutableListOf<Paciente>()
+        val sql = "SELECT * FROM PACIENTE WHERE HOSPITAL_id = ?"
+
+        return try {
+            val statement: PreparedStatement = connection.prepareStatement(sql)
+            statement.setString(1, idHospital.toString())
+            val resultSet: ResultSet = statement.executeQuery()
+
+            while (resultSet.next()) {
+                val paciente = Paciente(
+                    idPaciente = resultSet.getInt("ID_PACIENTE"),
+                    dni = resultSet.getString("DNI"),
+                    nombre = resultSet.getString("NOMBRE"),
+                    apellido = resultSet.getString("APELLIDO"),
+                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"),
+                    grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
+                    ciudad = resultSet.getString("CIUDAD"),
+                    pais = resultSet.getString("PAIS"),
+                    email = resultSet.getString("EMAIL")
+                )
+                pacientes.add(paciente)
+            }
+
+            resultSet.close()
+            statement.close()
+            connection.close()
+
+            pacientes
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
+
 
     // Obtener pacientes para un Spinner
     fun getPacientesForSpinner(): List<PacienteSpinner> {
