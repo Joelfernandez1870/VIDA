@@ -20,6 +20,7 @@ class Mensajes : AppCompatActivity() {
 
     private var idUsuario: Int? = null
     private var fechaActual: String = ""
+    private var idGrupo: Int = -1  // Variable para almacenar el ID del grupo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,14 @@ class Mensajes : AppCompatActivity() {
         // Verificar que el ID del usuario no sea nulo
         if (idUsuario == null) {
             Toast.makeText(this, "ID de usuario no disponible", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        // Obtener el ID del grupo desde el Intent
+        idGrupo = intent.getIntExtra("ID_GRUPO", -1) // Asegúrate de que la clave coincida
+        if (idGrupo == -1) {
+            Toast.makeText(this, "Error al obtener el ID del grupo", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -51,7 +60,7 @@ class Mensajes : AppCompatActivity() {
 
             // Verificar que el mensaje no esté vacío
             if (contenidoMensaje.isNotBlank()) {
-                insertarMensaje(idUsuario!!, contenidoMensaje, fechaActual)
+                insertarMensaje(idUsuario!!, contenidoMensaje, fechaActual, idGrupo)  // Pasamos el ID del grupo
             } else {
                 Toast.makeText(this, "El mensaje no puede estar vacío", Toast.LENGTH_SHORT).show()
             }
@@ -101,7 +110,7 @@ class Mensajes : AppCompatActivity() {
     }
 
     // Función para insertar un mensaje en la base de datos
-    private fun insertarMensaje(idUsuario: Int, contenido: String, fechaEnvio: String) {
+    private fun insertarMensaje(idUsuario: Int, contenido: String, fechaEnvio: String, idGrupo: Int) {
         Thread {
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
@@ -109,19 +118,19 @@ class Mensajes : AppCompatActivity() {
             try {
                 connection = MySqlConexion.getConexion()
 
-                // Consulta SQL para insertar un nuevo mensaje
+                // Consulta SQL para insertar un nuevo mensaje, ahora con el ID_GRUPO
                 val query = """
-                    INSERT INTO MENSAJES (ID_USUARIO, CONTENIDO, FECHA_ENVIO) 
-                    VALUES (?, ?, ?)
+                    INSERT INTO MENSAJES (ID_USUARIO, CONTENIDO, FECHA_ENVIO, ID_GRUPO) 
+                    VALUES (?, ?, ?, ?)
                 """
                 preparedStatement = connection?.prepareStatement(query)
                 preparedStatement?.setInt(1, idUsuario)
                 preparedStatement?.setString(2, contenido)
                 preparedStatement?.setString(3, fechaEnvio)
+                preparedStatement?.setInt(4, idGrupo)  // Se agrega el ID del grupo
 
                 // Ejecutar la inserción del mensaje
                 preparedStatement?.executeUpdate()
-
 
                 // Mostrar mensaje de éxito
                 runOnUiThread {

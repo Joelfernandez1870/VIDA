@@ -7,32 +7,38 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
 
-// Adapter para los grupos de chats
-class GruposAdapter(private val grupos: List<String>, private val itemClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<GruposAdapter.GruposViewHolder>() {
+class GruposAdapter(
+    private var gruposList: List<String>,
+    private val onGrupoClick: (String) -> Unit
+) : RecyclerView.Adapter<GruposAdapter.GrupoViewHolder>() {
 
-    // ViewHolder que representa cada item
-    inner class GruposViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    // ViewHolder para cada grupo
+    inner class GrupoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombreGrupo: TextView = itemView.findViewById(R.id.textViewNombreGrupo)
 
-        // Configura el clic del grupo
         fun bind(grupo: String) {
             nombreGrupo.text = grupo
-            itemView.setOnClickListener { itemClickListener(grupo) }
+            itemView.setOnClickListener {
+                onGrupoClick(grupo)
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GruposViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_item_grupo, parent, false)
-        return GruposViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GrupoViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.activity_item_grupo, parent, false)
+        return GrupoViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GruposViewHolder, position: Int) {
-        val grupo = grupos[position]
-        holder.bind(grupo)
+    override fun onBindViewHolder(holder: GrupoViewHolder, position: Int) {
+        holder.bind(gruposList[position])
     }
 
-    override fun getItemCount(): Int {
-        return grupos.size
+    override fun getItemCount(): Int = gruposList.size
+
+    // Método para actualizar la lista de grupos
+    fun updateData(newGruposList: List<String>) {
+        gruposList = newGruposList
+        notifyDataSetChanged()
     }
 }

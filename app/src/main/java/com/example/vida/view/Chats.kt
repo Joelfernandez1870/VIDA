@@ -1,12 +1,12 @@
 package com.example.vida.view
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,17 +23,27 @@ class Chats : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var mensajeAdapter: MensajeAdapter
     private lateinit var searchEditText: EditText
+    private lateinit var emptyTextView: TextView
     private var mensajes: MutableList<Mensaje> = mutableListOf()
+    private var idGrupo: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chats)
+
+        idGrupo = intent.getIntExtra("ID_GRUPO", -1)
+        if (idGrupo == -1) {
+            Toast.makeText(this, "Error al obtener el ID del grupo", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         recyclerView = findViewById(R.id.recyclerViewChats)
         recyclerView.layoutManager = LinearLayoutManager(this)
         mensajeAdapter = MensajeAdapter()
         recyclerView.adapter = mensajeAdapter
 
+        emptyTextView = findViewById(R.id.emptyTextView)
         searchEditText = findViewById(R.id.searchEditText)
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -43,23 +53,23 @@ class Chats : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        val fabAgregarChat = findViewById<FloatingActionButton>(R.id.fabAgregarChat)
-        fabAgregarChat.setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.fabAgregarChat).setOnClickListener {
             val intent = Intent(this, Mensajes::class.java)
+            intent.putExtra("ID_GRUPO", idGrupo)
             startActivity(intent)
         }
 
-        cargarMensajes() // Carga inicial de mensajes
+        cargarMensajes()
     }
 
     override fun onResume() {
         super.onResume()
-        cargarMensajes() // Recargar mensajes al reanudar la actividad
+        cargarMensajes()
     }
 
     private fun cargarMensajes() {
         Thread {
-            mensajes.clear()
+            val nuevosMensajes = mutableListOf<Mensaje>()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
@@ -69,9 +79,11 @@ class Chats : AppCompatActivity() {
                     SELECT M.ID_MENSAJE, U.NOMBRE AS NOMBRE_USUARIO, M.CONTENIDO, M.FECHA_ENVIO
                     FROM MENSAJES M
                     JOIN USUARIO U ON M.ID_USUARIO = U.ID_USUARIO
+                    WHERE M.ID_GRUPO = ?
                     ORDER BY M.FECHA_ENVIO DESC
                 """
                 preparedStatement = connection?.prepareStatement(query)
+                preparedStatement?.setInt(1, idGrupo)
                 val resultSet = preparedStatement?.executeQuery()
 
                 while (resultSet?.next() == true) {
@@ -81,11 +93,19 @@ class Chats : AppCompatActivity() {
                         resultSet.getString("CONTENIDO"),
                         resultSet.getString("FECHA_ENVIO")
                     )
-                    mensajes.add(mensaje)
+                    nuevosMensajes.add(mensaje)
                 }
 
                 runOnUiThread {
-                    mensajeAdapter.updateMensajes(mensajes) // Actualización directa
+                    mensajes.clear()
+                    mensajes.addAll(nuevosMensajes)
+                    if (mensajes.isEmpty()) {
+                        emptyTextView.text = "Aún no hay mensajes cargados."
+                        emptyTextView.visibility = TextView.VISIBLE
+                    } else {
+                        emptyTextView.visibility = TextView.GONE
+                    }
+                    mensajeAdapter.updateMensajes(mensajes)
                 }
             } catch (ex: Exception) {
                 Log.e("Chats", "Error al cargar mensajes: ${ex.message}")
@@ -101,7 +121,7 @@ class Chats : AppCompatActivity() {
 
     private fun filtrarMensajesPorNombre(nombre: String) {
         val mensajesFiltrados = if (nombre.isEmpty()) {
-            mensajes // Si el nombre está vacío, no hay filtro
+            mensajes
         } else {
             mensajes.filter { it.nombreUsuario?.contains(nombre, ignoreCase = true) == true }
         }

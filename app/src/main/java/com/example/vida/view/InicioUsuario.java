@@ -52,7 +52,7 @@ public class InicioUsuario extends AppCompatActivity {
 
         // Configurar el OnClickListener para iniciar la actividad Chats
         btnChats.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this,Chats.class);
+            Intent intent = new Intent(InicioUsuario.this,GruposChats.class);
             startActivity(intent);
         });
         // Obtener referencia al botón "Pedidos"

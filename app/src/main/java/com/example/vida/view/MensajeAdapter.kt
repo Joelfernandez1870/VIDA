@@ -10,7 +10,7 @@ import com.example.vida.models.Mensaje
 
 class MensajeAdapter : RecyclerView.Adapter<MensajeAdapter.MensajeViewHolder>() {
 
-    private var mensajes: MutableList<Mensaje> = mutableListOf()
+    private val mensajes: MutableList<Mensaje> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MensajeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_muestra_mensaje, parent, false)
@@ -18,8 +18,7 @@ class MensajeAdapter : RecyclerView.Adapter<MensajeAdapter.MensajeViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: MensajeViewHolder, position: Int) {
-        val mensaje = mensajes[position]
-        holder.bind(mensaje)
+        holder.bind(mensajes[position])
     }
 
     override fun getItemCount(): Int = mensajes.size

@@ -32,7 +32,22 @@
         app:layout_constraintTop_toBottomOf="@id/encabezado"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" /> <!-- Cambiado a layout_marginTop -->
+        android:layout_marginTop="8dp" />
+
+    <!-- Texto cuando no hay mensajes -->
+    <TextView
+        android:id="@+id/emptyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aún no hay mensajes cargados"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/recyclerViewChats"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerViewChats"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Lista de chats -->
     <androidx.recyclerview.widget.RecyclerView
@@ -42,7 +57,7 @@
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/searchEditText"
         app:layout_constraintBottom_toTopOf="@id/fabAgregarChat"
-        android:layout_marginTop="16dp" /> <!-- Cambiado a layout_marginTop -->
+        android:layout_marginTop="16dp" />
 
     <!-- Botón para agregar chats -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
