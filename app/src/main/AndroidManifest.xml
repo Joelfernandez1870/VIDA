@@ -98,6 +98,9 @@
             android:name=".view.HospitalesMapActivity"
             android:exported="false" />
         <activity
+            android:name=".view.ListadoNotificaciones"
+            android:exported="false" />
+        <activity
             android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>

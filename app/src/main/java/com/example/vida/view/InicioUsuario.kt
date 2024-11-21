@@ -21,7 +21,6 @@ class InicioUsuario : AppCompatActivity() {
 
         // Verificar si el usuario está logueado
         if (usuarioLogeadoId == null || usuarioLogeadoId == 0) {
-            // Redirigir al login si no hay usuario logueado
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
@@ -44,11 +43,11 @@ class InicioUsuario : AppCompatActivity() {
 
         // Configurar el click listener para el botón de notificaciones
         btnNotificaciones.setOnClickListener {
-            val intent = Intent(this, NotificacionesUrgentes::class.java)
+            val intent = Intent(this, ListadoNotificaciones::class.java)
             startActivity(intent)
         }
 
-        // Configurar otros botones...
+        // Configurar otros botones
         findViewById<Button>(R.id.btnHospitalesMap).setOnClickListener {
             startActivity(Intent(this, HospitalesMapActivity::class.java))
         }
@@ -76,10 +75,9 @@ class InicioUsuario : AppCompatActivity() {
         findViewById<Button>(R.id.btnCerrarSesion).setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish() // Finaliza la actividad actual para que no esté en la pila
+            finish()
         }
     }
-
 
     private fun obtenerNotificacionesUrgentes(): Int {
         return NotificacionUrgenteDao.getCantidadNotificacionesUrgentes()
