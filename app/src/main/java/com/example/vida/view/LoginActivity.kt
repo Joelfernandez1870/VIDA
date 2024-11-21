@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     // Variable global para almacenar el hospitalId
     companion object {
-        var sesionGlobal: Int? = null
+        public var sesionGlobal: Int? = null
         var sesionGlobalDni: Int? = null
     }
 

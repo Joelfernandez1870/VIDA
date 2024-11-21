@@ -28,6 +28,17 @@ class NotificacionesUrgentes : AppCompatActivity() {
     private val idPacientes = mutableListOf<Int>()
     private val idHospitales = mutableListOf<Int>()
 
+    object SessionGlobal {
+        var hospitalId: Int? = null
+        var usuarioId: Int? = null
+
+        fun clearSession() {
+            hospitalId = null
+            usuarioId = null
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notificaciones_urgentes)
@@ -69,6 +80,7 @@ class NotificacionesUrgentes : AppCompatActivity() {
             mensaje = mensajeTexto,
             fecha = LocalDateTime.now().toString(),
             tipoNotificacion = tipoSeleccionado
+
         )
 
         // Insertar en la base de datos
@@ -95,18 +107,27 @@ class NotificacionesUrgentes : AppCompatActivity() {
     private fun cargarDatosEnSpinners() {
         lifecycleScope.launch {
             try {
+                // Obtener el ID del hospital logeado desde la sesión global
+                val idHospitalLogeado = obtenerIdHospitalLogeado()
+
                 // Obtener datos desde los DAOs
-                val hospitales = withContext(Dispatchers.IO) { HospitalCentroDao.getAllHospitalesCentros() }
-                val pacientes = withContext(Dispatchers.IO) { PacienteDao.getAllPacientes() }
+                val hospital = withContext(Dispatchers.IO) { HospitalCentroDao.getHospitalById(idHospitalLogeado) }
+                val pacientes = withContext(Dispatchers.IO) { PacienteDao.getPacientesByHospitalId(idHospitalLogeado) }
+
+                if (hospital == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@NotificacionesUrgentes, "No se encontró el hospital logeado.", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
 
                 // Preparar listas de IDs y nombres
                 idHospitales.clear()
                 idPacientes.clear()
-                idHospitales.addAll(hospitales.mapNotNull { it.idHospitalesCentro })
+                hospital.idHospitalesCentro?.let { idHospitales.add(it) }
                 idPacientes.addAll(pacientes.mapNotNull { it.idPaciente })
 
-
-                val nombresHospitales = hospitales.map { it.nombreLugar }
+                val nombresHospitales = listOf(hospital.nombreLugar)
                 val nombresPacientes = pacientes.map { "${it.nombre} ${it.apellido}" }
                 val tiposNotificacion = listOf("Alerta", "Aviso", "Información")
 
@@ -143,6 +164,13 @@ class NotificacionesUrgentes : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+    }
+
+
+
+    private fun obtenerIdHospitalLogeado(): Int {
+        val hospitalId = LoginActivity.sesionGlobal
+        return hospitalId ?: throw IllegalStateException("No se encontró el ID del hospital en la sesión.")
     }
 
 }

@@ -8,5 +8,9 @@ data class NotificacionUrgente(
     val idPaciente: Int?,  // Puede ser nulo
     val mensaje: String,
     val tipoNotificacion: String,
-    val fecha: String = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    val fecha: String,
+    val nombreLugar: String? = null,
+    val grupoSanguineo: String? = null,
+    val nombrePaciente: String? = null,
+    val apellidoPaciente: String? = null
 )

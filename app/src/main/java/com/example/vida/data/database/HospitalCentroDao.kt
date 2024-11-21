@@ -112,31 +112,41 @@ object HospitalCentroDao {
         }
     }
 
-    fun getHospitalById (id: Int): HospitalCentro? {
-        val connection: Connection = MySqlConexion.getConexion()!!
-        val statement: PreparedStatement = connection.prepareStatement(
-            "SELECT * FROM HOSPITALES_CENTROS WHERE ID_HOSPITALES_CENTRO = ?"
-        )
-        statement.setInt(1, id)
-        val resultSet: ResultSet = statement.executeQuery()
+    fun getHospitalById(hospitalId: Int): HospitalCentro? {
+        val connection: Connection = MySqlConexion.getConexion() ?: return null
+        val sql = "SELECT * FROM HOSPITALES_CENTROS WHERE ID_HOSPITALES_CENTRO = ?"
 
-        if (resultSet.next()) {
-            return HospitalCentro(
-                idHospitalesCentro = resultSet.getInt("ID_HOSPITALES_CENTRO"),
-                tipoLugar = resultSet.getString("TIPO_LUGAR"),
-                nombreLugar = resultSet.getString("NOMBRE_LUGAR"),
-                direccion = resultSet.getString("DIRECCION"),
-                correo = resultSet.getString("EMAIL"),
-                clave = resultSet.getString("CONTRASENIA"),
-                ciudad = resultSet.getString("CIUDAD"),
-                pais = resultSet.getString("PAIS"),
-                longitud = resultSet.getDouble("LONGITUD"),
-                latitud = resultSet.getDouble("LATITUD"),
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setInt(1, hospitalId)
+            val resultSet: ResultSet = ps.executeQuery()
 
-            )
-        }else
-        {return null}
+            if (resultSet.next()) {
+                val hospital = HospitalCentro(
+                    idHospitalesCentro = resultSet.getInt("ID_HOSPITALES_CENTRO"),
+                    tipoLugar = resultSet.getString("TIPO_LUGAR") ?: "",
+                    nombreLugar = resultSet.getString("NOMBRE_LUGAR") ?: "",
+                    ciudad = resultSet.getString("CIUDAD") ?: "",
+                    pais = resultSet.getString("PAIS") ?: "",
+                    longitud = resultSet.getDouble("LONGITUD"),
+                    latitud = resultSet.getDouble("LATITUD"),
+                    clave = resultSet.getString("CONTRASENIA") ?: "",
+                    correo = resultSet.getString("EMAIL") ?: "",
+                    direccion = resultSet.getString("DIRECCION") ?: ""
+                )
+                resultSet.close()
+                ps.close()
+                connection.close()
+                hospital
+            } else {
+                null
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            null
+        }
     }
+
 
 
     /*
@@ -185,24 +195,5 @@ object HospitalCentroDao {
         return hospitalesCentros
     }
 
-    fun getHospitalCentroById(id: Int): HospitalCentro? {
-        val connection: Connection = MySqlConexion.getConexion()!!
-        val statement: PreparedStatement = connection.prepareStatement(
-            "SELECT * FROM HOSPITALES_CENTROS WHERE ID_HOSPITALES_CENTRO = ?"
-        )
-        statement.setInt(1, id)
-        val resultSet: ResultSet = statement.executeQuery()
-        if (resultSet.next()) {
-            return HospitalCentro(
-//                resultSet.getInt("ID_HOSPITALES_CENTRO"),
-                resultSet.getString("TIPO_LUGAR"),
-                resultSet.getString("NOMBRE_LUGAR"),
-                resultSet.getString("CIUDAD"),
-                resultSet.getString("PAIS"),
-                resultSet.getDouble("LONGITUD"),
-                resultSet.getDouble("LATITUD")
-            )
-        }
-        return null
-    }*/
+    */
 }

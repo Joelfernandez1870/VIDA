@@ -1,78 +1,85 @@
-package com.example.vida.view;
+package com.example.vida.view
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-import com.example.vida.R;
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.vida.R
+import com.example.vida.Recordatorios_Usuario
+import com.example.vida.data.database.NotificacionUrgenteDao
 
-public class InicioUsuario extends AppCompatActivity {
+class InicioUsuario : AppCompatActivity() {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio_usuario);
+    private val usuarioLogeadoId: Int? = LoginActivity.sesionGlobal
 
-        // Obtener referencia al botón "Centro de Donaciones"
-        Button btnCentroDonaciones = findViewById(R.id.btnHospitalesMap);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_inicio_usuario)
 
-        //Obtengo otra referencia para el boton "Recordatorios"
-        Button btnRecordatorio = findViewById(R.id.btnRecordatorio);
+        // Verificar si el usuario está logueado
+        if (usuarioLogeadoId == null || usuarioLogeadoId == 0) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
 
-        btnRecordatorio.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this, Recordatorios_Usuario.class);
-            startActivity(intent);
-        });
+        // Consultar las notificaciones urgentes
+        val notificacionesUrgentes = obtenerNotificacionesUrgentes()
 
-        btnCentroDonaciones.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this, HospitalesMapActivity.class);
-            startActivity(intent);
-        });
+        // Configurar el badge de notificaciones
+        val btnNotificaciones = findViewById<ImageButton>(R.id.btnUrgencias)
+        val notificationBadge = findViewById<TextView>(R.id.notificationBadge)
 
-        // Obtener referencia al botón "Donaciones"
-        Button btnDonaciones = findViewById(R.id.btnDonaciones);
+        if (notificacionesUrgentes > 0) {
+            notificationBadge.visibility = View.VISIBLE
+            notificationBadge.text = notificacionesUrgentes.toString()
+        } else {
+            notificationBadge.visibility = View.GONE
+        }
 
-        // Configurar el OnClickListener para iniciar la actividad Donaciones
-        btnDonaciones.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this,Donaciones.class);
-            startActivity(intent);
-        });
+        // Configurar el click listener para el botón de notificaciones
+        btnNotificaciones.setOnClickListener {
+            val intent = Intent(this, ListadoNotificaciones::class.java)
+            startActivity(intent)
+        }
 
-        // Obtener referencia al botón "Beneficios"
-        Button btnBeneficios = findViewById(R.id.btnBeneficios);
+        // Configurar otros botones
+        findViewById<Button>(R.id.btnHospitalesMap).setOnClickListener {
+            startActivity(Intent(this, HospitalesMapActivity::class.java))
+        }
 
-        // Configurar el OnClickListener para iniciar la actividad Beneficios
-        btnBeneficios.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this,Beneficios.class);
-            startActivity(intent);
-        });
+        findViewById<Button>(R.id.btnRecordatorio).setOnClickListener {
+            startActivity(Intent(this, Recordatorios_Usuario::class.java))
+        }
 
-        // Obtener referencia al botón "Chats"
-        Button btnChats = findViewById(R.id.btnChats);
+        findViewById<Button>(R.id.btnDonaciones).setOnClickListener {
+            startActivity(Intent(this, Donaciones::class.java))
+        }
 
-        // Configurar el OnClickListener para iniciar la actividad Chats
-        btnChats.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this,GruposChats.class);
-            startActivity(intent);
-        });
-        // Obtener referencia al botón "Pedidos"
-        Button btnPedidos = findViewById(R.id.btnListaPedidos);
+        findViewById<Button>(R.id.btnBeneficios).setOnClickListener {
+            startActivity(Intent(this, Beneficios::class.java))
+        }
 
-        // Configurar el OnClickListener para iniciar la actividad Pedidos
-        btnPedidos.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioUsuario.this,ListaPedidosUsuario.class);
-            startActivity(intent);
-        });
+        findViewById<Button>(R.id.btnChats).setOnClickListener {
+            startActivity(Intent(this, GruposChats::class.java))
+        }
 
-// Obtener referencia al botón "Cerrar Sesión"
-       Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
+        findViewById<Button>(R.id.btnListaPedidos).setOnClickListener {
+            startActivity(Intent(this, ListaPedidosUsuario::class.java))
+        }
 
-// Configurar el OnClickListener para iniciar la actividad de login
-                btnCerrarSesion.setOnClickListener(v -> {
-                    Intent intent = new Intent(InicioUsuario.this,LoginActivity.class);
+        findViewById<Button>(R.id.btnCerrarSesion).setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 
-            startActivity(intent);
-            finish(); // Finaliza la actividad actual para que no esté en la pila
-                });
+    private fun obtenerNotificacionesUrgentes(): Int {
+        return NotificacionUrgenteDao.getCantidadNotificacionesUrgentes()
     }
 }
