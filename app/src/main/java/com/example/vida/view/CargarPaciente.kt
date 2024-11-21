@@ -78,6 +78,7 @@ class CargarPaciente : AppCompatActivity() {
         val fechaNacimiento = inputFechaNacimiento.text.toString()
         val ciudad = inputCiudad.text.toString()
         val pais = inputPais.text.toString()
+        val hospitalId = LoginActivity.sesionGlobal.toString()
 
         // Validación de los campos
         if (dni.isEmpty() || !dni.matches("\\d{7,8}".toRegex())) {
@@ -123,7 +124,8 @@ class CargarPaciente : AppCompatActivity() {
             grupoSanguineo = grupoSanguineo,
             fechaNacimiento = fechaNacimiento,
             ciudad = ciudad,
-            pais = pais
+            pais = pais,
+            hospitalId = hospitalId
         )
 
         // Ejecutar la inserción en una coroutine

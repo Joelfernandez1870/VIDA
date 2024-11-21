@@ -10,5 +10,6 @@ data class Paciente(
     val grupoSanguineo: String,
     val fechaNacimiento: String,
     val ciudad: String,
-    val pais: String
+    val pais: String,
+    val hospitalId: String
 )
