@@ -110,6 +110,9 @@
             android:name=".view.ListadoNotificaciones"
             android:exported="false" />
         <activity
+            android:name=".view.ListadoNotificacionesHospital"
+            android:exported="false" />
+        <activity
             android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>

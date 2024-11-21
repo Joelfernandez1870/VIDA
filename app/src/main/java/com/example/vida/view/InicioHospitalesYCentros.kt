@@ -28,7 +28,7 @@ class InicioHospitalesYCentros : AppCompatActivity() {
 
         // Crear el Intent para iniciar la actividad Notificaciones Urgentes
         btnNotificacionUrgente.setOnClickListener { v: View? ->
-            val intent = Intent(this, NotificacionesUrgentes::class.java)
+            val intent = Intent(this, ListadoNotificacionesHospital::class.java)
             startActivity(intent)
         }
 
