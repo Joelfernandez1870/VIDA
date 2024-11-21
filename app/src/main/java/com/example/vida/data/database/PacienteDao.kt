@@ -91,43 +91,8 @@ object PacienteDao {
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
-                    email = resultSet.getString("EMAIL") // Asegúrate de que aquí esté el email
-                )
-                pacientes.add(paciente)
-            }
-
-            resultSet.close()
-            statement.close()
-            connection.close()
-
-            pacientes
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
-
-    fun getAllPacientesFromHospital(idHospital: String): List<Paciente> {
-        val connection: Connection = MySqlConexion.getConexion() ?: return emptyList()
-        val pacientes = mutableListOf<Paciente>()
-        val sql = "SELECT * FROM PACIENTE WHERE HOSPITAL_id = ?"
-
-        return try {
-            val statement: PreparedStatement = connection.prepareStatement(sql)
-            statement.setString(1, idHospital.toString())
-            val resultSet: ResultSet = statement.executeQuery()
-
-            while (resultSet.next()) {
-                val paciente = Paciente(
-                    idPaciente = resultSet.getInt("ID_PACIENTE"),
-                    dni = resultSet.getString("DNI"),
-                    nombre = resultSet.getString("NOMBRE"),
-                    apellido = resultSet.getString("APELLIDO"),
-                    fechaNacimiento = resultSet.getString("FECHA_NACIMIENTO"),
-                    grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
-                    ciudad = resultSet.getString("CIUDAD"),
-                    pais = resultSet.getString("PAIS"),
-                    email = resultSet.getString("EMAIL")
+                    email = resultSet.getString("EMAIL"),
+                    hospitalId = resultSet.getString("HOSPITAL_ID")
                 )
                 pacientes.add(paciente)
             }
@@ -174,14 +139,14 @@ object PacienteDao {
     }
 
     // Obtener todos los pacientes por ID del hospital
-    fun getPacientesByHospitalId(hospitalId: Int): List<Paciente> {
+    fun getPacientesByHospitalId(hospitalId: String): List<Paciente> {
         val connection: Connection = MySqlConexion.getConexion() ?: return emptyList()
         val pacientes = mutableListOf<Paciente>()
         val sql = "SELECT * FROM PACIENTE WHERE HOSPITAL_ID = ?"
 
         return try {
             val ps: PreparedStatement = connection.prepareStatement(sql)
-            ps.setInt(1, hospitalId)
+            ps.setString(1, hospitalId)
             val resultSet: ResultSet = ps.executeQuery()
 
             while (resultSet.next()) {
@@ -194,7 +159,8 @@ object PacienteDao {
                     grupoSanguineo = resultSet.getString("GRUPO_SANGUINEO"),
                     ciudad = resultSet.getString("CIUDAD"),
                     pais = resultSet.getString("PAIS"),
-                    email = resultSet.getString("EMAIL")
+                    email = resultSet.getString("EMAIL"),
+                    hospitalId = resultSet.getString("HOSPITAL_ID")
                 )
                 pacientes.add(paciente)
             }

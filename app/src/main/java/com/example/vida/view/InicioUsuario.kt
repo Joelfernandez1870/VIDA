@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
-import com.example.vida.Recordatorios_Usuario
+//import com.example.vida.Recordatorios_Usuario
 import com.example.vida.data.database.NotificacionUrgenteDao
 
 class InicioUsuario : AppCompatActivity() {

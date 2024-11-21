@@ -125,7 +125,7 @@ class CargarPaciente : AppCompatActivity() {
             fechaNacimiento = fechaNacimiento,
             ciudad = ciudad,
             pais = pais,
-            hospitalId = hospitalId.toIntOrNull()
+            hospitalId = hospitalId
         )
 
         // Ejecutar la inserción en una coroutine

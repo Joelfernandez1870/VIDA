@@ -10,7 +10,7 @@ import com.example.vida.R
 import com.example.vida.models.Paciente
 import android.widget.EditText
 import android.widget.Toast
-import com.example.vida.data.database.PacienteDao.getAllPacientesFromHospital
+import com.example.vida.data.database.PacienteDao.getPacientesByHospitalId
 
 class MuestraPaciente : AppCompatActivity() {
 
@@ -27,8 +27,8 @@ class MuestraPaciente : AppCompatActivity() {
 
         // Obtener pacientes desde la base de datos
         val idHospital = LoginActivity.sesionGlobal.toString()
-        pacientes = getAllPacientesFromHospital(idHospital)
-        Toast.makeText(this, "ID del Hospital: $pacientes", Toast.LENGTH_SHORT).show()
+        pacientes = getPacientesByHospitalId(idHospital)
+        Toast.makeText(this, "ID del Hospital: $idHospital", Toast.LENGTH_SHORT).show()
 
         // Configurar adaptador
         adapter = PacienteAdapter(pacientes)

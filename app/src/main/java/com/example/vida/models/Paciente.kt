@@ -11,5 +11,5 @@ data class Paciente(
     val fechaNacimiento: String,
     val ciudad: String,
     val pais: String,
-    val hospitalId: Int? = null
+    val hospitalId: String
 )

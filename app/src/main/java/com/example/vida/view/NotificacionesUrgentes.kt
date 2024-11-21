@@ -112,7 +112,9 @@ class NotificacionesUrgentes : AppCompatActivity() {
 
                 // Obtener datos desde los DAOs
                 val hospital = withContext(Dispatchers.IO) { HospitalCentroDao.getHospitalById(idHospitalLogeado) }
-                val pacientes = withContext(Dispatchers.IO) { PacienteDao.getPacientesByHospitalId(idHospitalLogeado) }
+                val pacientes = withContext(Dispatchers.IO) { PacienteDao.getPacientesByHospitalId(
+                    idHospitalLogeado.toString()
+                ) }
 
                 if (hospital == null) {
                     withContext(Dispatchers.Main) {
