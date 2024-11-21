@@ -26,7 +26,7 @@ class RegistrarPedidoHospital : AppCompatActivity() {
     private lateinit var btnRegistrarPedido: Button
 
     // ID de hospital obtenido de la sesión
-    private var idHospital: Int? = null
+    private lateinit var idHospital: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class RegistrarPedidoHospital : AppCompatActivity() {
         btnRegistrarPedido = findViewById(R.id.btnRegistrarPedido)
 
         // Obtener el ID de hospital de la sesión
-        idHospital = LoginActivity.sesionGlobal
+        idHospital = LoginActivity.sesionGlobal.toString()
 
         // Cargar pacientes en el Spinner
         cargarPacientes()
@@ -59,10 +59,10 @@ class RegistrarPedidoHospital : AppCompatActivity() {
 
     // Función para cargar pacientes desde la base de datos
     private fun cargarPacientes() {
-        val pacientesList = PacienteDao.getPacientesForSpinner() // Obtener pacientes para el Spinner
+        val pacientesList = PacienteDao.getPacientesByHospitalId(idHospital) // Obtener pacientes para el Spinner
         for (paciente in pacientesList) {
             pacientes.add(paciente.nombre)
-            idPacientes.add(paciente.id)
+            paciente.idPaciente?.let { idPacientes.add(it) }
         }
 
         // Configurar el adapter del Spinner
@@ -115,7 +115,7 @@ class RegistrarPedidoHospital : AppCompatActivity() {
         // Crear objeto PedidoDonacion
         val pedido = PedidoDonacion(
             idPaciente = idPacienteSeleccionado,
-            idHospital = idHospital!!,
+            idHospital = idHospital,
             descripcion = descripcion,
             fecha = fecha,
             estado = estado

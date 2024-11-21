@@ -23,6 +23,7 @@ class ListaPedidosHospitales : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private var listaPedidos: MutableList<PedidoHospital> = mutableListOf()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,6 +49,7 @@ class ListaPedidosHospitales : AppCompatActivity() {
 
     private fun cargarPedidosHospitales() {
         Thread {
+            val idHospital = LoginActivity.sesionGlobal.toString()
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
@@ -67,9 +69,11 @@ class ListaPedidosHospitales : AppCompatActivity() {
                     JOIN 
                         PACIENTE pa ON p.ID_PACIENTE = pa.ID_PACIENTE
                     JOIN 
-                        HOSPITALES_CENTROS hc ON p.ID_HOSPITALES_CENTRO = hc.ID_HOSPITALES_CENTRO
+                        HOSPITALES_CENTROS hc ON p.ID_HOSPITALES_CENTRO = hc.ID_HOSPITALES_CENTRO 
+                    WHERE p.ID_HOSPITALES_CENTRO = ?
                 """
-                preparedStatement = connection?.prepareStatement(query)
+                preparedStatement =
+                    connection?.prepareStatement(query)?.apply { setString(1, idHospital) }
 
                 val resultSet = preparedStatement?.executeQuery()
                 listaPedidos.clear()

@@ -20,7 +20,7 @@ object PedidoDonacionDao {
             val ps: PreparedStatement? = connection?.prepareStatement(sql)
             ps?.apply {
                 setInt(1, pedido.idPaciente)
-                setInt(2, pedido.idHospital)
+                setString(2, pedido.idHospital)
                 setString(3, pedido.descripcion)
                 setString(4, pedido.fecha) // La fecha se pasa como String
                 setString(5, pedido.estado)
@@ -63,4 +63,6 @@ object PedidoDonacionDao {
             false
         }
     }
+
+
 }
