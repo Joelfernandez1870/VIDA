@@ -19,6 +19,9 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".view.EditarMensaje"
+            android:exported="false" />
+        <activity
             android:name=".view.ItemPaciente"
             android:exported="false" />
         <activity
