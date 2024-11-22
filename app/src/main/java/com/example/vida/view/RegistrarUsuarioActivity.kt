@@ -111,6 +111,8 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         val fechaNacimiento = inputFechaNacimiento.text.toString()
         val ciudad = inputCiudad.text.toString()
         val pais = inputPais.text.toString()
+        val isDniRegistered = UsuarioDao.isDniRegistered(dni)
+        val isEmailRegistered = UsuarioDao.isEmailRegistered(email)
 
         // Validación de los campos
         val usuarioExistente = UsuarioDao.getUsuarioByDni(dni)
@@ -118,9 +120,16 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
             Toast.makeText(this, "El DNI ya está registrado", Toast.LENGTH_SHORT).show()
             return
         }
-
         if (!dni.matches("\\d{7,8}".toRegex())) {
             inputDNI.error = "DNI debe tener 7 u 8 dígitos"
+            return
+        }
+        if (isDniRegistered){
+            inputDNI.error = "El DNI ya está registrado"
+            return
+        }
+        if (isEmailRegistered){
+            inputEmail.error = "El email ya está registrado"
             return
         }
         if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
