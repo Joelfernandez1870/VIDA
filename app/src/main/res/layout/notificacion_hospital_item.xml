@@ -28,7 +28,7 @@
             android:id="@+id/tvHospital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mensaje de notificación"
+            android:text="Hospital: Ejemplo"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginBottom="4dp" />
@@ -45,9 +45,8 @@
             android:id="@+id/tvGrupoSanguineo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mensaje de notificación"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:text="Grupo Sanguíneo: O+"
+            android:textSize="14sp"
             android:layout_marginBottom="4dp" />
 
         <!-- Tipo de notificación -->
@@ -72,26 +71,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end">
+            android:gravity="end"
+            android:layout_marginTop="8dp">
 
-            <!-- Botón Editar -->
-            <Button
+            <!-- Botón Editar con ícono blanco y negro -->
+            <ImageButton
                 android:id="@+id/btnEditar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Editar"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@android:color/holo_blue_light"
-                android:textColor="@android:color/white" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_edit"
+                android:contentDescription="Editar"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginEnd="8dp" />
 
-            <!-- Botón Eliminar -->
-            <Button
+            <!-- Botón Eliminar con ícono blanco y negro -->
+            <ImageButton
                 android:id="@+id/btnEliminar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Eliminar"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:textColor="@android:color/white" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:contentDescription="Eliminar"
+                android:background="?android:attr/selectableItemBackground" />
         </LinearLayout>
 
     </LinearLayout>
