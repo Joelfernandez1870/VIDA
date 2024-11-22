@@ -29,6 +29,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
     private lateinit var inputApellido: EditText
     private lateinit var inputEmail: EditText
     private lateinit var inputContrasena: EditText
+    private lateinit var inputContrasenaRepetida: EditText
     private lateinit var inputFechaNacimiento: EditText
     private lateinit var inputCiudad: EditText
     private lateinit var inputPais: EditText
@@ -46,7 +47,8 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         inputNombre = findViewById(R.id.inputNombre)
         inputApellido = findViewById(R.id.inputApellido)
         inputEmail = findViewById(R.id.inputEmail)
-        inputContrasena = findViewById(R.id.et_longitud)  // Asegúrate de que este ID sea correcto
+        inputContrasena = findViewById(R.id.et_contrasenia)
+        inputContrasenaRepetida = findViewById(R.id.et_claverepetida)
         inputFechaNacimiento = findViewById(R.id.inputFechaNacimiento)
         inputCiudad = findViewById(R.id.inputCiudad)
         inputPais = findViewById(R.id.inputPais)
@@ -105,6 +107,7 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         val apellido = inputApellido.text.toString()
         val email = inputEmail.text.toString()
         val contrasena = inputContrasena.text.toString()
+        val contrasenaRepetida = inputContrasenaRepetida.text.toString()
         val fechaNacimiento = inputFechaNacimiento.text.toString()
         val ciudad = inputCiudad.text.toString()
         val pais = inputPais.text.toString()
@@ -134,6 +137,10 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         }
         if (!contrasena.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$".toRegex())) {
             inputContrasena.error = "Contrasenia debe contener al menos 6 caracteres, incluyendo letras y números"
+            return
+        }
+        if (contrasena != contrasenaRepetida) {
+            inputContrasenaRepetida.error = "Las contraseñas no coinciden"
             return
         }
 
@@ -184,7 +191,9 @@ class RegistrarUsuarioActivity : AppCompatActivity() {
         inputApellido.text.clear()
         inputEmail.text.clear()
         inputContrasena.text.clear()
+        inputContrasenaRepetida.text.clear()
         inputFechaNacimiento.text.clear()
+        spinner.setSelection(0)
         inputCiudad.text.clear()
         inputPais.text.clear()
     }
