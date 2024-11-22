@@ -10,7 +10,7 @@ import java.sql.SQLException
 object PacienteDao {
 
     // Método para verificar si un DNI ya está registrado
-    private fun isDniRegistered(dni: String): Boolean {
+    fun isDniRegistered(dni: String): Boolean {
         val connection: Connection = MySqlConexion.getConexion() ?: return false
         val sql = "SELECT DNI FROM PACIENTE WHERE DNI = ?"
 
@@ -37,11 +37,6 @@ object PacienteDao {
         """
 
         return try {
-            // Verificar si el DNI ya está registrado
-            if (isDniRegistered(paciente.dni)) {
-                throw IllegalArgumentException("El DNI ingresado ya está registrado.")
-            }
-
             // Proceder con la inserción
             val ps: PreparedStatement? = connection?.prepareStatement(sql)
             ps?.apply {
@@ -175,5 +170,26 @@ object PacienteDao {
             emptyList()
         }
     }
+    //validar si el dni existe
+    fun validateEmail(email: String): Boolean {
+        val connection: Connection = MySqlConexion.getConexion() ?: return false
+        val sql = "SELECT EXISTS(SELECT 1 FROM PACIENTE WHERE EMAIL = ?)"
 
+        return try {
+            val ps: PreparedStatement = connection.prepareStatement(sql)
+            ps.setString(1, email)
+            val resultSet: ResultSet = ps.executeQuery()
+
+            if (resultSet.next()) {
+                val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value
+                return exists
+            }else{
+                connection.close()
+                return false
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return false
+        }
+    }
 }

@@ -13,7 +13,9 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.vida.R
+import com.example.vida.data.database.NotificacionUrgenteDao
 import com.example.vida.data.database.PacienteDao
 import com.example.vida.models.Paciente
 import kotlinx.coroutines.CoroutineScope
@@ -106,12 +108,10 @@ class CargarPaciente : AppCompatActivity() {
         val ciudad = inputCiudad.text.toString()
         val pais = inputPais.text.toString()
         val hospitalId = LoginActivity.sesionGlobal.toString()
+        var isEmailRegistered = PacienteDao.validateEmail(email)
+        var isDniRegistered = PacienteDao.isDniRegistered(dni)
 
         // Validación de los campos
-        if (dni.isEmpty() || !dni.matches("\\d{7,8}".toRegex())) {
-            inputDNI.error = "DNI debe tener 7 u 8 dígitos"
-            return
-        }
         if (nombre.isEmpty() || !nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+".toRegex())) {
             inputNombre.error = "Nombre solo debe contener letras"
             return
@@ -120,6 +120,20 @@ class CargarPaciente : AppCompatActivity() {
             inputApellido.error = "Apellido solo debe contener letras"
             return
         }
+        if (dni.isEmpty() || !dni.matches("\\d{7,8}".toRegex())) {
+            inputDNI.error = "DNI debe tener 7 u 8 dígitos"
+            return
+        }
+        if (isDniRegistered) {
+            inputDNI.error = "Este DNI se encuentra registrado."
+            return
+        }
+
+        if (isEmailRegistered) {
+            inputEmail.error = "Este email se encuentra registrado."
+            return
+        }
+
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             inputEmail.error = "Email inválido"
             return
@@ -141,8 +155,6 @@ class CargarPaciente : AppCompatActivity() {
             return
         }
 
-
-
         // Crear paciente y ejecutar la inserción en la base de datos
         val paciente = Paciente(
 
@@ -160,6 +172,7 @@ class CargarPaciente : AppCompatActivity() {
         // Ejecutar la inserción en una coroutine
         CoroutineScope(Dispatchers.IO).launch {
             val insertado = PacienteDao.insert(paciente)
+            println(insertado)
             withContext(Dispatchers.Main) {
                 if (insertado) {
                     Toast.makeText(this@CargarPaciente, "Paciente registrado exitosamente", Toast.LENGTH_SHORT).show()
