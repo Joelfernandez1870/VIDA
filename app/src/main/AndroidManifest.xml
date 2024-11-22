@@ -19,6 +19,9 @@
         android:theme="@style/Theme.VIDA"
         tools:targetApi="31">
         <activity
+            android:name=".view.EditarMensaje"
+            android:exported="false" />
+        <activity
             android:name=".view.ItemPaciente"
             android:exported="false" />
         <activity
@@ -108,6 +111,9 @@
             android:exported="false" />
         <activity
             android:name=".view.ListadoNotificaciones"
+            android:exported="false" />
+        <activity
+            android:name=".view.ListadoNotificacionesHospital"
             android:exported="false" />
         <activity
             android:name=".view.LoginActivity"
