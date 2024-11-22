@@ -10,6 +10,7 @@ import com.example.vida.data.database.HospitalCentroDao
 import com.example.vida.data.database.MySqlConexion
 import com.example.vida.data.database.UsuarioDao
 import com.example.vida.models.Donacion
+import com.example.vida.view.LoginActivity.Companion.sesionGlobal
 import com.example.vida.view.LoginActivity.Companion.sesionGlobalDni
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -50,8 +51,9 @@ class Donaciones : AppCompatActivity() {
             var connection: Connection? = null
             var preparedStatement: PreparedStatement? = null
 
-            val dniUsuario = sesionGlobalDni ?: 0
-            val usuarioEncontrado = UsuarioDao.getUsuarioByDni(dniUsuario.toString())
+            val iDUsuario = sesionGlobal ?: 0
+
+//            val usuarioEncontrado = UsuarioDao.getUsuarioByDni(sesionGlobalDni.toString())
 
 
             try {
@@ -62,29 +64,29 @@ class Donaciones : AppCompatActivity() {
                 val query = """
                     SELECT 
                         r.ID_DONACION,
-                        r.DNI_USUARIO,
+                        r.ID_USUARIO,
                         r.ID_HOSPITALES_CENTRO,
                         r.FECHA_DONACION,
                         r.TIPO_DE_DONACION
                     FROM 
                         DONACIONES r
                     WHERE 
-                        r.DNI_USUARIO = ?
+                        r.ID_USUARIO = ?
                 """
                 preparedStatement = connection?.prepareStatement(query)
 
-                preparedStatement?.setString(1, dniUsuario.toString())
+                preparedStatement?.setString(1, iDUsuario.toString())
 
                 val resultSet = preparedStatement?.executeQuery()
                 while (resultSet?.next() == true) {
-                    val dniUsuario = resultSet.getString("DNI_USUARIO")
+                    val iDUsuario = resultSet.getString("ID_USUARIO")
                     val idHospital = resultSet.getString("ID_HOSPITALES_CENTRO")
                     val fecha = resultSet.getString("FECHA_DONACION")
                     val tipoDonacion = resultSet.getString("TIPO_DE_DONACION")
 
                     val NombreHospital = HospitalCentroDao.getHospitalById(idHospital.toInt())?.nombreLugar ?: "Hospital desconocido"
                     // Crear objeto Donacion
-                    val donacion = Donacion(dniUsuario, NombreHospital, fecha, tipoDonacion)
+                    val donacion = Donacion(iDUsuario, NombreHospital, fecha, tipoDonacion)
                     donaciones.add(donacion)
                 }
 
