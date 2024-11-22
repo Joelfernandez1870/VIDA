@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -67,7 +68,7 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
             val rowView = convertView ?: inflater.inflate(R.layout.notificacion_hospital_item, parent, false)
 
             val mensaje = rowView.findViewById<TextView>(R.id.tvMensaje)
-            val btnEliminar = rowView.findViewById<Button>(R.id.btnEliminar)
+            val btnEliminar = rowView.findViewById<ImageButton>(R.id.btnEliminar)
 
             val notificacion = data[position]
 
