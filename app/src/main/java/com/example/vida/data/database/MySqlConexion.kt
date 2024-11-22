@@ -16,7 +16,7 @@ object MySqlConexion {
 //    private const val USER = "root"
 //    private const val PASS = ""
 
-    private const val URL = "jdbc:mysql://drg999.duckdns.org:3306/freedb_vida_db"
+    private const val URL = "jdbc:mysql://drg999.duckdns.org:3306/freedb_vida_db?useSSL=false"
     private const val USER = "root"
     private const val PASS = "grupo6"
 

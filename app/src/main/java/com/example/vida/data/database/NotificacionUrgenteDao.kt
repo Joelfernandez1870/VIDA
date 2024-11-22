@@ -106,26 +106,26 @@ object NotificacionUrgenteDao {
     fun getNotificacionesUrgentesByHospital(loggedInHospitalId: Int): List<NotificacionUrgente> {
         val connection = getConexion()
         val sql = """
-        SELECT 
-            nu.ID_HOSPITALES_CENTRO, 
-            h.NOMBRE_LUGAR, 
-            nu.ID_PACIENTE, 
-            p.GRUPO_SANGUINEO, 
-            p.NOMBRE, 
-            p.APELLIDO, 
-            nu.MENSAJE, 
-            nu.TIPO_NOTIFICACION, 
-            nu.FECHA,
-            nu.FECHA_EXPIRACION
-        FROM 
-            NOTIFICACIONES_URGENTES nu
-        LEFT JOIN 
-            HOSPITALES_CENTROS h ON nu.ID_HOSPITALES_CENTRO = h.ID_HOSPITALES_CENTRO
-        LEFT JOIN 
-            PACIENTE p ON nu.ID_PACIENTE = p.ID_PACIENTE
-        WHERE 
-            nu.ID_HOSPITALES_CENTRO = ? AND nu.FECHA_EXPIRACION > CURRENT_TIMESTAMP
-    """
+            SELECT 
+                nu.ID_HOSPITALES_CENTRO, 
+                h.NOMBRE_LUGAR, 
+                nu.ID_PACIENTE, 
+                p.GRUPO_SANGUINEO, 
+                p.NOMBRE, 
+                p.APELLIDO, 
+                nu.MENSAJE, 
+                nu.TIPO_NOTIFICACION, 
+                nu.FECHA,
+                nu.FECHA_EXPIRACION
+            FROM 
+                NOTIFICACIONES_URGENTES nu
+            LEFT JOIN 
+                HOSPITALES_CENTROS h ON nu.ID_HOSPITALES_CENTRO = h.ID_HOSPITALES_CENTRO
+            LEFT JOIN 
+                PACIENTE p ON nu.ID_PACIENTE = p.ID_PACIENTE
+            WHERE 
+                nu.ID_HOSPITALES_CENTRO = ?; """.trimIndent()
+
         val notificaciones = mutableListOf<NotificacionUrgente>()
 
         try {
@@ -161,7 +161,7 @@ object NotificacionUrgenteDao {
             }
         }
         return notificaciones
-    }
+        }
 
 
 
