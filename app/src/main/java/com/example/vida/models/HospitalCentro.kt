@@ -12,4 +12,8 @@ data class HospitalCentro(
     val clave: String,
     val correo: String,
     val direccion: String,
-)
+) {
+    override fun toString(): String {
+        return nombreLugar // Esto mostrará el nombre del hospital en el Spinner
+    }
+}
