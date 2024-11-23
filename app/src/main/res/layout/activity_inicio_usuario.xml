@@ -23,12 +23,16 @@
 
     <!-- Icono de Notificaciones -->
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/titleMain"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/titleMain">
 
         <!-- Icono de Notificaciones -->
+
+        <!-- Badge para Notificaciones -->
         <ImageButton
             android:id="@+id/btnUrgencias"
             android:layout_width="48dp"
@@ -37,17 +41,16 @@
             android:contentDescription="@string/notifications"
             android:src="@android:drawable/ic_dialog_email" />
 
-        <!-- Badge para Notificaciones -->
         <TextView
             android:id="@+id/notificationBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
             android:background="@drawable/circle_background"
-            android:textColor="@android:color/white"
             android:gravity="center"
             android:padding="4dp"
+            android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:layout_gravity="top|end"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -57,7 +60,7 @@
         android:id="@+id/btnDonaciones"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/holo_blue_light"
         android:text="Ir a Donaciones"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,18 +134,32 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnRecordatorio"
-        android:layout_width="139dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="256dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="8dp"
-        android:text="Recordatorios"
-        app:layout_constraintBottom_toTopOf="@+id/btnDonaciones"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleMain" />
+        android:layout_width="40dp"
+        android:layout_height="41dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:src="@drawable/calendario"
+        app:layout_constraintBottom_toBottomOf="@+id/titleMain"
+        app:layout_constraintEnd_toEndOf="@+id/titleMain"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout"
+        app:layout_constraintTop_toTopOf="@+id/titleMain"
+        app:layout_constraintVertical_bias="0.47" />
+
+    <!--    <Button-->
+<!--        android:id="@+id/btnRecordatorio"-->
+<!--        android:layout_width="139dp"-->
+<!--        android:layout_height="67dp"-->
+<!--        android:layout_marginStart="256dp"-->
+<!--        android:layout_marginTop="9dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:text="Recordatorios"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/btnDonaciones"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/titleMain" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

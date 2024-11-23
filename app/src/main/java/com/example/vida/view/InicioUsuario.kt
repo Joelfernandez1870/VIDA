@@ -52,7 +52,7 @@ class InicioUsuario : AppCompatActivity() {
             startActivity(Intent(this, HospitalesMapActivity::class.java))
         }
 
-        findViewById<Button>(R.id.btnRecordatorio).setOnClickListener {
+        findViewById<ImageButton>(R.id.btnRecordatorio).setOnClickListener {
             startActivity(Intent(this, Recordatorios_Usuario::class.java))
         }
 
