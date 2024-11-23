@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vida.R
@@ -24,17 +25,14 @@ class Recordatorios_Usuario : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_recordatorios_usuario)
 
-        // Inicializar el RecyclerView
         recyclerView = findViewById(R.id.recyclerViewRecordatorios)
-        recyclerView.layoutManager = LinearLayoutManager(this) // Puedes usar otro LayoutManager si prefieres
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Cargar los recordatorios al reanudar la actividad
         cargarRecordatorios()
     }
 
     override fun onResume() {
         super.onResume()
-        // Cargar los recordatorios al reanudar la actividad
         cargarRecordatorios()
     }
 
@@ -48,10 +46,7 @@ class Recordatorios_Usuario : AppCompatActivity() {
             val usuarioEncontrado = UsuarioDao.getUsuarioByDni(dniUsuario.toString())
 
             try {
-                // Establecer la conexión con la base de datos
                 connection = MySqlConexion.getConexion()
-
-                // Realizar la consulta SQL para obtener los recordatorios de un usuario
                 val query = """
                     SELECT 
                         r.ID_RECORDATORIO,
@@ -64,23 +59,21 @@ class Recordatorios_Usuario : AppCompatActivity() {
                         r.ID_USUARIO = ?
                 """
                 preparedStatement = connection?.prepareStatement(query)
-                preparedStatement?.setInt(1, usuarioEncontrado?.id!!)  // Asumiendo que idUsuario es el ID del usuario actual
-
+                preparedStatement?.setInt(1, usuarioEncontrado?.id!!)
                 val resultSet = preparedStatement?.executeQuery()
+
                 while (resultSet?.next() == true) {
                     val idRecordatorio = resultSet.getInt("ID_RECORDATORIO")
                     val mensajeRecordatorio = resultSet.getString("MENSAJE_RECORDATORIO")
                     val fechaEnvio = resultSet.getString("FECHA_ENVIO")
                     val tipoRecordatorio = resultSet.getString("TIPO_RECORDATORIO")
-
-                    // Crear objeto Recordatorio
-                    val recordatorio = Recordatorio(idRecordatorio, mensajeRecordatorio, fechaEnvio, tipoRecordatorio)
-                    recordatorios.add(recordatorio)
+                    recordatorios.add(Recordatorio(idRecordatorio, mensajeRecordatorio, fechaEnvio, tipoRecordatorio))
                 }
 
                 runOnUiThread {
-                    // Actualizar el RecyclerView con los recordatorios cargados
-                    recordatorioAdapter = RecordatorioAdapter(recordatorios)
+                    recordatorioAdapter = RecordatorioAdapter(recordatorios) { recordatorio ->
+                        confirmarEliminacion(recordatorio)
+                    }
                     recyclerView.adapter = recordatorioAdapter
                 }
             } catch (ex: Exception) {
@@ -88,7 +81,47 @@ class Recordatorios_Usuario : AppCompatActivity() {
                     Toast.makeText(this, "Error al cargar los recordatorios", Toast.LENGTH_SHORT).show()
                 }
             } finally {
-                // Cerrar conexiones
+                preparedStatement?.close()
+                connection?.close()
+            }
+        }.start()
+    }
+
+    private fun confirmarEliminacion(recordatorio: Recordatorio) {
+        AlertDialog.Builder(this)
+            .setTitle("Eliminar Recordatorio")
+            .setMessage("¿Estás seguro de que deseas eliminar este recordatorio?")
+            .setPositiveButton("Sí") { _, _ ->
+                eliminarRecordatorio(recordatorio)
+            }
+            .setNegativeButton("No") { _, _ ->
+                // Recargar los recordatorios para asegurarte de que la vista está actualizada
+                cargarRecordatorios()
+            }
+            .show()
+    }
+
+    private fun eliminarRecordatorio(recordatorio: Recordatorio) {
+        Thread {
+            var connection: Connection? = null
+            var preparedStatement: PreparedStatement? = null
+
+            try {
+                connection = MySqlConexion.getConexion()
+                val query = "DELETE FROM RECORDATORIOS WHERE ID_RECORDATORIO = ?"
+                preparedStatement = connection?.prepareStatement(query)
+                preparedStatement?.setInt(1, recordatorio.id_usuario)
+                preparedStatement?.executeUpdate()
+
+                runOnUiThread {
+                    Toast.makeText(this, "Recordatorio eliminado", Toast.LENGTH_SHORT).show()
+                    cargarRecordatorios() // Recargar la lista tras eliminar
+                }
+            } catch (ex: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, "Error al eliminar el recordatorio", Toast.LENGTH_SHORT).show()
+                }
+            } finally {
                 preparedStatement?.close()
                 connection?.close()
             }
