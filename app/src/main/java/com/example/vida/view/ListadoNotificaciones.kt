@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.vida.R
 import com.example.vida.data.database.HospitalCentroDao
@@ -83,9 +84,22 @@ class ListadoNotificaciones : AppCompatActivity() {
             hospital.text = "Hospital: ${notificacion.nombreLugar ?: "N/A"}"
             grupoSanguineo.text = "Grupo Sanguíneo: ${notificacion.grupoSanguineo ?: "N/A"}"
 
+            // Cambiar color del texto según el tipo de notificación
+            val color = when (notificacion.tipoNotificacion?.lowercase()) {
+                "alerta" -> ContextCompat.getColor(context, R.color.alert_red) // Rojo para alerta
+                "información" -> ContextCompat.getColor(context, R.color.info_blue) // Azul para información
+                "aviso" -> ContextCompat.getColor(context, R.color.warning_orange) // Naranja para advertencia
+                else -> ContextCompat.getColor(context, R.color.default_black) // Negro para otros casos
+            }
+
+            // Aplicar el color a los textos relacionados con el tipo de notificación
+            tipoNotificacion.setTextColor(color)
+            mensaje.setTextColor(color)
+
             return rowView
         }
     }
+
 
     private fun configurarFiltros() {
         val spinnerHospitales = findViewById<Spinner>(R.id.spinnerHospitales)

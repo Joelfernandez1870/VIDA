@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.vida.R
 import com.example.vida.data.database.NotificacionUrgenteDao
@@ -76,6 +77,7 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val inflater = context.layoutInflater
             val rowView = convertView ?: inflater.inflate(R.layout.notificacion_hospital_item, parent, false)
+
             val tipoNotificacion = rowView.findViewById<TextView>(R.id.tvTipoNotificacion)
             val fecha = rowView.findViewById<TextView>(R.id.tvFecha)
             val paciente = rowView.findViewById<TextView>(R.id.tvPaciente)
@@ -93,6 +95,18 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
             paciente.text = "Paciente: ${notificacion.nombrePaciente ?: "Desconocido"} ${notificacion.apellidoPaciente ?: ""}"
             hospital.text = "Hospital: ${notificacion.nombreLugar ?: "Desconocido"}"
             grupoSanguineo.text = "Grupo Sanguíneo: ${notificacion.grupoSanguineo ?: "No especificado"}"
+
+            // Cambiar color del texto según el tipo de notificación
+            val color = when (notificacion.tipoNotificacion?.lowercase()) {
+                "alerta" -> ContextCompat.getColor(context, R.color.alert_red) // Rojo para alerta
+                "información" -> ContextCompat.getColor(context, R.color.info_blue) // Azul para información
+                "aviso" -> ContextCompat.getColor(context, R.color.warning_orange) // Naranja para advertencia
+                else -> ContextCompat.getColor(context, R.color.default_black) // Negro para otros casos
+            }
+
+            // Aplicar color al tipo de notificación y mensaje
+            tipoNotificacion.setTextColor(color)
+            mensaje.setTextColor(color)
 
             btnEditar.setOnClickListener {
                 val idNotificacion = notificacion.idNotificacion
@@ -135,6 +149,7 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
             return rowView
         }
     }
+
 
     private fun cargarNotificaciones(loggedInHospitalId: Int) {
         val listView = findViewById<ListView>(R.id.lvNotificaciones)
