@@ -2,6 +2,7 @@ package com.example.vida.data.database
 
 import com.example.vida.data.database.MySqlConexion.getConexion
 import com.example.vida.models.NotificacionUrgente
+import com.example.vida.models.NotificacionUrgenteEdicion
 import com.mysql.jdbc.Statement
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -224,7 +225,7 @@ object NotificacionUrgenteDao {
         }
     }
 
-    fun updateNotificacion(notificacionUrgente: NotificacionUrgente): Boolean {
+    fun updateNotificacion(notificacionUrgente: NotificacionUrgenteEdicion): Boolean {
         val connection: Connection? = MySqlConexion.getConexion()
         val sql = """
         UPDATE NOTIFICACIONES_URGENTES 
@@ -234,7 +235,7 @@ object NotificacionUrgenteDao {
             FECHA = ?, 
             FECHA_EXPIRACION = ?, 
             TIPO_NOTIFICACION = ? 
-        WHERE ID_HOSPITALES_CENTRO = ? AND MENSAJE = ?;
+        WHERE ID_NOTIFICACION = ?;
     """.trimIndent()
 
         // Usamos SimpleDateFormat para manejar la fecha
@@ -254,10 +255,9 @@ object NotificacionUrgenteDao {
             ps?.setInt(2, notificacionUrgente.idPaciente ?: 0)
             ps?.setString(3, notificacionUrgente.mensaje)
             ps?.setString(4, notificacionUrgente.fecha)
-            ps?.setString(5, fechaExpiracion) // Fecha de expiración
+            ps?.setString(5, fechaExpiracion) // Fecha de expiración calculada
             ps?.setString(6, notificacionUrgente.tipoNotificacion)
-            ps?.setInt(7, notificacionUrgente.idHospitalCentro)
-            ps?.setString(8, notificacionUrgente.mensaje)
+            ps?.setInt(7, notificacionUrgente.idNotificacion) // El identificador único
 
             val rowsUpdated = ps?.executeUpdate()
             ps?.close()
@@ -269,6 +269,7 @@ object NotificacionUrgenteDao {
             false
         }
     }
+
 
     fun getNotificacionById(idNotificacion: Int): NotificacionUrgente? {
         val connection = MySqlConexion.getConexion()

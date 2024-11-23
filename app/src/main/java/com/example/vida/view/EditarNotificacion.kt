@@ -11,6 +11,7 @@ import com.example.vida.data.database.NotificacionUrgenteDao
 import com.example.vida.data.database.PacienteDao
 import com.example.vida.models.HospitalCentro
 import com.example.vida.models.NotificacionUrgente
+import com.example.vida.models.NotificacionUrgenteEdicion
 import com.example.vida.models.Paciente
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -198,34 +199,61 @@ class EditarNotificacion : AppCompatActivity() {
             return
         }
 
-        val fechaActual = LocalDateTime.now().toString()
+        try {
+            println("Antes de calcular fechaActual")
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val fechaActual = LocalDateTime.now().format(formatter)
+            val fechaExpiracion = LocalDateTime.now().plusHours(1).format(formatter)
+            println("Fecha actual generada: $fechaActual")
 
-        println("Preparando para entrar al bloque lifecycleScope.launch")
-        lifecycleScope.launch {
-            println("Entrando al bloque lifecycleScope.launch")
-            val success = withContext(Dispatchers.IO) {
-                println("Entrando al bloque Dispatchers.IO")
-                val notificacionActualizada = NotificacionUrgente(
-                    idNotificacion = notificacionId,
-                    idHospitalCentro = notificacionIdHospital!!,
-                    idPaciente = notificacionIdPaciente,
-                    mensaje = mensaje,
-                    tipoNotificacion = tipoNotificacion,
-                    fecha = fechaActual
-                )
-                println("Datos de la notificación actualizada: $notificacionActualizada")
-                NotificacionUrgenteDao.updateNotificacion(notificacionActualizada)
+            println("Validando datos antes de lifecycleScope.launch:")
+            println("notificacionId: $notificacionId")
+            println("notificacionIdHospital: $notificacionIdHospital")
+            println("notificacionIdPaciente: $notificacionIdPaciente")
+            println("mensaje: $mensaje")
+            println("tipoNotificacion: $tipoNotificacion")
+
+            if (notificacionIdHospital == null || notificacionIdPaciente == null) {
+                println("Error: ID del hospital o paciente es nulo")
+                return
             }
 
-            withContext(Dispatchers.Main) {
-                println("Regresando al hilo principal")
-                if (success) {
-                    Toast.makeText(this@EditarNotificacion, "Notificación actualizada correctamente.", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this@EditarNotificacion, "Error al actualizar la notificación.", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                println("Entrando al bloque lifecycleScope.launch")
+                val success = withContext(Dispatchers.IO) {
+                    try {
+                        println("Entrando al bloque Dispatchers.IO")
+                        val notificacionActualizada = NotificacionUrgenteEdicion(
+                            idNotificacion = notificacionId,
+                            idHospitalCentro = notificacionIdHospital!!,
+                            idPaciente = notificacionIdPaciente,
+                            mensaje = mensaje,
+                            tipoNotificacion = tipoNotificacion,
+                            fecha = fechaActual,
+                            fechaExpiracion = fechaExpiracion
+                        )
+                        println("Datos de la notificación actualizada: $notificacionActualizada")
+                        NotificacionUrgenteDao.updateNotificacion(notificacionActualizada)
+                    } catch (e: Exception) {
+                        println("Error en el bloque Dispatchers.IO: ${e.message}")
+                        e.printStackTrace()
+                        false
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    println("Regresando al hilo principal")
+                    if (success) {
+                        Toast.makeText(this@EditarNotificacion, "Notificación actualizada correctamente.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@EditarNotificacion, "Error al actualizar la notificación.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        } catch (e: Exception) {
+            println("Ocurrió un error antes de lifecycleScope.launch: ${e.message}")
+            e.printStackTrace()
         }
 
     }

@@ -16,3 +16,13 @@ data class NotificacionUrgente(
     val nombrePaciente: String? = null,
     val apellidoPaciente: String? = null
 )
+
+data class NotificacionUrgenteEdicion(
+    val idNotificacion: Int,
+    val idHospitalCentro: Int,
+    val idPaciente: Int?,
+    val mensaje: String,
+    val tipoNotificacion: String,
+    val fecha: String,
+    val fechaExpiracion: String
+)
