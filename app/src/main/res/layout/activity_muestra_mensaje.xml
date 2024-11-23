@@ -62,7 +62,8 @@
                 android:src="@android:drawable/ic_menu_edit"
                 android:contentDescription="Modificar"
                 android:background="?android:attr/selectableItemBackground"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:tint="@color/blue" />
 
             <ImageButton
                 android:id="@+id/btnEliminar"
@@ -72,7 +73,8 @@
                 android:contentDescription="Eliminar"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="8dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:tint="@color/red" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

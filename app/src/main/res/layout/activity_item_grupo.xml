@@ -19,7 +19,7 @@
             android:textSize="18sp"
             android:textColor="#000000"/>
 
-        <!-- Puedes añadir más detalles del grupo si lo deseas, como una descripción o fecha -->
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
