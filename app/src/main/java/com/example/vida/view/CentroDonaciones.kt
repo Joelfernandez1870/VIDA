@@ -13,10 +13,10 @@ class CentroDonaciones : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_centro_donaciones)
 
-        // Obtener referencia al botón
+        // referencia al botón
         val verMapaButton = findViewById<Button>(R.id.btnVerMapa1)
 
-        // Establecer listener para el botón
+        //  listener para el botón
         verMapaButton.setOnClickListener {
             // Crear Intent para abrir Google Maps
             val locationUri = Uri.parse("geo:0,0?q=hospitales+donación+sangre")

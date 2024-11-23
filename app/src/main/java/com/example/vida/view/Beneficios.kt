@@ -19,7 +19,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class Beneficios : AppCompatActivity() {
 
-    private lateinit var puntosEditText: EditText // Aqui cargo los puntos del usuario
+    private lateinit var puntosEditText: EditText // Aca cargo los puntos del usuario.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +41,8 @@ class Beneficios : AppCompatActivity() {
             Toast.makeText(this, "No se encontraron beneficios disponibles.", Toast.LENGTH_SHORT).show()
         } else {
 
-//        // Lista de beneficios precargados
-//        val beneficios = listOf(
-//            Beneficio("10% de Descuento en Estación de Servicios", 10, false),
-//            Beneficio("15% de Descuento en Farmacity", 20, false),
-//            Beneficio("25% de Descuento en Ropa Deportiva", 30, false),
-//            Beneficio("2x1 en Cine", 40, false),
-//            Beneficio("50% de Descuento en Restaurantes", 50, false)
-//        )
 
-
-
-        // Crear lista de beneficios desbloqueados y bloqueados
+        // Creo lista de beneficios desbloqueados y bloqueados
         val listaBeneficiosConEstado = beneficios.map { beneficio ->
             if (puntosUsuario >= beneficio.puntos_necesario) {
                 "✅ ${beneficio.descripcion} - Desbloqueado"
@@ -70,7 +60,7 @@ class Beneficios : AppCompatActivity() {
         listViewBeneficios.adapter = adapter
     }
 
-        // Manejar clic en los beneficios
+        // Manejamos los clic en los beneficios
         listViewBeneficios.setOnItemClickListener { _, _, position, _ ->
             val beneficio = beneficios[position]
             if (puntosUsuario < beneficio.puntos_necesario) {

@@ -92,11 +92,11 @@ object HospitalCentroDao {
                 "SELECT EXISTS(SELECT 1 FROM CODIGO_HABILITACION WHERE CODIGO = ?)"
             )
             try {
-                statement.setString(1, codigo) // Set the parameter value
+                statement.setString(1, codigo) // Seteamos el parametro para la consulta
                 val resultSet: ResultSet = statement.executeQuery()
                 if (resultSet.next()) {
-                    val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value
-                    return exists// Use the 'exists' variable
+                    val exists: Boolean = resultSet.getBoolean(1)
+                    return exists// retornamos la variable Exists
                 }else{
                     return false
                 }
@@ -176,11 +176,11 @@ object HospitalCentroDao {
                 "SELECT EXISTS(SELECT 1 FROM HOSPITALES_CENTROS WHERE EMAIL = ?)"
             )
             try {
-                statement.setString(1, email) // Set the parameter value
+                statement.setString(1, email) // Seteamos el parametro
                 val resultSet: ResultSet = statement.executeQuery()
                 if (resultSet.next()) {
-                    val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value
-                    return exists// Use the 'exists' variable
+                    val exists: Boolean = resultSet.getBoolean(1)
+                    return exists// retornamos la variable Exists
                 } else {
                     return false
                 }

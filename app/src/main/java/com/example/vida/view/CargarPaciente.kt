@@ -55,10 +55,10 @@ class CargarPaciente : AppCompatActivity() {
         btnGuardar = findViewById(R.id.btnGuardar)
 
 
-        // Configurar el selector de fecha
+        // selector de fecha
         inputFechaNacimiento.setOnClickListener { mostrarDatePicker() }
 
-        // Configurar el botón de guardar
+        // botón de guardar
         btnGuardar.setOnClickListener { validarDatos() }
 
         cargarSpinner()

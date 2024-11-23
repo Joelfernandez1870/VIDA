@@ -57,7 +57,7 @@ class Donaciones : AppCompatActivity() {
 
 
             try {
-                // Establecer la conexión con la base de datos
+                // conexión con la base de datos
                 connection = MySqlConexion.getConexion()
 
                 // Realizar la consulta SQL para obtener las donaciones de un usuario
@@ -85,7 +85,7 @@ class Donaciones : AppCompatActivity() {
                     val tipoDonacion = resultSet.getString("TIPO_DE_DONACION")
 
                     val NombreHospital = HospitalCentroDao.getHospitalById(idHospital.toInt())?.nombreLugar ?: "Hospital desconocido"
-                    // Crear objeto Donacion
+
                     val donacion = Donacion(iDUsuario, NombreHospital, fecha, tipoDonacion)
                     donaciones.add(donacion)
                 }

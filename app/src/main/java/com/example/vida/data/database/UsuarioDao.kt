@@ -211,7 +211,7 @@ object UsuarioDao {
             ps.close()
             connection.close()
 
-            rowsUpdated > 0  // Retorna true si al menos una fila fue actualizada
+            rowsUpdated > 0  // retornamos true si se actualizo por lo menos 1 columna
         } catch (e: SQLException) {
             e.printStackTrace()
             false

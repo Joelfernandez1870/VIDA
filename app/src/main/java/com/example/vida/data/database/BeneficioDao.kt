@@ -56,7 +56,7 @@ object BeneficioDao {
             ps.close()
             connection.close()
 
-            rowsUpdated > 0  // Retorna true si al menos una fila fue actualizada
+            rowsUpdated > 0  // Retornamos true si por lo menos 1 fila se actualizo
         } catch (e: SQLException) {
             e.printStackTrace()
             false

@@ -37,13 +37,13 @@ object PacienteDao {
         """
 
         return try {
-            // Proceder con la inserción
+            // Hacemos la insercion
             val ps: PreparedStatement? = connection?.prepareStatement(sql)
             ps?.apply {
                 setString(1, paciente.dni)
                 setString(2, paciente.nombre)
                 setString(3, paciente.apellido)
-                setString(4, paciente.fechaNacimiento) // Asumimos que es String o Formato de Fecha adecuado
+                setString(4, paciente.fechaNacimiento)
                 setString(5, paciente.grupoSanguineo)
                 setString(6, paciente.ciudad)
                 setString(7, paciente.pais)
@@ -57,7 +57,6 @@ object PacienteDao {
             rowsInserted != null && rowsInserted > 0
 
         } catch (e: IllegalArgumentException) {
-            // Mostrar mensaje específico para DNI duplicado
             println(e.message)
             false
         } catch (e: SQLException) {
@@ -118,7 +117,7 @@ object PacienteDao {
                 val id = resultSet.getInt("ID_PACIENTE")  // Usamos el nombre correcto de la columna
                 val nombre = resultSet.getString("NOMBRE") ?: "" // Aseguramos que 'nombre' no sea nulo
 
-                // Crear un objeto PacienteSpinner solo con el nombre
+                // Creamos un objeto PacienteSpinner solo con el nombre
                 pacientesList.add(PacienteSpinner(id, nombre))
             }
 
