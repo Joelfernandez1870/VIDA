@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class NotificacionUrgente(
-    val idNotificacion: Int? = null,
+    val idNotificacion: Int,
     val idHospitalCentro: Int,
     val idPaciente: Int?,  // Puede ser nulo
     val mensaje: String,
@@ -15,4 +15,14 @@ data class NotificacionUrgente(
     val grupoSanguineo: String? = null,
     val nombrePaciente: String? = null,
     val apellidoPaciente: String? = null
+)
+
+data class NotificacionUrgenteEdicion(
+    val idNotificacion: Int,
+    val idHospitalCentro: Int,
+    val idPaciente: Int?,
+    val mensaje: String,
+    val tipoNotificacion: String,
+    val fecha: String,
+    val fechaExpiracion: String
 )

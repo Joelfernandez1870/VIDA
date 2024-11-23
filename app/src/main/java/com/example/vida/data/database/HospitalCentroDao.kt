@@ -147,6 +147,27 @@ object HospitalCentroDao {
         }
     }
 
+    fun getIdByName(nombreLugar: String): Int? {
+        val connection = MySqlConexion.getConexion()
+        val sql = "SELECT ID_HOSPITALES_CENTRO FROM HOSPITALES_CENTROS WHERE NOMBRE_LUGAR = ?"
+        var idHospital: Int? = null
+
+        try {
+            val ps = connection!!.prepareStatement(sql)
+            ps.setString(1, nombreLugar)
+            val rs = ps.executeQuery()
+            if (rs.next()) {
+                idHospital = rs.getInt("ID_HOSPITALES_CENTRO")
+            }
+            rs.close()
+            ps.close()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            connection?.close()
+        }
+        return idHospital
+    }
 
 
     /*
