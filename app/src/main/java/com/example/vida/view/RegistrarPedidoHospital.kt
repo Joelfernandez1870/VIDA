@@ -8,9 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.vida.R
 import com.example.vida.data.database.PacienteDao
 import com.example.vida.data.database.PedidoDonacionDao
-import com.example.vida.models.PacienteSpinner
-import java.util.*
 import com.example.vida.models.PedidoDonacion
+import java.util.*
 
 class RegistrarPedidoHospital : AppCompatActivity() {
 
@@ -20,9 +19,9 @@ class RegistrarPedidoHospital : AppCompatActivity() {
 
     // Variables de vista
     private lateinit var spinnerPaciente: Spinner
+    private lateinit var spinnerEstado: Spinner
     private lateinit var inputFecha: EditText
     private lateinit var inputDescripcion: EditText
-    private lateinit var inputEstado: EditText
     private lateinit var btnRegistrarPedido: Button
 
     // ID de hospital obtenido de la sesión
@@ -35,9 +34,9 @@ class RegistrarPedidoHospital : AppCompatActivity() {
 
         // Inicializar vistas
         spinnerPaciente = findViewById(R.id.spinnerPaciente)
+        spinnerEstado = findViewById(R.id.spinnerEstado) // Spinner para el estado
         inputFecha = findViewById(R.id.inputFecha)
         inputDescripcion = findViewById(R.id.inputDescripcion)
-        inputEstado = findViewById(R.id.inputEstado)
         btnRegistrarPedido = findViewById(R.id.btnRegistrarPedido)
 
         // Obtener el ID de hospital de la sesión
@@ -45,6 +44,9 @@ class RegistrarPedidoHospital : AppCompatActivity() {
 
         // Cargar pacientes en el Spinner
         cargarPacientes()
+
+        // Cargar opciones de estado en el Spinner
+        cargarEstados()
 
         // Configurar DatePicker para el campo de fecha
         inputFecha.setOnClickListener {
@@ -69,6 +71,14 @@ class RegistrarPedidoHospital : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pacientes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPaciente.adapter = adapter
+    }
+
+    // Función para cargar las opciones de estado
+    private fun cargarEstados() {
+        val estados = listOf("Activo", "Inactivo")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, estados)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerEstado.adapter = adapter
     }
 
     // Función para mostrar el DatePicker y seleccionar la fecha como String
@@ -98,17 +108,11 @@ class RegistrarPedidoHospital : AppCompatActivity() {
         // Obtener otros valores de los campos de entrada
         val fecha = inputFecha.text.toString()
         val descripcion = inputDescripcion.text.toString()
-        val estado = inputEstado.text.toString()
+        val estado = spinnerEstado.selectedItem.toString()
 
         // Validar que los campos no estén vacíos antes de guardar
-        if (fecha.isEmpty() || descripcion.isEmpty() || estado.isEmpty()) {
+        if (fecha.isEmpty() || descripcion.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Validar que el ID de hospital no sea nulo
-        if (idHospital == null) {
-            Toast.makeText(this, "Error: ID de hospital no disponible.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -121,7 +125,7 @@ class RegistrarPedidoHospital : AppCompatActivity() {
             estado = estado
         )
 
-        // Guardar el pedido en la base de datos (ejemplo con PedidoDonacionDao)
+        // Guardar el pedido en la base de datos
         val success = PedidoDonacionDao.insert(pedido)
 
         // Mostrar mensaje de éxito
@@ -131,8 +135,8 @@ class RegistrarPedidoHospital : AppCompatActivity() {
             // Limpiar los campos (opcional)
             inputFecha.text.clear()
             inputDescripcion.text.clear()
-            inputEstado.text.clear()
             spinnerPaciente.setSelection(0)
+            spinnerEstado.setSelection(0)
         } else {
             Toast.makeText(this, "Error al registrar el pedido de donación.", Toast.LENGTH_SHORT).show()
         }
