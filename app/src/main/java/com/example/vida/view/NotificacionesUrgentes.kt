@@ -90,6 +90,9 @@ class NotificacionesUrgentes : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 if (idGenerado != null) {
                     Toast.makeText(this@NotificacionesUrgentes, "Notificación registrada con éxito. ID: $idGenerado", Toast.LENGTH_SHORT).show()
+                    runOnUiThread {
+                        findViewById<EditText>(R.id.Mensaje).setText("")
+                    }
                 } else {
                     Toast.makeText(this@NotificacionesUrgentes, "Error al registrar la notificación.", Toast.LENGTH_SHORT).show()
                 }
