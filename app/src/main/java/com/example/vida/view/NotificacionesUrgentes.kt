@@ -75,27 +75,20 @@ class NotificacionesUrgentes : AppCompatActivity() {
 
         // Crear objeto de Notificación Urgente
         val notificacion = NotificacionUrgente(
+            idNotificacion = -1,
             idPaciente = idPacienteSeleccionado,
             idHospitalCentro = idHospitalSeleccionado,
             mensaje = mensajeTexto,
             fecha = LocalDateTime.now().toString(),
             tipoNotificacion = tipoSeleccionado
-
         )
 
         // Insertar en la base de datos
         lifecycleScope.launch(Dispatchers.IO) {
-            val success = NotificacionUrgenteDao.insert(notificacion)
-
+            val idGenerado = NotificacionUrgenteDao.insertAndReturnId(notificacion) // Método que retorna el ID generado
             withContext(Dispatchers.Main) {
-                if (success) {
-                    Toast.makeText(this@NotificacionesUrgentes, "Notificación registrada con éxito.", Toast.LENGTH_SHORT).show()
-
-                    // Limpiar los campos
-                    mensaje.text.clear()
-                    nombrePaciente.setSelection(0)
-                    nombreHospital.setSelection(0)
-                    tipoNotificacion.setSelection(0)
+                if (idGenerado != null) {
+                    Toast.makeText(this@NotificacionesUrgentes, "Notificación registrada con éxito. ID: $idGenerado", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this@NotificacionesUrgentes, "Error al registrar la notificación.", Toast.LENGTH_SHORT).show()
                 }
@@ -167,8 +160,6 @@ class NotificacionesUrgentes : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun obtenerIdHospitalLogeado(): Int {
         val hospitalId = LoginActivity.sesionGlobal

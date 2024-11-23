@@ -12,4 +12,8 @@ data class Paciente(
     val ciudad: String,
     val pais: String,
     val hospitalId: String
-)
+) {
+    override fun toString(): String {
+        return "$nombre $apellido"
+    }
+}

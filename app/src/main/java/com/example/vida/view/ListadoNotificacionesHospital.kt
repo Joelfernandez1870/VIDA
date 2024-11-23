@@ -60,26 +60,46 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
     class NotificacionAdapter(
         private val context: AppCompatActivity,
         private val data: List<NotificacionUrgente>,
-        private val onNotificationDeleted: () -> Unit // Callback para actualizar la vista
+        private val onNotificationDeleted: () -> Unit
     ) : ArrayAdapter<NotificacionUrgente>(context, R.layout.notificacion_hospital_item, data) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val inflater = context.layoutInflater
             val rowView = convertView ?: inflater.inflate(R.layout.notificacion_hospital_item, parent, false)
-
+            val tipoNotificacion = rowView.findViewById<TextView>(R.id.tvTipoNotificacion)
+            val fecha = rowView.findViewById<TextView>(R.id.tvFecha)
+            val paciente = rowView.findViewById<TextView>(R.id.tvPaciente)
+            val hospital = rowView.findViewById<TextView>(R.id.tvHospital)
+            val grupoSanguineo = rowView.findViewById<TextView>(R.id.tvGrupoSanguineo)
+            val btnEditar = rowView.findViewById<ImageButton>(R.id.btnEditar)
             val mensaje = rowView.findViewById<TextView>(R.id.tvMensaje)
             val btnEliminar = rowView.findViewById<ImageButton>(R.id.btnEliminar)
 
             val notificacion = data[position]
 
             mensaje.text = notificacion.mensaje
+            tipoNotificacion.text = "Tipo: ${notificacion.tipoNotificacion}"
+            fecha.text = "Fecha: ${notificacion.fecha}"
+            paciente.text = "Paciente: ${notificacion.nombrePaciente ?: "Desconocido"} ${notificacion.apellidoPaciente ?: ""}"
+            hospital.text = "Hospital: ${notificacion.nombreLugar ?: "Desconocido"}"
+            grupoSanguineo.text = "Grupo Sanguíneo: ${notificacion.grupoSanguineo ?: "No especificado"}"
+
+            btnEditar.setOnClickListener {
+                val idNotificacion = notificacion.idNotificacion
+                if (idNotificacion != null && idNotificacion > 0) {
+                    val intent = Intent(context, EditarNotificacion::class.java)
+                    intent.putExtra("NOTIFICACION_ID", idNotificacion)
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "ID de notificación no válido en Listado", Toast.LENGTH_SHORT).show()
+                }
+            }
 
             btnEliminar.setOnClickListener {
                 val builder = android.app.AlertDialog.Builder(context)
                 builder.setTitle("Confirmar eliminación")
                 builder.setMessage("¿Estás seguro de que deseas eliminar esta notificación?")
 
-                // Botón para confirmar
                 builder.setPositiveButton("Eliminar") { dialog, _ ->
                     context.lifecycleScope.launch {
                         val success = withContext(Dispatchers.IO) {
@@ -88,7 +108,7 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
 
                         if (success) {
                             Toast.makeText(context, "Notificación eliminada correctamente", Toast.LENGTH_SHORT).show()
-                            onNotificationDeleted() // Llamar al callback para recargar la lista
+                            onNotificationDeleted()
                         } else {
                             Toast.makeText(context, "Error al marcar la notificación como expirada", Toast.LENGTH_SHORT).show()
                         }
@@ -96,12 +116,8 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
                     }
                 }
 
-                // Botón para cancelar
-                builder.setNegativeButton("Cancelar") { dialog, _ ->
-                    dialog.dismiss()
-                }
+                builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
 
-                // Mostrar el diálogo
                 val alertDialog = builder.create()
                 alertDialog.show()
             }
@@ -139,4 +155,5 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
             }
         }
     }
+
 }
