@@ -132,6 +132,7 @@ object NotificacionUrgenteDao {
                 PACIENTE p ON nu.ID_PACIENTE = p.ID_PACIENTE
             WHERE 
                 nu.ID_HOSPITALES_CENTRO = ?
+                AND nu.FECHA_EXPIRACION > CURRENT_TIMESTAMP
             ; """.trimIndent()
 
         val notificaciones = mutableListOf<NotificacionUrgente>()
@@ -313,8 +314,8 @@ object NotificacionUrgenteDao {
         val connection = MySqlConexion.getConexion()
         val sql = """
         INSERT INTO NOTIFICACIONES_URGENTES 
-        (ID_HOSPITALES_CENTRO, ID_PACIENTE, MENSAJE, FECHA, TIPO_NOTIFICACION) 
-        VALUES (?, ?, ?, ?, ?)
+        (ID_HOSPITALES_CENTRO, ID_PACIENTE, MENSAJE, FECHA, TIPO_NOTIFICACION, FECHA_EXPIRACION) 
+        VALUES (?, ?, ?, ?, ?, ?)
     """.trimIndent()
 
         return try {
@@ -324,6 +325,8 @@ object NotificacionUrgenteDao {
             ps?.setString(3, notificacion.mensaje)
             ps?.setString(4, notificacion.fecha)
             ps?.setString(5, notificacion.tipoNotificacion)
+            ps?.setString(6, notificacion.fechaExpiracion)
+
             ps?.executeUpdate()
 
             val rs = ps?.generatedKeys

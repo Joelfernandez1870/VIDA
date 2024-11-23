@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ListadoNotificacionesHospital : AppCompatActivity() {
-
+    private val loggedInHospitalId = LoginActivity.sesionGlobal
     companion object {
         const val REQUEST_CODE_ADD_NOTIFICATION = 1
     }
@@ -30,7 +30,7 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notificaciones_hospital)
 
-        val loggedInHospitalId = LoginActivity.sesionGlobal
+
 
         if (loggedInHospitalId == null || loggedInHospitalId <= 0) {
             Toast.makeText(this, "No se pudo identificar el hospital logeado", Toast.LENGTH_SHORT).show()
@@ -43,6 +43,12 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
         btnCargarNotificaciones.setOnClickListener {
             val intent = Intent(this, NotificacionesUrgentes::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_NOTIFICATION)
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        if (loggedInHospitalId != null) {
+            cargarNotificaciones(loggedInHospitalId)
         }
     }
 

@@ -80,7 +80,8 @@ class NotificacionesUrgentes : AppCompatActivity() {
             idHospitalCentro = idHospitalSeleccionado,
             mensaje = mensajeTexto,
             fecha = LocalDateTime.now().toString(),
-            tipoNotificacion = tipoSeleccionado
+            tipoNotificacion = tipoSeleccionado,
+            fechaExpiracion = LocalDateTime.now().plusHours(1).toString(),
         )
 
         // Insertar en la base de datos
