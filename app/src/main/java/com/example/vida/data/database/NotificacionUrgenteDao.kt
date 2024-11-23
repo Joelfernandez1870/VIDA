@@ -421,4 +421,93 @@ object NotificacionUrgenteDao {
         return notificaciones
     }
 
+    fun getNotificacionesPorFiltros(
+        hospitalId: Int,
+        paciente: String?,
+        tipoNotificacion: String?
+    ): List<NotificacionUrgente> {
+        val connection = getConexion()
+        val sql = StringBuilder("""
+        SELECT 
+            nu.ID_NOTIFICACION, 
+            nu.ID_HOSPITALES_CENTRO, 
+            h.NOMBRE_LUGAR, 
+            nu.ID_PACIENTE, 
+            p.GRUPO_SANGUINEO, 
+            p.NOMBRE, 
+            p.APELLIDO, 
+            nu.MENSAJE, 
+            nu.TIPO_NOTIFICACION, 
+            nu.FECHA, 
+            nu.FECHA_EXPIRACION
+        FROM 
+            NOTIFICACIONES_URGENTES nu
+        LEFT JOIN 
+            HOSPITALES_CENTROS h ON nu.ID_HOSPITALES_CENTRO = h.ID_HOSPITALES_CENTRO
+        LEFT JOIN 
+            PACIENTE p ON nu.ID_PACIENTE = p.ID_PACIENTE
+        WHERE 
+            nu.ID_HOSPITALES_CENTRO = ?
+            AND nu.FECHA_EXPIRACION > CURRENT_TIMESTAMP
+    """)
+
+        if (!paciente.isNullOrEmpty()) {
+            sql.append(" AND CONCAT(p.NOMBRE, ' ', p.APELLIDO) = ?")
+        }
+        if (!tipoNotificacion.isNullOrEmpty()) {
+            sql.append(" AND nu.TIPO_NOTIFICACION = ?")
+        }
+
+        val notificaciones = mutableListOf<NotificacionUrgente>()
+
+        try {
+            val ps = connection!!.prepareStatement(sql.toString())
+            var index = 1
+
+            // Filtros obligatorios
+            ps.setInt(index++, hospitalId)
+
+            // Filtros opcionales
+            if (!paciente.isNullOrEmpty()) {
+                ps.setString(index++, paciente)
+            }
+            if (!tipoNotificacion.isNullOrEmpty()) {
+                ps.setString(index++, tipoNotificacion)
+            }
+
+            val rs = ps.executeQuery()
+
+            while (rs.next()) {
+                val notificacion = NotificacionUrgente(
+                    idNotificacion = rs.getInt("ID_NOTIFICACION"),
+                    idHospitalCentro = rs.getInt("ID_HOSPITALES_CENTRO"),
+                    idPaciente = rs.getInt("ID_PACIENTE").takeIf { !rs.wasNull() },
+                    mensaje = rs.getString("MENSAJE"),
+                    tipoNotificacion = rs.getString("TIPO_NOTIFICACION"),
+                    fecha = rs.getString("FECHA"),
+                    fechaExpiracion = rs.getString("FECHA_EXPIRACION"),
+                    nombreLugar = rs.getString("NOMBRE_LUGAR"),
+                    grupoSanguineo = rs.getString("GRUPO_SANGUINEO"),
+                    nombrePaciente = rs.getString("NOMBRE"),
+                    apellidoPaciente = rs.getString("APELLIDO")
+                )
+                notificaciones.add(notificacion)
+            }
+
+            rs.close()
+            ps.close()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                connection!!.close()
+            } catch (e: SQLException) {
+                e.printStackTrace()
+            }
+        }
+
+        return notificaciones
+    }
+
+
 }

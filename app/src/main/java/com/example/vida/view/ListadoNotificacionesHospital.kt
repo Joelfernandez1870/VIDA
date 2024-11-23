@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ListView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.vida.R
 import com.example.vida.data.database.NotificacionUrgenteDao
+import com.example.vida.data.database.PacienteDao
 import com.example.vida.models.NotificacionUrgente
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +32,8 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_notificaciones_hospital)
-
+        cargarSpinners(loggedInHospitalId!!)
+        configurarFiltros(loggedInHospitalId)
 
 
         if (loggedInHospitalId == null || loggedInHospitalId <= 0) {
@@ -161,5 +165,89 @@ class ListadoNotificacionesHospital : AppCompatActivity() {
             }
         }
     }
+
+    private fun cargarSpinners(loggedInHospitalId: Int) {
+        lifecycleScope.launch {
+            val pacientes = withContext(Dispatchers.IO) {
+                PacienteDao.getPacientesByHospitalId(loggedInHospitalId.toString()) // Método devuelve una lista de objetos Paciente
+            }
+            val tiposNotificacion = listOf("Todos los tipos", "Alerta", "Información", "Aviso") // Tipos predefinidos o dinámicos
+
+            withContext(Dispatchers.Main) {
+                // Adaptador para el spinner de pacientes
+                val pacienteAdapter = ArrayAdapter(
+                    this@ListadoNotificacionesHospital,
+                    android.R.layout.simple_spinner_item,
+                    listOf("Todos los pacientes") + pacientes.map { "${it.nombre} ${it.apellido}" } // Transformar objetos a Strings
+                )
+                pacienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                findViewById<Spinner>(R.id.spinnerPacientes).adapter = pacienteAdapter
+
+                // Adaptador para el spinner de tipos de notificación
+                val tipoAdapter = ArrayAdapter(
+                    this@ListadoNotificacionesHospital,
+                    android.R.layout.simple_spinner_item,
+                    tiposNotificacion
+                )
+                tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                findViewById<Spinner>(R.id.spinnerTiposNotificacion).adapter = tipoAdapter
+            }
+        }
+    }
+
+
+    private fun configurarFiltros(loggedInHospitalId: Int) {
+        val spinnerPacientes = findViewById<Spinner>(R.id.spinnerPacientes)
+        val spinnerTiposNotificacion = findViewById<Spinner>(R.id.spinnerTiposNotificacion)
+
+        spinnerPacientes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val pacienteSeleccionado = parent?.getItemAtPosition(position) as String
+                val tipoSeleccionado = spinnerTiposNotificacion.selectedItem as String
+                filtrarNotificaciones(loggedInHospitalId, pacienteSeleccionado, tipoSeleccionado)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        spinnerTiposNotificacion.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val tipoSeleccionado = parent?.getItemAtPosition(position) as String
+                val pacienteSeleccionado = spinnerPacientes.selectedItem as String
+                filtrarNotificaciones(loggedInHospitalId, pacienteSeleccionado, tipoSeleccionado)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun filtrarNotificaciones(
+        loggedInHospitalId: Int,
+        pacienteSeleccionado: String?,
+        tipoSeleccionado: String?
+    ) {
+        lifecycleScope.launch {
+            val pacienteFiltro = if (pacienteSeleccionado == "Todos los pacientes") null else pacienteSeleccionado
+            val tipoFiltro = if (tipoSeleccionado == "Todos los tipos") null else tipoSeleccionado
+
+            val notificacionesFiltradas = withContext(Dispatchers.IO) {
+                NotificacionUrgenteDao.getNotificacionesPorFiltros(loggedInHospitalId, pacienteFiltro, tipoFiltro)
+            }
+
+            withContext(Dispatchers.Main) {
+                val listView = findViewById<ListView>(R.id.lvNotificaciones)
+                if (notificacionesFiltradas.isNotEmpty()) {
+                    val adapter = NotificacionAdapter(this@ListadoNotificacionesHospital, notificacionesFiltradas) {
+                        filtrarNotificaciones(loggedInHospitalId, pacienteSeleccionado, tipoSeleccionado)
+                    }
+                    listView.adapter = adapter
+                } else {
+                    Toast.makeText(this@ListadoNotificacionesHospital, "No se encontraron notificaciones", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
 
 }
