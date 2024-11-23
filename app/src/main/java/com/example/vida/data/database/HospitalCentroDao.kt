@@ -169,7 +169,32 @@ object HospitalCentroDao {
         return idHospital
     }
 
+    fun isEmailRegistered(email: String): Boolean {
+        val connection = MySqlConexion.getConexion()
+        if (connection != null) {
+            val statement: PreparedStatement = connection.prepareStatement(
+                "SELECT EXISTS(SELECT 1 FROM HOSPITALES_CENTROS WHERE EMAIL = ?)"
+            )
+            try {
+                statement.setString(1, email) // Set the parameter value
+                val resultSet: ResultSet = statement.executeQuery()
+                if (resultSet.next()) {
+                    val exists: Boolean = resultSet.getBoolean(1) // Get the boolean value
+                    return exists// Use the 'exists' variable
+                } else {
+                    return false
+                }
+                connection.close()
 
+            } catch (e: SQLException) {
+                e.printStackTrace()
+                return false
+            }
+        } else {
+            println("error: conexion null")
+            return false
+        }
+    }
     /*
     fun update(hospitalCentro: HospitalCentro) {
         val connection: Connection = MySqlConexion.getConexion()!!

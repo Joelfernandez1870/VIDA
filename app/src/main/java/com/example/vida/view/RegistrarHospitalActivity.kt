@@ -87,6 +87,21 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
         val claverepetida = et_claverepetida.text.toString()
         val correo = et_correo.text.toString()
         val tipoLugar = "Hospital"
+        var isEmailRegistered =  HospitalCentroDao.isEmailRegistered(correo)
+
+
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                isEmailRegistered = HospitalCentroDao.isEmailRegistered(correo)
+//                println(isEmailRegistered)
+//                withContext(Dispatchers.Main) {
+//                    if (isEmailRegistered) {
+//                        isEmailRegistered = true
+//                    } else {
+//                        isEmailRegistered = false
+//                    }
+//                }
+//            }
+
 
 
         // Validación de los campos y creación del objeto HospitalCentro
@@ -107,6 +122,12 @@ class RegistrarHospitalActivity : AppCompatActivity(), PlaceSelectionListener {
             et_correo.error = "Email inválido"
             return
         }
+
+        if (isEmailRegistered) {
+            et_correo.error = "El email ya está registrado"
+            return
+        }
+
         if (!clave.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$".toRegex())) {
             et_clave.error = "Contrasenia debe contener al menos 6 caracteres, incluyendo letras y números"
             return
